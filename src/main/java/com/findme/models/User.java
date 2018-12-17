@@ -16,7 +16,7 @@ public class User extends GeneralModel{
     private String city;
 
     private Integer age;
-    private Date dateregistered;
+    private Date dateRegistered;
     private Date dateLastActive;
     //TODO enum
     private String relationshipStatus;
@@ -98,12 +98,12 @@ public class User extends GeneralModel{
     }
 
     @Column(name = "DATE_REGISTERED")
-    public Date getDateregistered() {
-        return dateregistered;
+    public Date getDateRegistered() {
+        return dateRegistered;
     }
 
-    public void setDateregistered(Date dateregistered) {
-        this.dateregistered = dateregistered;
+    public void setDateRegistered(Date dateregistered) {
+        this.dateRegistered = dateRegistered;
     }
 
     @Column(name = "DATE_LAST_ACTIVE")

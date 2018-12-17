@@ -3,38 +3,61 @@
 <head>
     <title>Find me</title>
 </head>
+
+
 <body>
     <div>
         <div class="left">
-            <h1 class="photo">Photo</h1>
+            <h1>Photo</h1>
             <div>
-                <button class="">Send message</button>
+                <button class="btn">Send message</button>
             </div>
         </div>
 
         <div class="right">
-            Styled text here
-            <p th:text="${user.firstName}"></p>
-            <p th:text="${user.city}"></p>
+            <p class="nameLabel">Name: <span th:text="${user.firstName}+' '+${user.lastName}"></span></p>
+            <p class="infoLabel">Phone: <span th:text="${user.phone}"></span></p>
+            <p class="infoLabel">Country: <span th:text="${user.country}"></span></p>
+            <p class="infoLabel">City: <span th:text="${user.city}"></span></p>
+            <p class="infoLabel">Age: <span th:text="${user.age}"></span></p>
+            <p class="infoLabel">Registration date: <span th:text="${user.dateRegistered}"></span></p>
+            <p class="infoLabel">Relationship Status: <span th:text="${user.relationshipStatus}"></span></p>
+            <p class="infoLabel">Religion: <span th:text="${user.religion}"></span></p>
+            <p class="infoLabel">School: <span th:text="${user.school}"></span></p>
+            <p class="infoLabel">University: <span th:text="${user.university}"></span></p>
+
+
         </div>
     </div>
 </body>
+
 
 <style>
     .left {
         float: left;
         width: 200px;
         height: 300px;
-    }
-    .photo {
         border-style: solid;
-        height: 300px;
     }
     .right {
-        margin-left: 300px;
+        float: left;
+        margin-left: 50px;
     }
     .btn {
-
+        margin-top: 230px;
     }
+    .nameLabel {
+        padding-right: 10px;
+        font-size: 28px;
+        margin-top: 5px;
+        margin-bottom: 20px;
+    }
+    .infoLabel {
+        font-size: 18px;
+        margin-top: 5px;
+        margin-bottom: 0px;
+        color: #777;
+    }
+
 </style>
 </html>
