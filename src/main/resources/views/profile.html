@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Find me</title>
+</head>
+<body>
+    <div>
+        <div class="left">
+            <h1 class="photo">Photo</h1>
+            <div>
+                <button class="">Send message</button>
+            </div>
+        </div>
+
+        <div class="right">
+            Styled text here
+            <p th:text="${user.firstName}"></p>
+            <p th:text="${user.city}"></p>
+        </div>
+    </div>
+</body>
+
+<style>
+    .left {
+        float: left;
+        width: 200px;
+        height: 300px;
+    }
+    .photo {
+        border-style: solid;
+        height: 300px;
+    }
+    .right {
+        margin-left: 300px;
+    }
+    .btn {
+
+    }
+</style>
+</html>

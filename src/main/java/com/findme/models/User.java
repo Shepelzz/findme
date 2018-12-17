@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends GeneralModel{
     private Long id;
     private String firstName;
     private String lastName;
@@ -34,6 +34,7 @@ public class User {
     @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
     @Column(name = "USER_ID")
+    @Override
     public Long getId() {
         return id;
     }

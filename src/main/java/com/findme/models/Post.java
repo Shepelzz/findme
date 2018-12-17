@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "POST")
-public class Post {
+public class Post extends GeneralModel{
     private Long id;
     private String message;
     private Date datePosted;
@@ -21,6 +21,7 @@ public class Post {
     @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
     @Column(name = "ID")
+    @Override
     public Long getId() {
         return id;
     }

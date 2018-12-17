@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "MESSAGE")
-public class Message {
+public class Message extends GeneralModel{
     private Long id;
     private String text;
     private Date dateSent;
@@ -17,6 +17,7 @@ public class Message {
     @SequenceGenerator(name = "MESSAGE_SEQ", sequenceName = "MESSAGE_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQ")
     @Column(name = "ID")
+    @Override
     public Long getId() {
         return id;
     }
