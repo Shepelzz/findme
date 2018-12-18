@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="'ERROR '+${error.getErrorCode().getCode()}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
+
+<header>Find Me</header>
+
 <body>
+<div class="w3-content main-container">
     <div th:text="${error.getErrorCode().getDescription()}+' - '+${error.getMessage()}"></div>
+</div>
 </body>
+
+<footer>Footer</footer>
+
 </html>

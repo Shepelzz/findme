@@ -7,6 +7,9 @@
     text-align: center;
     margin-bottom: 15px;
 }
+.photo-container:hover {
+    background: #d0d0d0;
+}
 
 .name-label {
     margin-left: 130px;
@@ -30,6 +33,7 @@
     margin: 5px 0 0 0;
 }
 .form-inline p {
+    width: 400px;
     font-size: 16px;
     color: #2969ac;
     padding: 0 0 0 10px;
