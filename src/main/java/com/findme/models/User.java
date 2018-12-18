@@ -102,7 +102,7 @@ public class User extends GeneralModel{
         return dateRegistered;
     }
 
-    public void setDateRegistered(Date dateregistered) {
+    public void setDateRegistered(Date dateRegistered) {
         this.dateRegistered = dateRegistered;
     }
 
