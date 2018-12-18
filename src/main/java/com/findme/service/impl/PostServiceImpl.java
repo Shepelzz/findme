@@ -1,6 +1,7 @@
 package com.findme.service.impl;
 
 import com.findme.dao.PostDAO;
+import com.findme.exception.BadRequestException;
 import com.findme.models.Post;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,33 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post save(Post post) {
+    public Post save(Post post) throws BadRequestException {
+        validatePost(post);
         return postDAO.save(post);
     }
 
     @Override
     @Transactional
-    public Post update(Post post) {
+    public Post update(Post post) throws BadRequestException {
+        validatePost(post);
         return postDAO.update(post);
     }
 
     @Override
     public void delete(Long id) {
         postDAO.delete(id);
+    }
+
+    @Override
+    public Post findById(Long id) throws BadRequestException {
+        Post post = postDAO.findById(id);
+        if(post == null)
+            throw new BadRequestException("Post with id "+id+" was not found");
+        return post;
+    }
+
+    private void validatePost(Post post) throws BadRequestException{
+        if(post.getMessage().equals(""))
+            throw new BadRequestException("Message can not be empty");
     }
 }

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'ERROR '+${error.getErrorCode().getCode()}"></title>
+</head>
+<body>
+    <div th:text="${error.getErrorCode().getDescription()}+' - '+${error.getMessage()}"></div>
+</body>
+</html>

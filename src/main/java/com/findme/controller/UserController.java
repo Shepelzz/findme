@@ -6,7 +6,10 @@ import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class UserController {
@@ -21,10 +24,14 @@ public class UserController {
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(Model model, @PathVariable String userId){
-        //TODO controller-service-dao
+        try {
+            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
+            return "profile";
+        } catch (Exception e){
+            model.addAttribute("error", e);
+            return "error";
+        }
 
-        model.addAttribute("user", userDAO.findById(Long.valueOf(userId)));
-        return "profile";
     }
 
     @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
