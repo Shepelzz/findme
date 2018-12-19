@@ -1,31 +1,31 @@
-html {
-    height: 100%;
-    font-family: ABeeZee;
-}
-body {
-    background: #f3f3f3;
-    height: 100%;
-}
-header {
-    height: 50px;
-    background: #333f5f;
-    padding: 5px 20px 5px 20px;
-    font-size: 24px;
-    color: #ffca81;
-}
-footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background: #e1e1e1;
-    height: 40px;
-    font-size: 12px;
-    padding: 5px 20px 5px 20px;
-    color: #777777;
-}
-.main-container {
-    background: white;
-    padding:15px 15px 15px 15px;
-    height: 100%;
-}
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+/*html {*/
+    /*height: 100%;*/
+/*}*/
+/*body {*/
+    /*background: #f3f3f3;*/
+    /*height: 100%;*/
+/*}*/
+/*header {*/
+    /*height: 50px;*/
+    /*background: #333f5f;*/
+    /*padding: 5px 20px 5px 20px;*/
+    /*font-size: 24px;*/
+    /*color: #ffca81;*/
+/*}*/
+/*footer {*/
+    /*position: fixed;*/
+    /*left: 0;*/
+    /*bottom: 0;*/
+    /*width: 100%;*/
+    /*background: #e1e1e1;*/
+    /*height: 40px;*/
+    /*font-size: 12px;*/
+    /*padding: 5px 20px 5px 20px;*/
+    /*color: #777777;*/
+/*}*/
+/*.main-container {*/
+    /*background: white;*/
+    /*padding:15px 15px 15px 15px;*/
+    /*height: 100%;*/
+/*}*/

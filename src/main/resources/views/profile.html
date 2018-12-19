@@ -1,68 +1,158 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Find me</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-</head>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
-<header>Find Me</header>
-<body>
-    <div class="w3-content main-container">
-        <div class="w3-row">
-            <div class="w3-col s4 w3-padding">
-                <div class="photo-container">Photo</div>
-                <div>
-                    <button class="btn">Send message</button>
-                </div>
-            </div>
 
-            <div class="w3-col s8 w3-padding">
-                <div class="name-label" th:text="${user.firstName}+' '+${user.lastName}">User name</div>
-                <div>
-                    <div class="form-inline">
-                        <label>Phone:</label>
-                        <p th:text="${user.phone}">+38(063)7777777</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>Country:</label>
-                        <p class="" th:text="${user.country}">Ukraine</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>City:</label>
-                        <p class="" th:text="${user.city}">Kiev</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>Age:</label>
-                        <p class="" th:text="${user.age}">28</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>Registration date:</label>
-                        <p class="" th:text="${user.dateRegistered}">17.12.2018 14.00.00</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>Relationship Status:</label>
-                        <p class="" th:text="${user.relationshipStatus}">Used</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>Religion:</label>
-                        <p class="" th:text="${user.religion}">No matter</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>School:</label>
-                        <p class="" th:text="${user.school}">Some school</p>
-                    </div>
-                    <div class="form-inline">
-                        <label>University:</label>
-                        <p class="" th:text="${user.university}">Some university blabla bla blablaa bla blablabla</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<title>Find me</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+<!--<link rel="stylesheet" href="../static/css/profile.css">-->
+<!--<link rel="stylesheet" href="../static/css/main.css">-->
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-theme-d2 w3-left-align w3-large">
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
+        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
+        <a href="#" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
+            <img src="" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+        </a>
     </div>
-</body>
-<footer></footer>
+</div>
 
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">Messages</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;min-height:800px;margin-top:80px">
+    <!-- The Grid -->
+    <div class="w3-row">
+        <!-- Left Column -->
+        <div class="w3-col m3">
+            <!-- Profile -->
+            <div class="w3-card w3-round w3-white">
+                <div class="w3-container">
+                    <h4 class="clear-inline w3-padding-small w3-center">
+                        <p class="inline w3-center" th:text="${user.firstName}+' '+${user.lastName}">User Name</p>
+                        <i class="inline w3-padding-small"><a  href=""><i class="fa fa-edit fa-fw w3-margin-right w3-text-theme"></i></a></i>
+                    </h4>
+                    <div class="w3-center">
+                        <!--<img src="/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar">-->
+                        <div class="photo-container">photo</div>
+                    </div>
+                    <hr>
+
+                    <div class="clear-inline w3-padding-small">
+                        <i class="inline fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.country}+', '+${user.city}">Ukraine, Kiev</div>
+                    </div>
+
+                    <div class="w3-padding-small">
+                        <i class="inline fa fa-phone fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.phone}">+38(063)7777777</div>
+                    </div>
+                    <div class="w3-padding-small">
+                        <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.age}">28</div>
+                    </div>
+                    <div class="w3-padding-small">
+                        <i class="fa fa-calendar fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.dateRegistered}">17.12.2018 14.00.00</div>
+                    </div>
+                    <div class="w3-padding-small">
+                        <i class="fa fa-heart fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.relationshipStatus}">married</div>
+                    </div>
+                    <div class="w3-padding-small">
+                        <i class="fa fa-church fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.religion}">no religion</div>
+                    </div>
+                    <div class="w3-padding-small">
+                        <i class="fa fa-chalkboard-teacher fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.school}">№450</div>
+                    </div>
+                    <div class="w3-padding-small" style="margin-bottom: 10px">
+                        <i class="fa fa-graduation-cap fa-fw w3-margin-right w3-text-theme"></i>
+                        <div class="inline" th:text="${user.university}">KPI bla blaI bla blaI bla blaI b</div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <!-- Accordion -->
+            <div class="w3-card w3-round">
+                <div class="w3-white">
+                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Friends</button>
+                    <div id="Demo1" class="w3-hide w3-container">
+                        <p>Some text..</p>
+                    </div>
+                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> My Photos</button>
+                </div>
+            </div>
+            <br>
+
+            <!-- Interests -->
+            <div class="w3-card w3-round w3-white w3-hide-small">
+                <div class="w3-container">
+                    <p>Interests</p>
+
+                </div>
+            </div>
+            <!-- End Left Column -->
+        </div>
+
+        <!-- Middle Column -->
+        <div class="w3-col m8">
+
+            <div class="w3-row-padding">
+                <div class="w3-col m12">
+                    <div class="w3-card w3-round w3-white">
+                        <div class="w3-container w3-padding">
+                            <h6 class="w3-opacity">Create new post here: </h6>
+                            <p contenteditable="true" class="w3-border w3-padding"></p>
+                            <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+                <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <span class="w3-right w3-opacity">how time ago</span>
+                <h4>/Some friend/</h4><br>
+                <hr class="w3-clear">
+                <p>/Some text./</p>
+                <div class="w3-row-padding" style="margin:0 -16px">
+                    <div class="w3-half">
+                        <img src="/w3images/lights.jpg" style="width:100%" alt="/Some image/" class="w3-margin-bottom">
+                    </div>
+                </div>
+                <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+                <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
+            </div>
+
+            <!-- End Middle Column -->
+        </div>
+        <!-- End Grid -->
+    </div>
+
+    <!-- End Page Container -->
+</div>
+<br>
+
+<!-- Footer -->
+<footer class="w3-container w3-theme-d3 w3-padding-16">
+    <h5>Footer</h5>
+</footer>
+
+</body>
 </html>

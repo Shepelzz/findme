@@ -1,19 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Find me</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-</head>
-<header>Find Me</header>
-<body>
-    <div class="w3-content main-container">
-        <h1>Welcome to Find me!</h1>
-        Some text
-    </div>
-</body>
-<footer>Footer</footer>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
+
+<title>Home</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+<!--<link rel="stylesheet" href="../static/css/profile.css">-->
+<!--<link rel="stylesheet" href="../static/css/main.css">-->
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-theme-d2 w3-left-align w3-large">
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
+    </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+</div>
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;min-height:800px;margin-top:80px">
+    <!-- The Grid -->
+    <div class="w3-row">
+        <!-- Left Column -->
+        <div class="w3-col m3">
+            <!-- Registration/Login -->
+            <div class="w3-card w3-round w3-white">
+                <div class="w3-container" style="height: 500px;">
+                    <h3 class="w3-opacity w3-center">Registration </h3>
+                </div>
+            </div>
+            <br>
+            <!-- End Left Column -->
+        </div>
+
+
+        <!-- Middle Column -->
+        <div class="w3-col m8">
+
+            <div class="w3-row-padding">
+                <div class="w3-col m12">
+                    <div class="w3-card w3-round w3-white">
+                        <div class="w3-container w3-padding" style="height: 500px;">
+                            <h3 class="w3-opacity w3-center">Welcome to Findme </h3>
+                            <br>
+                            Test
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Middle Column -->
+        </div>
+        <!-- End Grid -->
+    </div>
+
+    <!-- End Page Container -->
+</div>
+<br>
+
+<!-- Footer -->
+<footer class="w3-container w3-theme-d3 w3-padding-16">
+    <h5>Footer</h5>
+</footer>
+
+</body>
 </html>
