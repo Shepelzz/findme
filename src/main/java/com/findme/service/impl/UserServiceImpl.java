@@ -2,6 +2,7 @@ package com.findme.service.impl;
 
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
+import com.findme.exception.InternalServerError;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    @Transactional
+    public void delete(Long id) throws InternalServerError {
         userDAO.delete(id);
     }
 

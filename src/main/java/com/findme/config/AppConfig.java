@@ -24,7 +24,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @ComponentScan("com")
-@EnableWebMvc
+//@EnableWebMvc
 @EnableTransactionManagement
 public class AppConfig implements WebMvcConfigurer {
 

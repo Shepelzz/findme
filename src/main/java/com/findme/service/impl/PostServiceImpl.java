@@ -2,6 +2,7 @@ package com.findme.service.impl;
 
 import com.findme.dao.PostDAO;
 import com.findme.exception.BadRequestException;
+import com.findme.exception.InternalServerError;
 import com.findme.models.Post;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws InternalServerError {
         postDAO.delete(id);
     }
 

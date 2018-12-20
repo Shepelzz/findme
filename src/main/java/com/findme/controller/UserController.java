@@ -41,9 +41,9 @@ public class UserController {
         return null;
     }
 
-    @RequestMapping(path = "/user/edit/{userId}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/user/edit/", method = RequestMethod.PUT)
     public @ResponseBody
-    User update(Model model, @PathVariable String userId){
+    User update(Model model){
 
         return null;
     }
