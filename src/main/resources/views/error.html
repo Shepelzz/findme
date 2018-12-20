@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'ERROR '+${error.getErrorCode().getCode()}"></title>
+    <title th:text="'ERROR '+${error.getCode()}"></title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
 </head>
@@ -11,7 +11,7 @@
 
 <body>
 <div class="w3-content main-container">
-    <div th:text="${error.getErrorCode().getDescription()}+' - '+${error.getMessage()}"></div>
+    <div th:text="${error.getDescription()}+' - '+${error.getMessage()}"></div>
 </div>
 </body>
 

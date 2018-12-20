@@ -52,7 +52,32 @@
                         <div class="w3-container w3-padding" style="height: 500px;">
                             <h3 class="w3-opacity w3-center">Welcome to Findme </h3>
                             <br>
-                            Test
+                            <div class="w3-padding-small">
+                                <p class="inline w3-margin-right w3-text-theme">Registered: </p>
+                                <div class="inline" th:text="${userList.size()}">50</div>
+                            </div>
+                            <br>
+                            <table class="w3-table w3-striped w3-border">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>DATE REGISTERED</th>
+                                    <th>LAST ACTIVITY</th>
+                                    <th></th>
+                                </tr>
+                                <tr th:each="user : ${userList}">
+                                    <td th:text="${user.getId()}">0</td>
+                                    <td th:text="${user.getFirstName()}+' '+${user.getLastName()}">Test Test</td>
+                                    <td th:text="${user.getDateRegistered()}">2018-01-01</td>
+                                    <td th:text="${user.getDateLastActive()}">2018-01-01</td>
+                                    <td>
+                                        <a th:href="@{'/user/' + ${user.getId()}}">
+                                            <button type="button" class="w3-button w3-theme">
+                                            <i class="fa fa-user-circle"></i> Profile</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     private Class<T> clazz;
 
     @PersistenceContext
-    protected EntityManager entityManager;
+    EntityManager entityManager;
 
     final void setClazz( Class<T> clazzToSet ){
         this.clazz = clazzToSet;
