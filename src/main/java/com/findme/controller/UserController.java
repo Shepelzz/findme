@@ -41,6 +41,11 @@ public class UserController {
         }
     }
 
+    @RequestMapping(path = "/user/", method = RequestMethod.GET)
+    public String profile(Model model){
+        return "errors/notFound";
+    }
+
     @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
     public @ResponseBody
     User save(Model model){
