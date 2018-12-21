@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ERROR 400</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="../../static/css/profile.css">
+    <link rel="stylesheet" href="../../static/css/main.css">
+</head>
+
+<header>Find Me</header>
+
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+    <div class="w3-theme-d2 w3-left-align w3-large">
+        <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
+    </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+</div>
+
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;min-height:80%;margin-top:80px">
+    <!-- The Grid -->
+    <div class="w3-row w3-center">
+        <p>400 - Bad Request</p>
+        <div th:text="${error.getMessage()}">error message</div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container custom-footer fixed">
+    <h5>Footer</h5>
+</footer>
+</body>
+
+</html>

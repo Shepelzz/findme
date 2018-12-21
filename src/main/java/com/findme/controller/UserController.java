@@ -1,6 +1,7 @@
 package com.findme.controller;
 
 import com.findme.dao.UserDAO;
+import com.findme.exception.BadRequestException;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,13 @@ public class UserController {
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             return "profile";
+        } catch (BadRequestException e){
+            model.addAttribute("error", e);
+            return "errors/badRequest";
         } catch (Exception e){
             model.addAttribute("error", e);
-            return "error";
+            return "errors/internalServerError";
         }
-
     }
 
     @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
