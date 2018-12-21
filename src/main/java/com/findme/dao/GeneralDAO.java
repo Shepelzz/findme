@@ -5,9 +5,9 @@ import com.findme.models.GeneralModel;
 
 public interface GeneralDAO<T extends GeneralModel> {
 
-    T save(T t);
-    T update(T t);
+    T save(T t) throws InternalServerError;
+    T update(T t) throws InternalServerError;
     void delete(Long id) throws InternalServerError;
-    T findById(Long id);
+    T findById(Long id) throws InternalServerError;
 
 }

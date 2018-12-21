@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface UserDAO extends GeneralDAO<User> {
 
-    public List<User> getFirstUsers();
+    List<User> getFirstUsers();
 
 }

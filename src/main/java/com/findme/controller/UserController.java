@@ -1,7 +1,8 @@
 package com.findme.controller;
 
 import com.findme.dao.UserDAO;
-import com.findme.exception.BadRequestException;
+import com.findme.exception.InternalServerError;
+import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,15 @@ public class UserController {
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             return "profile";
-        } catch (BadRequestException e){
+        } catch (NumberFormatException e){
             model.addAttribute("error", e);
             return "errors/badRequest";
-        } catch (Exception e){
-            model.addAttribute("error", e);
+        } catch (InternalServerError ise){
+            model.addAttribute("error", ise);
             return "errors/internalServerError";
+        } catch (NotFoundException nofe){
+            model.addAttribute("error", nofe);
+            return "errors/notFound";
         }
     }
 

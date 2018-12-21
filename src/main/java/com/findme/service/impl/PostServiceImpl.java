@@ -3,6 +3,7 @@ package com.findme.service.impl;
 import com.findme.dao.PostDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
+import com.findme.exception.NotFoundException;
 import com.findme.models.Post;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public Post save(Post post) throws BadRequestException {
+    public Post save(Post post) throws InternalServerError, BadRequestException {
         validatePost(post);
         return postDAO.save(post);
     }
 
     @Override
     @Transactional
-    public Post update(Post post) throws BadRequestException {
+    public Post update(Post post) throws InternalServerError, BadRequestException {
         validatePost(post);
         return postDAO.update(post);
     }
@@ -38,10 +39,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post findById(Long id) throws BadRequestException {
+    public Post findById(Long id) throws InternalServerError, NotFoundException {
         Post post = postDAO.findById(id);
         if(post == null)
-            throw new BadRequestException("Post with id "+id+" was not found");
+            throw new NotFoundException("Post with id "+id+" was not found");
         return post;
     }
 
