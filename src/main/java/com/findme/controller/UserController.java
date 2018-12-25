@@ -8,10 +8,7 @@ import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -41,9 +38,10 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/user/", method = RequestMethod.GET)
-    public String profile(Model model){
-        return "errors/notFound";
+    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    public String registerUser(@ModelAttribute User user){
+        //TODO logic
+        return "ok";
     }
 
     @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
