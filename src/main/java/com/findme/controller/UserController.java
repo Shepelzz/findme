@@ -42,16 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute User user){
-//        if(user.getFirstName().length() > 5)
-//            return new ResponseEntity<>("success", HttpStatus.OK);
-//        else {
-//                try {
-//                    userDAO.findById(10L);
-//                }catch (Exception e){
-//                }
-//            return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
-//        }
+    public ResponseEntity<?> registerUser(@ModelAttribute User user){
         try {
             userService.save(user);
             return new ResponseEntity<>("User "+user.getFirstName()+" "+user.getLastName()+" registered successfully", HttpStatus.OK);
@@ -65,13 +56,6 @@ public class UserController {
         }
     }
 
-//    @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
-//    public @ResponseBody
-//    User save(Model model){
-//
-//        return null;
-//    }
-//
 
     @RequestMapping(path = "/user/edit/", method = RequestMethod.PUT)
     public @ResponseBody

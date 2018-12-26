@@ -125,7 +125,7 @@
                                     </tr>
                                 </table>
                             </div>
-
+                            <br>
                         </div>
                     </div>
                 </div>
@@ -153,35 +153,39 @@
     // alert($("#test-ajax").text());
 
 
-    $("#test-ajax").click(function () {
-        //debugger;
-        $.ajax({
-            type: "GET",
-            url: "/test-ajax",
-            data: {},
-            success: function success() {
-                alert("success!");
-            },
-            error: function error(xhr) {
-                debugger;
-                alert("error!");
-            }
-        });
-    });
+    // $("#test-ajax").click(function () {
+    //     //debugger;
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/test-ajax",
+    //         data: {},
+    //         success: function success() {
+    //             alert("success!");
+    //         },
+    //         error: function error(xhr) {
+    //             debugger;
+    //             alert("error!");
+    //         }
+    //     });
+    // });
 
     // //submit reg form
-    $("#registration-form").submit(function register(e) {
+    $("#registration-form").submit(function register() {
+        event.preventDefault();
         $.ajax({
             type: "POST",
             url: "register-user",
             async: false,
             data: $('#registration-form').serialize(),
-            success:function success(msg) {
-                debugger;
-                alert(msg);
+            dataType : 'json',
+            success:function success(data) {
+                // debugger;
+                alert(data);
+                location.reload();
+                // window.location.href = "user/10";
             },
             error: function(xhr) {
-                debugger;
+                // debugger;
                 alert(xhr.responseText);
             }
         });
