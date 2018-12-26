@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-<link rel="stylesheet" href="../static/css/profile.css">
-<link rel="stylesheet" href="../static/css/main.css">
+<!--<link rel="stylesheet" href="../static/css/profile.css">-->
+<!--<link rel="stylesheet" href="../static/css/main.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-theme-l5">
 
@@ -28,25 +28,19 @@
 </div>
 
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px; margin-bottom: 50px">
     <!-- The Grid -->
     <div class="w3-row">
         <!-- Left Column -->
         <div class="w3-col m3">
             <!-- Registration/Login -->
             <div class="w3-card w3-round w3-white">
-                <div class="w3-container" style="height: 500px;">
-                    <h3 class="w3-opacity w3-center">Registration </h3>
+                <div class="w3-container" style="min-height: 500px;">
+                    <h3 class="w3-opacity w3-center">Authorization</h3>
                     <br>
-                    <form id="registration-form">
-                        <input type="text" name="firstName" required>
-                        <button type="submit">Register</button>
-                    </form>
-
-
-
                 </div>
-
+                <br>
+                <button id="test-ajax">тыц!</button>
 
             </div>
             <br>
@@ -60,35 +54,77 @@
             <div class="w3-row-padding">
                 <div class="w3-col m12">
                     <div class="w3-card w3-round w3-white">
-                        <div class="w3-container w3-padding" style="height: 500px;">
+                        <div class="w3-container w3-padding" style="min-height: 500px;">
                             <h3 class="w3-opacity w3-center">Welcome to Findme </h3>
                             <br>
-                            <div class="w3-padding-small">
-                                <p class="inline w3-margin-right w3-text-theme">Registered: </p>
-                                <div class="inline" th:text="${userList.size()}">50</div>
+                            <div>
+                                <h4 class="w3-opacity">Registration</h4>
+                                <form id="registration-form">
+                                    <p class="w3-opacity">Please fill in this form to create an account.</p>
+                                    <hr>
+                                    <div class="w3-container">
+                                        <div class="w3-padding-small">
+                                            <label for="first_name" class="inline w3-margin-right w3-text-theme">First name: </label>
+                                            <input id="first_name" placeholder="Enter your first name" type="text" name="firstName" required>
+                                        </div>
+                                        <div class="w3-padding-small">
+                                            <label for="last_name" class="inline w3-margin-right w3-text-theme">Last name: </label>
+                                            <input id="last_name" placeholder="Enter your last name" type="text" name="lastName" required>
+                                        </div>
+                                        <div class="w3-padding-small">
+                                            <label for="phone" class="inline w3-margin-right w3-text-theme">Phone: </label>
+                                            <input id="phone" placeholder="+380801111111" type="text" name="phone" required>
+                                        </div>
+                                        <div class="w3-padding-small">
+                                            <label for="email" class="inline w3-margin-right w3-text-theme">Email: </label>
+                                            <input id="email" placeholder="Enter email" type="text" name="email" required>
+                                        </div>
+                                        <div class="w3-padding-small">
+                                            <label for="password" class="inline w3-margin-right w3-text-theme">Password: </label>
+                                            <input id="password" placeholder="Enter password" type="password" name="password" required>
+                                        </div>
+                                        <!--<div class="w3-padding-small">-->
+                                            <!--<label for="repeat_password" class="inline w3-margin-right w3-text-theme">Repeat password: </label>-->
+                                            <!--<input id="repeat_password" placeholder="Repeat Password" type="password" >-->
+                                        <!--</div>-->
+                                        <hr>
+                                        <div class="w3-padding-small">
+                                            <label class="inline w3-margin-right w3-text-theme"><p id="loading" style="display:none">waiting... </p></label>
+                                            <button type="submit" class="w3-button w3-theme">Register</button>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </form>
                             </div>
                             <br>
-                            <table class="w3-table w3-striped w3-border">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>NAME</th>
-                                    <th>DATE REGISTERED</th>
-                                    <th>LAST ACTIVITY</th>
-                                    <th></th>
-                                </tr>
-                                <tr th:each="user : ${userList}">
-                                    <td th:text="${user.getId()}">0</td>
-                                    <td th:text="${user.getFirstName()}+' '+${user.getLastName()}">Test Test</td>
-                                    <td th:text="${user.getDateRegistered()}">2018-01-01</td>
-                                    <td th:text="${user.getDateLastActive()}">2018-01-01</td>
-                                    <td>
-                                        <a th:href="@{'/user/' + ${user.getId()}}">
-                                            <button type="button" class="w3-button w3-theme">
-                                            <i class="fa fa-user-circle"></i> Profile</button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
+                            <div>
+                                <div class="w3-padding-small">
+                                    <p class="inline w3-margin-right w3-text-theme">Registered: </p>
+                                    <div class="inline" th:text="${userList.size()}">50</div>
+                                </div>
+                                <br>
+                                <table class="w3-table w3-striped w3-border">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>NAME</th>
+                                        <th>DATE REGISTERED</th>
+                                        <th>LAST ACTIVITY</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr th:each="user : ${userList}">
+                                        <td th:text="${user.getId()}">0</td>
+                                        <td th:text="${user.getFirstName()}+' '+${user.getLastName()}">Test Test</td>
+                                        <td th:text="${user.getDateRegistered()}">2018-01-01</td>
+                                        <td th:text="${user.getDateLastActive()}">2018-01-01</td>
+                                        <td>
+                                            <a th:href="@{'/user/' + ${user.getId()}}">
+                                                <button type="button" class="w3-button w3-theme">
+                                                <i class="fa fa-user-circle"></i> Profile</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
 
                         </div>
                     </div>
@@ -117,37 +153,41 @@
     // alert($("#test-ajax").text());
 
 
-    // $("#test-ajax").click(function () {
-    //     //debugger;
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/test-ajax",
-    //         data: {},
-    //         success: function success() {
-    //             debugger;
-    //             alert("success!");
-    //         },
-    //         error: function error(xhr) {
-    //             debugger;
-    //             alert("error!");
-    //         }
-    //     });
-    // });
-    //
-    // //submit reg form
-    $("#registration-form").submit(function (e) {
+    $("#test-ajax").click(function () {
+        //debugger;
         $.ajax({
-            url: "register-user",
-            type: "POST",
-            data: $('#registration-form').serialize(),
+            type: "GET",
+            url: "/test-ajax",
+            data: {},
             success: function success() {
-                //
+                alert("success!");
             },
-            error: function error() {
-                //
+            error: function error(xhr) {
+                debugger;
+                alert("error!");
             }
         });
     });
+
+    // //submit reg form
+    $("#registration-form").submit(function register(e) {
+        $.ajax({
+            type: "POST",
+            url: "register-user",
+            async: false,
+            data: $('#registration-form').serialize(),
+            success:function success(msg) {
+                debugger;
+                alert(msg);
+            },
+            error: function(xhr) {
+                debugger;
+                alert(xhr.responseText);
+            }
+        });
+    });
+
+
 
 
 </script>

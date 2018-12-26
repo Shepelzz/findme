@@ -1,11 +1,14 @@
 package com.findme.controller;
 
 import com.findme.dao.UserDAO;
+import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,17 +42,36 @@ public class UserController {
     }
 
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public String registerUser(@ModelAttribute User user){
-        //TODO logic
-        return "ok";
+    public ResponseEntity<String> registerUser(@ModelAttribute User user){
+//        if(user.getFirstName().length() > 5)
+//            return new ResponseEntity<>("success", HttpStatus.OK);
+//        else {
+//                try {
+//                    userDAO.findById(10L);
+//                }catch (Exception e){
+//                }
+//            return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+//        }
+        try {
+            userService.save(user);
+            return new ResponseEntity<>("User "+user.getFirstName()+" "+user.getLastName()+" registered successfully", HttpStatus.OK);
+        } catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerError e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>("hui", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
-    public @ResponseBody
-    User save(Model model){
-
-        return null;
-    }
+//    @RequestMapping(path = "/user/save/", method = RequestMethod.POST)
+//    public @ResponseBody
+//    User save(Model model){
+//
+//        return null;
+//    }
+//
 
     @RequestMapping(path = "/user/edit/", method = RequestMethod.PUT)
     public @ResponseBody

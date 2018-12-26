@@ -33,9 +33,13 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     }
 
     @Override
-    public T update(T t){
-        entityManager.merge(t);
-        return t;
+    public T update(T t) throws InternalServerError {
+        try {
+            entityManager.merge(t);
+            return t;
+        } catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
     }
 
     @Transactional

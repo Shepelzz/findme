@@ -1,6 +1,7 @@
 package com.findme.controller;
 
 import com.findme.dao.UserDAO;
+import com.findme.exception.InternalServerError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,19 @@ public class HomeController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model){
-        model.addAttribute("userList", userDAO.getFirstUsers());
-        return "index";
+        try {
+            model.addAttribute("userList", userDAO.getFirstUsers());
+            return "index";
+        } catch (InternalServerError e){
+            model.addAttribute("error", e);
+            return "errors/internalServerError";
+        }
     }
 
     @RequestMapping(path = "/test-ajax", method = RequestMethod.GET)
     public ResponseEntity<String> testAjax(){
 
-        return new ResponseEntity<>("trouble", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("trouble", HttpStatus.OK);
     }
 
 

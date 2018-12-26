@@ -2,7 +2,31 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 .custom-footer { width: 100%; background: #dddddd
 }
+.custom-container{
+    max-width: 1400px;
+    margin-top: 80px;
+    margin-bottom: 50px;
+}
 .fixed {position: fixed; left: 0; bottom: 0;}
+
+#registration-form label{
+    text-align: right;
+    display: inline-block;
+    width: 20%;
+}
+#registration-form input{
+    width: 60%;
+    border: none;
+    background: #f1f1f1;
+    padding: 5px;
+}
+#registration-form input::placeholder{
+    font-size: 12px;
+}
+#registration-form button{
+    width: 20%;
+}
+
 /*html {*/
     /*height: 100%;*/
 /*}*/
