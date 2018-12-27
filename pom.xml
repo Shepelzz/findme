@@ -17,6 +17,7 @@
         <hibernate.version>5.3.7.Final</hibernate.version>
         <oracle.ojdbc.version>12.1.0.1</oracle.ojdbc.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
+        <fasterxml.jackson-databind.version>2.9.4</fasterxml.jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -89,11 +90,11 @@
             <version>${hibernate.version}</version>
         </dependency>
 
-        <!--for lesson3.hw3_1-->
+        <!--Other-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>${springframework.boot.version}</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${fasterxml.jackson-databind.version}</version>
         </dependency>
     </dependencies>
 

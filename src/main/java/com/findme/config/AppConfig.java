@@ -99,6 +99,7 @@ public class AppConfig implements WebMvcConfigurer {
                         "classpath:/static/css/",
                         "classpath:/static/js/");
     }
+
 }
 
 

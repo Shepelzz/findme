@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-<link rel="stylesheet" href="../static/css/profile.css">
-<link rel="stylesheet" href="../static/css/main.css">
+<!--<link rel="stylesheet" href="../static/css/profile.css">-->
+<!--<link rel="stylesheet" href="../static/css/main.css">-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body class="w3-theme-l3">
 
@@ -174,11 +174,9 @@
             url: "register-user",
             async: false,
             data: $('#registration-form').serialize(),
-            dataType : 'json',
-            success:function success(data) {
-                // debugger;
-                alert(data);
-                location.reload();
+            success:function success(msg) {
+                alert(msg);
+                window.location.reload(true);
             },
             error: function(xhr) {
                 // debugger;
@@ -187,18 +185,18 @@
         });
     });
 
-    $('#showUsers_btn').click(function () {
-        var button =  $('#showUsers_btn');
-        var list = $('#usersList');
-
-        if(list.css("display") === 'none'){
-            button.val('hide users list');
-            list.show(150);
-        } else {
-            button.val('show users list');
-            list.hide(150);
-        }
-    });
+    // $('#showUsers_btn').click(function () {
+    //     var button =  $('#showUsers_btn');
+    //     var list = $('#usersList');
+    //
+    //     if(list.css("display") === 'none'){
+    //         button.val('hide users list');
+    //         list.show(150);
+    //     } else {
+    //         button.val('show users list');
+    //         list.hide(150);
+    //     }
+    // });
 
 
 
