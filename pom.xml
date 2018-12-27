@@ -17,9 +17,6 @@
         <hibernate.version>5.3.7.Final</hibernate.version>
         <oracle.ojdbc.version>12.1.0.1</oracle.ojdbc.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
