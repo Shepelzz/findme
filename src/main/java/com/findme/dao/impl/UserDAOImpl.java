@@ -5,12 +5,11 @@ import com.findme.exception.InternalServerError;
 import com.findme.models.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
 public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
-    private static final String SQL_TOP_USERS = "SELECT * FROM USERS ORDER BY DATE_REGISTERED DESC";
+    private static final String SQL_TOP_USERS = "SELECT u FROM User ORDER BY dateRegistered DESC";
     private static final String SQL_GET_USER_BY_EMAIL_OR_PHONE = "SELECT u FROM User u WHERE email = :email OR phone = :phone";
 
     public UserDAOImpl() {
@@ -19,7 +18,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
 
     public List<User> getFirstUsers() throws InternalServerError{
         try {
-            return (List<User>) entityManager.createNativeQuery(SQL_TOP_USERS, User.class)
+            return (List<User>) entityManager.createQuery(SQL_TOP_USERS, User.class)
                     .setMaxResults(10)
                     .getResultList();
         }catch (Exception e){
