@@ -61,10 +61,13 @@ public class UserController {
         return null;
     }
 
-    @RequestMapping(path = "/user/remove/{userId}", method = RequestMethod.DELETE)
-    public @ResponseBody
-    String delete(Model model, @PathVariable String userId){
-
-        return null;
+    @RequestMapping(path = "/remove-user/{userId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteUser(@PathVariable String userId){
+        try {
+            userService.delete(Long.valueOf(userId));
+            return new ResponseEntity<>("User with id: "+userId+" removed successfully", HttpStatus.OK);
+        } catch (InternalServerError e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -11,10 +11,10 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-<!--<link rel="stylesheet" href="../static/css/profile.css">-->
-<!--<link rel="stylesheet" href="../static/css/main.css">-->
+<link rel="stylesheet" href="../static/css/profile.css">
+<link rel="stylesheet" href="../static/css/main.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<body class="w3-theme-l3">
+<body>
 
 <!-- Navbar -->
 <div class="w3-top">
@@ -28,7 +28,7 @@
 </div>
 
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px; margin-bottom: 50px">
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px;">
     <!-- The Grid -->
     <div class="w3-row">
         <!-- Left Column -->
@@ -107,6 +107,7 @@
                                         <th>DATE REGISTERED</th>
                                         <th>LAST ACTIVITY</th>
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                     <tr th:each="user : ${userList}">
                                         <td th:text="${user.getId()}">0</td>
@@ -118,6 +119,10 @@
                                                 <button type="button" class="w3-button w3-theme">
                                                 <i class="fa fa-user-circle"></i> Profile</button>
                                             </a>
+                                        </td>
+                                        <td>
+                                            <button id="userRemove" type="button" class="w3-button w3-theme" style="width: 50px" th:onclick="|userDelete('${user.getId()}')|">
+                                            <i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr>
                                 </table>
@@ -134,11 +139,11 @@
 
     <!-- End Page Container -->
 </div>
-<br>
+
 
 <!-- Footer -->
-<footer class="w3-container custom-footer fixed">
-    <h5>Footer</h5>
+<footer class="w3-center custom-footer">
+    <p>Footer копирайты</p>
 </footer>
 
 </body>
@@ -174,8 +179,8 @@
             url: "register-user",
             async: false,
             data: $('#registration-form').serialize(),
-            success:function success(msg) {
-                alert(msg);
+            success:function success(data) {
+                alert(data);
                 window.location.reload(true);
             },
             error: function(xhr) {
@@ -185,18 +190,37 @@
         });
     });
 
-    // $('#showUsers_btn').click(function () {
-    //     var button =  $('#showUsers_btn');
-    //     var list = $('#usersList');
-    //
-    //     if(list.css("display") === 'none'){
-    //         button.val('hide users list');
-    //         list.show(150);
-    //     } else {
-    //         button.val('show users list');
-    //         list.hide(150);
-    //     }
-    // });
+    $('#showUsers_btn').click(function () {
+        var button =  $('#showUsers_btn');
+        var list = $('#usersList');
+
+        if(list.css("display") === 'none'){
+            button.val('hide users list');
+            list.show(150);
+        } else {
+            button.val('show users list');
+            list.hide(150);
+        }
+    });
+
+    function userDelete(id) {
+        if(confirm('Remove user with id: '+id+'?')) {
+            $.ajax({
+                type: "DELETE",
+                url: "remove-user/" + id,
+                async: false,
+                success: function success(data) {
+                    debugger;
+                    alert(data);
+                    window.location.reload(true);
+                },
+                error: function (xhr) {
+                    debugger;
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    }
 
 
 

@@ -3,6 +3,7 @@ package com.findme.models;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @Entity
 @Table(name = "POST")
 public class Post extends GeneralModel{
@@ -15,7 +16,6 @@ public class Post extends GeneralModel{
 
     //TODO
     //comments
-
 
     @Id
     @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_ID_SEQ", allocationSize = 1)
