@@ -179,7 +179,6 @@
                 // debugger;
                 alert(data);
                 location.reload();
-                // window.location.href = "user/10";
             },
             error: function(xhr) {
                 // debugger;
@@ -194,12 +193,12 @@
 
         if(list.css("display") === 'none'){
             button.val('hide users list');
-            // list.css("display",'block');
             list.show(150);
         } else {
             button.val('show users list');
             list.hide(150);
-        }});
+        }
+    });
 
 
 

@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public ResponseEntity<?> registerUser(@ModelAttribute User user){
+    public ResponseEntity<String> registerUser(@ModelAttribute User user){
         try {
             userService.save(user);
             return new ResponseEntity<>("User "+user.getFirstName()+" "+user.getLastName()+" registered successfully", HttpStatus.OK);
