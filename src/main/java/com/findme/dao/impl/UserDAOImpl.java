@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
-    private static final String SQL_TOP_USERS = "SELECT u FROM User ORDER BY dateRegistered DESC";
+    private static final String SQL_TOP_USERS = "SELECT u FROM User u ORDER BY dateRegistered DESC";
     private static final String SQL_GET_USER_BY_EMAIL_OR_PHONE = "SELECT u FROM User u WHERE email = :email OR phone = :phone";
 
     public UserDAOImpl() {
