@@ -194,10 +194,11 @@
 
         if(list.css("display") === 'none'){
             button.val('hide users list');
-            list.css("display",'block');
+            // list.css("display",'block');
+            list.show(150);
         } else {
             button.val('show users list');
-            list.css("display", 'none');
+            list.hide(150);
         }});
 
 
