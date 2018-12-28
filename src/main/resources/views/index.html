@@ -14,7 +14,9 @@
 <link rel="stylesheet" href="../static/css/profile.css">
 <link rel="stylesheet" href="../static/css/main.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 <body>
+<div id="loaderGif"></div>
 
 <!-- Navbar -->
 <div class="w3-top">
@@ -26,7 +28,6 @@
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
 </div>
-
 <!-- Page Container -->
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px;">
     <!-- The Grid -->
@@ -40,7 +41,7 @@
                     <br>
                 </div>
                 <br>
-                <!--<button id="test-ajax">тыц!</button>-->
+                <button id="test-ajax">тыц!</button>
 
             </div>
             <br>
@@ -138,7 +139,6 @@
     </div>
 
     <!-- End Page Container -->
-</div>
 
 
 <!-- Footer -->
@@ -149,42 +149,46 @@
 </body>
 
 <script>
-
+    var loader = $('#loaderGif');
     //first js
     //first jquery usage
     // alert($("#test-ajax").text());
 
-
-    // $("#test-ajax").click(function () {
-    //     //debugger;
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/test-ajax",
-    //         data: {},
-    //         success: function success() {
-    //             alert("success!");
-    //         },
-    //         error: function error(xhr) {
-    //             debugger;
-    //             alert("error!");
-    //         }
-    //     });
-    // });
+    $("#test-ajax").click(function () {
+        loader.show();
+        $.ajax({
+            type: "GET",
+            url: "/test-ajax",
+            data: {},
+            success: function success() {
+                loader.hide();
+                alert("success!");
+            },
+            error: function error(xhr) {
+                debugger;
+                loader.hide();
+                alert("error!");
+            }
+        });
+    });
 
     // //submit reg form
     $("#registration-form").submit(function register() {
+        loader.show();
         event.preventDefault();
         $.ajax({
             type: "POST",
-            url: "register-user",
-            async: false,
+            url: "/register-user",
+            // async: false,
             data: $('#registration-form').serialize(),
             success:function success(data) {
+                loader.hide();
                 alert(data);
                 window.location.reload(true);
             },
             error: function(xhr) {
                 // debugger;
+                loader.hide();
                 alert(xhr.responseText);
             }
         });
@@ -205,24 +209,25 @@
 
     function userDelete(id) {
         if(confirm('Remove user with id: '+id+'?')) {
+            loader.show();
             $.ajax({
                 type: "DELETE",
                 url: "remove-user/" + id,
-                async: false,
+                // async: false,
                 success: function success(data) {
                     debugger;
+                    loader.hide();
                     alert(data);
                     window.location.reload(true);
                 },
                 error: function (xhr) {
                     debugger;
+                    loader.hide();
                     alert(xhr.responseText);
                 }
             });
         }
     }
-
-
 
 </script>
 </html>

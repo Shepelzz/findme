@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.concurrent.TimeUnit;
+
 @Controller
 public class HomeController {
     private UserDAO userDAO;
@@ -31,8 +33,8 @@ public class HomeController {
     }
 
     @RequestMapping(path = "/test-ajax", method = RequestMethod.GET)
-    public ResponseEntity<String> testAjax(){
-
+    public ResponseEntity<String> testAjax() throws Exception{
+        TimeUnit.SECONDS.sleep(3);
         return new ResponseEntity<>("trouble", HttpStatus.OK);
     }
 
