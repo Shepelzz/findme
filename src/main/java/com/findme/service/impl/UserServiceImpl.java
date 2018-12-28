@@ -9,7 +9,6 @@ import com.findme.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,21 +22,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User save(User user) throws InternalServerError, BadRequestException {
-        validateUser(user);
+//        validateNewUser(user);
         return userDAO.save(user);
     }
 
     @Override
-    @Transactional
     public User update(User user) throws InternalServerError, BadRequestException {
-        validateUser(user);
+        //TODO
         return userDAO.update(user);
     }
 
     @Override
-    @Transactional
     public void delete(Long id) throws InternalServerError {
         userDAO.delete(id);
     }
@@ -51,30 +47,47 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private void validateUser(User user) throws BadRequestException, InternalServerError{
+    private void validateNewUser(User user) throws BadRequestException, InternalServerError{
         //check name
-        String[] nameList = {user.getFirstName(), user.getLastName()};
-        for(String name : nameList){
-            if(name.length() == 0)
-                throw new BadRequestException("User name can not be empty");
-            if(!name.chars().allMatch(Character::isLetter))
-                throw new BadRequestException("User name can contain only text characters");
-        }
+        checkUserName(user.getFirstName(), user.getLastName());
         //check phone
+        checkUserPhone(user.getPhone());
+        //check email
+        checkUserEmail(user.getEmail());
+        //check password
+        checkUserPassword(user.getPassword());
+        //check on exists
+        checkUserOnExists(user.getEmail(), user.getPhone());
+    }
+
+    private void checkUserName(String firstName, String lastName) throws BadRequestException{
+        if(firstName.length() == 0 || lastName.length() == 0)
+            throw new BadRequestException("User name can not be empty");
+        if(!firstName.chars().allMatch(Character::isLetter) || !lastName.chars().allMatch(Character::isLetter))
+            throw new BadRequestException("User name can contain only text characters");
+    }
+
+    private void checkUserPhone(String phone) throws BadRequestException {
         Pattern phonePattern = Pattern.compile("\\+\\d{12}");
-        Matcher phoneMatcher = phonePattern.matcher(user.getPhone());
+        Matcher phoneMatcher = phonePattern.matcher(phone);
         if(!phoneMatcher.matches())
             throw new BadRequestException("Phone number is not valid");
-        //check email
+    }
+
+    private void checkUserEmail(String email) throws BadRequestException {
         Pattern emailPattern = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$", Pattern.CASE_INSENSITIVE);
-        Matcher emailMatcher = emailPattern.matcher(user.getEmail());
+        Matcher emailMatcher = emailPattern.matcher(email);
         if(!emailMatcher.matches())
             throw new BadRequestException("Email is not valid");
-        //check password
-        if(user.getPassword().length() < 4)
+    }
+
+    private void checkUserPassword(String password) throws BadRequestException {
+        if(password.length() < 4)
             throw new BadRequestException("Password must be at least 4 character length");
-        //check on exists
-        if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
+    }
+
+    private void checkUserOnExists(String email, String phone) throws BadRequestException, InternalServerError{
+        if(userDAO.getUserByEmailOrPhone(email, phone) != null)
             throw new BadRequestException("There is already registered user with this email or phone");
     }
 }

@@ -145,7 +145,7 @@
 <footer class="w3-center custom-footer">
     <p>Footer копирайты</p>
 </footer>
-
+</div>
 </body>
 
 <script>
@@ -181,9 +181,9 @@
             url: "/register-user",
             // async: false,
             data: $('#registration-form').serialize(),
-            success:function success(data) {
+            success:function success() {
                 loader.hide();
-                alert(data);
+                alert('User registered successfully');
                 window.location.reload(true);
             },
             error: function(xhr) {
@@ -214,10 +214,10 @@
                 type: "DELETE",
                 url: "remove-user/" + id,
                 // async: false,
-                success: function success(data) {
+                success: function success() {
                     debugger;
                     loader.hide();
-                    alert(data);
+                    alert('User removed successfully');
                     window.location.reload(true);
                 },
                 error: function (xhr) {

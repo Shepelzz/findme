@@ -8,7 +8,6 @@ import com.findme.models.Post;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -20,14 +19,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional
     public Post save(Post post) throws InternalServerError, BadRequestException {
         validatePost(post);
         return postDAO.save(post);
     }
 
     @Override
-    @Transactional
     public Post update(Post post) throws InternalServerError, BadRequestException {
         validatePost(post);
         return postDAO.update(post);

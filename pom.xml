@@ -15,6 +15,7 @@
         <springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <hibernate.version>5.3.7.Final</hibernate.version>
+        <hibernate.validator.version>6.0.13.Final</hibernate.validator.version>
         <oracle.ojdbc.version>12.1.0.1</oracle.ojdbc.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <fasterxml.jackson-databind.version>2.9.4</fasterxml.jackson-databind.version>
@@ -88,6 +89,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
         </dependency>
 
         <!--Other-->

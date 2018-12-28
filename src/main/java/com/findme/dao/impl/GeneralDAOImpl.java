@@ -23,6 +23,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     }
 
     @Override
+    @Transactional
     public T save(T t) throws InternalServerError {
         try {
             entityManager.persist(t);
@@ -33,6 +34,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     }
 
     @Override
+    @Transactional
     public T update(T t) throws InternalServerError {
         try {
             entityManager.merge(t);
@@ -42,8 +44,8 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void delete(Long id) throws InternalServerError{
         int res = entityManager.createQuery(SQL_DELETE_BY_ID).setParameter("id", id).executeUpdate();
         if(res == 0)

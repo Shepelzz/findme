@@ -45,7 +45,7 @@ public class UserController {
     public ResponseEntity<String> registerUser(@ModelAttribute User user){
         try {
             userService.save(user);
-            return new ResponseEntity<>("User "+user.getFirstName()+" "+user.getLastName()+" registered successfully", HttpStatus.OK);
+            return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e){
@@ -54,7 +54,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/user/edit/", method = RequestMethod.PUT)
+    @RequestMapping(path = "/edit-user/{userId}", method = RequestMethod.PUT)
     public @ResponseBody
     User update(Model model){
 
@@ -65,7 +65,7 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable String userId){
         try {
             userService.delete(Long.valueOf(userId));
-            return new ResponseEntity<>("User with id: "+userId+" removed successfully", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerError e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
