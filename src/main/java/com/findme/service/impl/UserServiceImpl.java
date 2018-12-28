@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) throws InternalServerError, BadRequestException {
-//        validateNewUser(user);
+        validateNewUser(user);
         return userDAO.save(user);
     }
 
