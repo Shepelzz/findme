@@ -1,18 +1,20 @@
 package com.findme.service.validation;
 
+import java.util.regex.Pattern;
+
 public enum CheckPatterns {
-    EMAIL_PATTERN("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,}).{4,50}$"),
-    PHONE_PATTERN("\\+\\d{12}"),
-    PASSWORD_PATTERN("^(?=\\S+$).{4,50}$"),
-    NAME_PATTERN("^[\\p{L}]{4,50}+$");
+    EMAIL_PATTERN(Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,}).{4,50}$")),
+    PHONE_PATTERN(Pattern.compile("^\\+\\d{12}$")),
+    PASSWORD_PATTERN(Pattern.compile("^(?=\\S+$).{4,50}$")),
+    NAME_PATTERN(Pattern.compile("^[\\p{L}]{4,50}+$"));
 
-    private String value;
+    private Pattern pattern;
 
-    CheckPatterns(String value) {
-        this.value = value;
+    CheckPatterns(Pattern pattern) {
+        this.pattern = pattern;
     }
 
-    public String getValue(){
-        return this.value;
+    public Pattern getPatern(){
+        return this.pattern;
     }
 }
