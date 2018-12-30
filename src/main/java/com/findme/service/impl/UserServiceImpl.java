@@ -14,6 +14,11 @@ import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
+    private static final Pattern emailPattern = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,}).{4,50}$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern phonePattern = Pattern.compile("^\\+\\d{12}$");
+    private static final Pattern passwordPattern = Pattern.compile("^(?=\\S+$).{4,50}$");
+    private static final Pattern namePattern = Pattern.compile("^[\\p{L}]{4,50}+$");
+
     private UserDAO userDAO;
 
     @Autowired
@@ -48,64 +53,24 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateNewUser(User user) throws BadRequestException, InternalServerError{
-        checkStringWithPattern(user.getPhone(), CheckPatterns.PHONE_PATTERN.getPatern(), "Phone number is not valid.");
-        checkStringWithPattern(user.getEmail(), CheckPatterns.EMAIL_PATTERN.getPatern(), "Email is not valid.");
+        checkStringWithPattern(user.getPhone(), phonePattern, "Phone number is not valid.");
+        checkEmail(user.getEmail());
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
             throw new BadRequestException("There is already registered user with this email or phone.");
 
-        checkStringWithPattern(user.getPassword(), CheckPatterns.PASSWORD_PATTERN.getPatern(),"Password is not valid.");
-        checkStringWithPattern(user.getFirstName(), CheckPatterns.NAME_PATTERN.getPatern(),"First name is not valid.");
-        checkStringWithPattern(user.getLastName(), CheckPatterns.NAME_PATTERN.getPatern(),"Last name is not valid.");
+        checkStringWithPattern(user.getPassword(), passwordPattern,"Password is not valid.");
+        checkStringWithPattern(user.getFirstName(), namePattern,"First name is not valid.");
+        checkStringWithPattern(user.getLastName(), namePattern,"Last name is not valid.");
+    }
+
+    private void checkEmail(String email) throws BadRequestException{
+        if(email.length()>=50)
+            throw new BadRequestException("Email larger is larger than 50.");
+        checkStringWithPattern(email, emailPattern, "Email is not valid.");
     }
 
     private void checkStringWithPattern(String value, Pattern pattern, String errorMessage) throws BadRequestException{
         if(!pattern.matcher(value).matches())
             throw new BadRequestException(errorMessage);
     }
-
-
-//    private void validateNewUser(User user) throws BadRequestException, InternalServerError{
-//        //check name
-//        checkUserName(user.getFirstName(), user.getLastName());
-//        //check phone
-//        checkUserPhone(user.getPhone());
-//        //check email
-//        checkUserEmail(user.getEmail());
-//        //check password
-//        checkUserPassword(user.getPassword());
-//        //check on exists
-//        checkUserOnExists(user.getEmail(), user.getPhone());
-//    }
-//
-//    private void checkUserName(String firstName, String lastName) throws BadRequestException{
-//        if(firstName.length() == 0 || lastName.length() == 0)
-//            throw new BadRequestException("User name can not be empty");
-//        if(!firstName.chars().allMatch(Character::isLetter) || !lastName.chars().allMatch(Character::isLetter))
-//            throw new BadRequestException("User name can contain only text characters");
-//    }
-//
-//    private void checkUserPhone(String phone) throws BadRequestException {
-//        Pattern phonePattern = Pattern.compile("\\+\\d{12}");
-//        Matcher phoneMatcher = phonePattern.matcher(phone);
-//        if(!phoneMatcher.matches())
-//            throw new BadRequestException("Phone number is not valid");
-//    }
-//
-//    private void checkUserEmail(String email) throws BadRequestException {
-//        Pattern emailPattern = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$", Pattern.CASE_INSENSITIVE);
-//        Matcher emailMatcher = emailPattern.matcher(email);
-//        if(!emailMatcher.matches())
-//            throw new BadRequestException("Email is not valid");
-//    }
-//
-//    private void checkUserPassword(String password) throws BadRequestException {
-//        if(password.length() < 4)
-//            throw new BadRequestException("Password must be at least 4 character length");
-//    }
-//
-//    private void checkUserOnExists(String email, String phone) throws BadRequestException, InternalServerError{
-//        if(userDAO.getUserByEmailOrPhone(email, phone) != null)
-//            throw new BadRequestException("There is already registered user with this email or phone");
-//    }
-
 }
