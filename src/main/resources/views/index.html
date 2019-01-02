@@ -6,13 +6,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
-<link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
-<link rel="stylesheet" href="../static/css/profile.css">
-<link rel="stylesheet" href="../static/css/main.css">
+<link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
+<link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
+<link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <body>
@@ -28,12 +26,13 @@
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
 </div>
+
 <!-- Page Container -->
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px;">
     <!-- The Grid -->
     <div class="w3-row">
         <!-- Left Column -->
-        <div class="w3-col m3">
+        <div class="w3-col m4">
             <!-- Registration/Login -->
             <div class="w3-card w3-round w3-white" style="min-height: 550px;">
                 <div class="w3-container">
