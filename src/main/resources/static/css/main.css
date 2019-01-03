@@ -13,21 +13,19 @@ body{
 }
 .fixed {position: fixed; left: 0; bottom: 0;}
 
-#registration-form label{
+.input-form label{
     text-align: right;
     display: inline-block;
     width: 20%;
 }
-#registration-form input{
-    width: 60%;
-    border: none;
-    background: #f1f1f1;
+.input-form input{
+    width: 75%;
     padding: 5px;
 }
-#registration-form input::placeholder{
+.input-form input::placeholder{
     font-size: 12px;
 }
-#registration-form button{
+.input-form button{
     width: 20%;
 }
 

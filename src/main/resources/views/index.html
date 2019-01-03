@@ -34,16 +34,26 @@
         <!-- Left Column -->
         <div class="w3-col m4">
             <!-- Registration/Login -->
-            <div class="w3-card w3-round w3-white" style="min-height: 550px;">
+            <div class="w3-card w3-round w3-white" style="min-height: 600px;">
                 <div class="w3-container">
                     <h3 class="w3-opacity w3-center">Authorization</h3>
                     <br>
-                    <form id="login">
-                        Email:<input type="text" name="email"><br>
-                        Password:<input type="password" name="password"><br>
-                        <input type="submit" value="login">
-                        <p th:text="${session.userName}">???</p>
-                    </form>
+                    <!--<form id="login">-->
+                        <!--Email:<input type="text" name="email"><br>-->
+                        <!--Password:<input type="password" name="password"><br>-->
+                        <!--<input type="submit" value="login">-->
+                   <!--</form>-->
+
+                    <div class="w3-container w3-padding input-form">
+                        <form id="login">
+                            <h6 class="w3-text-theme">Email: </h6>
+                            <input class="w3-border w3-padding" type="text" name="email" style="width: 100%; min-width: 150px" required>
+                            <h6 class="w3-text-theme">Password: </h6>
+                            <input class="w3-border w3-padding" type="password" name="password" style="width: 100%; min-width: 150px" required>
+                            <hr>
+                            <button type="submit" class="w3-button w3-theme" style="width: 40%; min-width: 100px"><i class="fa fa-pencil-alt"></i>  Login    </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <br>
@@ -56,39 +66,39 @@
 
             <div class="w3-row-padding">
                 <div class="w3-col m12">
-                    <div class="w3-card w3-round w3-white" style="min-height: 550px;">
+                    <div class="w3-card w3-round w3-white" style="min-height: 600px;">
                         <div class="w3-container w3-padding">
                             <h3 class="w3-opacity w3-center">Welcome to Findme </h3>
                             <br>
                             <div>
                                 <h4 class="w3-opacity">Registration</h4>
-                                <form id="registration-form">
+                                <form id="registration-form" class="input-form">
                                     <p class="w3-opacity">Please fill in this form to create an account.</p>
                                     <hr>
                                     <div class="w3-container">
                                         <div class="w3-padding-small">
-                                            <label for="first_name" class="inline w3-margin-right w3-text-theme">First name: </label>
-                                            <input id="first_name" placeholder="Enter your first name" type="text" name="firstName" required>
+                                            <label for="first_name" class="w3-margin-right w3-text-theme">First name: </label>
+                                            <input class="w3-border w3-padding" id="first_name" placeholder="Enter your first name" type="text" name="firstName" required>
                                         </div>
                                         <div class="w3-padding-small">
-                                            <label for="last_name" class="inline w3-margin-right w3-text-theme">Last name: </label>
-                                            <input id="last_name" placeholder="Enter your last name" type="text" name="lastName" required>
+                                            <label for="last_name" class="w3-margin-right w3-text-theme">Last name: </label>
+                                            <input class="w3-border w3-padding" id="last_name" placeholder="Enter your last name" type="text" name="lastName" required>
                                         </div>
                                         <div class="w3-padding-small">
-                                            <label for="phone" class="inline w3-margin-right w3-text-theme">Phone: </label>
-                                            <input id="phone" placeholder="+380801111111" type="text" name="phone" required>
+                                            <label for="phone" class="w3-margin-right w3-text-theme">Phone: </label>
+                                            <input class="w3-border w3-padding" id="phone" placeholder="+380801111111" type="text" name="phone" required>
                                         </div>
                                         <div class="w3-padding-small">
-                                            <label for="email" class="inline w3-margin-right w3-text-theme">Email: </label>
-                                            <input id="email" placeholder="Enter email" type="text" name="email" required>
+                                            <label for="email" class="w3-margin-right w3-text-theme">Email: </label>
+                                            <input class="w3-border w3-padding" id="email" placeholder="Enter email" type="text" name="email" required>
                                         </div>
                                         <div class="w3-padding-small">
-                                            <label for="password" class="inline w3-margin-right w3-text-theme">Password: </label>
-                                            <input id="password" placeholder="Enter password" type="password" name="password" required>
+                                            <label for="password" class="w3-margin-right w3-text-theme">Password: </label>
+                                            <input class="w3-border w3-padding" id="password" placeholder="Enter password" type="password" name="password" required>
                                         </div>
                                         <hr>
                                         <div class="w3-padding-small">
-                                            <label class="inline w3-margin-right w3-text-theme"><p id="loading" style="display:none">waiting... </p></label>
+                                            <label class="w3-margin-right w3-text-theme"><p id="loading" style="display:none">waiting... </p></label>
                                             <button type="submit" class="w3-button w3-theme">Register</button>
                                         </div>
                                     </div>
@@ -154,7 +164,7 @@
     var loader = $('#loaderGif');
 
     // //submit reg form
-    $("#registration-form").submit(function register() {
+    $("#registration").submit(function register() {
         loader.show();
         event.preventDefault();
         $.ajax({
