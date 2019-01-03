@@ -18,8 +18,14 @@
     <div class="w3-theme-d2 w3-left-align w3-large">
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
         <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
-        <a href="#" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
-            <img src="" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+        <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name
+            <!--<img src="" class="w3-circle" style="height:23px;width:23px" alt="Avatar">-->
+        </div>
+        <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.user==null ? 'display:none' : 'display:block'}">
+            <i class="fa fa-sign-out-alt"></i>
+        </a>
+        <a href="#" th:href="@{/}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Login" th:style="${session.user==null ? 'display:block' : 'display:none'}">
+            <i class="fa fa-sign-in-alt"></i>
         </a>
     </div>
 </div>
@@ -27,7 +33,7 @@
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
     <a href="#" class="w3-bar-item w3-button w3-padding-large">Messages</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name</a>
 </div>
 
 <!-- Page Container -->
@@ -89,11 +95,11 @@
             <!-- Accordion -->
             <div class="w3-card w3-round">
                 <div class="w3-white">
-                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Friends</button>
+                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> Friends</button>
                     <div id="Demo1" class="w3-hide w3-container">
                         <p>Some text..</p>
                     </div>
-                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> My Photos</button>
+                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> Photos</button>
                 </div>
             </div>
             <br>

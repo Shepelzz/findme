@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -22,8 +23,13 @@ public class HomeController {
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model){
+    public String home(Model model, HttpSession session){
         try {
+            if(session.getAttribute("user") != null){
+                model.addAttribute(session.getAttribute("user"));
+                return "profile";
+            }
+
             model.addAttribute("userList", userDAO.getFirstUsers());
             return "index";
         } catch (InternalServerError e){
@@ -34,7 +40,7 @@ public class HomeController {
 
     @RequestMapping(path = "/test-ajax", method = RequestMethod.GET)
     public ResponseEntity<String> testAjax() throws Exception{
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<>("trouble", HttpStatus.OK);
     }
 

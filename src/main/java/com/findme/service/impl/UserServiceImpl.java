@@ -6,10 +6,12 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import com.findme.service.validation.CheckPatterns;
+import com.findme.utils.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 @Service
@@ -52,25 +54,44 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public User login(String email, String password) throws InternalServerError, BadRequestException {
+        Map<String, String> userParams = new HashMap<>();
+        userParams.put("email", email);
+        userParams.put("password", password);
+
+        AbstractChainValidator emailValidator = new EmailValidator();
+        AbstractChainValidator passwordValidator = new PasswordValidator();
+
+        emailValidator.setNextAbstractChainValidator(passwordValidator);
+        emailValidator.check(userParams);
+
+        User user = userDAO.getUserByAuthorization(email, password);
+        if(user == null)
+            throw new BadRequestException("User is not registered.");
+        return user;
+    }
+
+
     private void validateNewUser(User user) throws BadRequestException, InternalServerError{
-        checkStringWithPattern(user.getPhone(), phonePattern, "Phone number is not valid.");
-        checkEmail(user.getEmail());
+        Map<String, String> userParams = new HashMap<>();
+            userParams.put("firstName", user.getFirstName());
+            userParams.put("lastName", user.getLastName());
+            userParams.put("email", user.getEmail());
+            userParams.put("phone", user.getPhone());
+            userParams.put("password", user.getPassword());
+
+        AbstractChainValidator nameValidator = new NameValidator();
+        AbstractChainValidator emailValidator = new EmailValidator();
+        AbstractChainValidator phoneValidator = new PhoneValidator();
+        AbstractChainValidator passwordValidator = new PasswordValidator();
+
+        nameValidator.setNextAbstractChainValidator(emailValidator);
+        emailValidator.setNextAbstractChainValidator(phoneValidator);
+        phoneValidator.setNextAbstractChainValidator(passwordValidator);
+
+        nameValidator.check(userParams);
+
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
             throw new BadRequestException("There is already registered user with this email or phone.");
-
-        checkStringWithPattern(user.getPassword(), passwordPattern,"Password is not valid.");
-        checkStringWithPattern(user.getFirstName(), namePattern,"First name is not valid.");
-        checkStringWithPattern(user.getLastName(), namePattern,"Last name is not valid.");
-    }
-
-    private void checkEmail(String email) throws BadRequestException{
-        if(email.length()>=50)
-            throw new BadRequestException("Email larger is larger than 50.");
-        checkStringWithPattern(email, emailPattern, "Email is not valid.");
-    }
-
-    private void checkStringWithPattern(String value, Pattern pattern, String errorMessage) throws BadRequestException{
-        if(!pattern.matcher(value).matches())
-            throw new BadRequestException(errorMessage);
     }
 }

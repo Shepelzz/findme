@@ -38,10 +38,13 @@
                 <div class="w3-container">
                     <h3 class="w3-opacity w3-center">Authorization</h3>
                     <br>
+                    <form id="login">
+                        Email:<input type="text" name="email"><br>
+                        Password:<input type="password" name="password"><br>
+                        <input type="submit" value="login">
+                        <p th:text="${session.userName}">???</p>
+                    </form>
                 </div>
-                <br>
-                <button id="test-ajax">тыц!</button>
-
             </div>
             <br>
             <!-- End Left Column -->
@@ -149,27 +152,6 @@
 
 <script>
     var loader = $('#loaderGif');
-    //first js
-    //first jquery usage
-    // alert($("#test-ajax").text());
-
-    $("#test-ajax").click(function () {
-        loader.show();
-        $.ajax({
-            type: "GET",
-            url: "/test-ajax",
-            data: {},
-            success: function success() {
-                loader.hide();
-                alert("success!");
-            },
-            error: function error(xhr) {
-                debugger;
-                loader.hide();
-                alert("error!");
-            }
-        });
-    });
 
     // //submit reg form
     $("#registration-form").submit(function register() {
@@ -227,6 +209,25 @@
             });
         }
     }
+
+    $("#login").submit(function login() {
+        loader.show();
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/login",
+            data: $('#login').serialize(),
+            success:function success(data) {
+                loader.hide();
+                alert('User logged in');
+                window.location.reload(true);
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
+    });
 
 </script>
 </html>

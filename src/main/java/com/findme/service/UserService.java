@@ -11,5 +11,6 @@ public interface UserService{
     User update(User user) throws InternalServerError, BadRequestException;
     void delete(Long id) throws InternalServerError;
     User findById(Long id) throws InternalServerError, NotFoundException;
+    User login(String email, String password) throws InternalServerError, BadRequestException;
 
 }
