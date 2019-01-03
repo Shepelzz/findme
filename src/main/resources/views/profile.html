@@ -55,39 +55,40 @@
                     </div>
                     <hr>
 
-                    <div class="clear-inline w3-padding-small">
+                    <div class="clear-inline w3-padding-small" th:style="${user.country !=null && user.city != null ? 'display:block' : 'display:none'}">
                         <i class="inline fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.country}+', '+${user.city}">Ukraine, Kiev</div>
                     </div>
 
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.phone !=null ? 'display:block' : 'display:none'}">
                         <i class="inline fa fa-phone fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.phone}">+38(063)7777777</div>
                     </div>
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.age !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.age}">28</div>
                     </div>
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.dateRegistered !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-calendar fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.dateRegistered}">17.12.2018 14.00.00</div>
                     </div>
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.relationshipStatus !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-heart fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.relationshipStatus}">married</div>
                     </div>
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.religion !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-church fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.religion}">no religion</div>
                     </div>
-                    <div class="w3-padding-small">
+                    <div class="w3-padding-small" th:style="${user.school !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-chalkboard-teacher fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.school}">№450</div>
                     </div>
-                    <div class="w3-padding-small" style="margin-bottom: 10px">
+                    <div class="w3-padding-small" th:style="${user.university !=null ? 'display:block' : 'display:none'}">
                         <i class="fa fa-graduation-cap fa-fw w3-margin-right w3-text-theme"></i>
                         <div class="inline" th:text="${user.university}">KPI bla blaI bla blaI bla blaI b</div>
                     </div>
+                    <br>
                 </div>
             </div>
             <br>
