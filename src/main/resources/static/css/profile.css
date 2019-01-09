@@ -14,6 +14,11 @@
 .inline {display: inline;}
 .clear-inline {clear: both}
 
+.dropdown-menu-label {
+    padding-left: 2px;
+    padding-right: 0;
+    word-wrap:break-word;
+}
 
 /*.name-label {*/
     /*margin-left: 130px;*/

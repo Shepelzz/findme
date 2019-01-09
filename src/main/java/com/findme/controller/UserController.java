@@ -1,5 +1,6 @@
 package com.findme.controller;
 
+import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
@@ -26,11 +27,13 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     private UserService userService;
     private UserDAO userDAO;
+    private RelationshipDAO relationshipDAO;
 
     @Autowired
-    public UserController(UserService userService, UserDAO userDAO) {
+    public UserController(UserService userService, UserDAO userDAO, RelationshipDAO relationshipDAO) {
         this.userService = userService;
         this.userDAO = userDAO;
+        this.relationshipDAO = relationshipDAO;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
@@ -43,9 +46,10 @@ public class UserController {
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : RelationshipStatus.FRIENDS);
+            model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(currentUser));
+            model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(currentUser));
 
             //TODO
-            //add incoming req
             //add outgoing req
             //add friends list
 

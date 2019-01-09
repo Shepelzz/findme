@@ -24,7 +24,7 @@
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
         <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
         <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name
-            <!--<img src="" class="w3-circle" style="height:23px;width:23px" alt="Avatar">-->
+            <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
         </div>
         <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.user==null ? 'display:none' : 'display:block'}">
             <i class="fa fa-sign-out-alt"></i>
@@ -55,8 +55,8 @@
                         <i class="inline w3-padding-small"><a  href=""><i class="fa fa-edit fa-fw w3-margin-right w3-text-theme"></i></a></i>
                     </h4>
                     <div class="w3-center">
-                        <!--<img src="/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar">-->
-                        <div class="w3-circle photo-container">photo</div>
+                        <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="width:200px" alt="Avatar">
+                        <!--<div class="w3-circle photo-container">photo</div>-->
                     </div>
                     <hr>
 
@@ -117,8 +117,44 @@
             <div th:switch="${profileStatus.name()}">
                 <div th:case="'OWNER'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests</button>
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests</button>
+                        <!--Incoming Friend Request-->
+                        <button onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                            <i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests
+                            <span class="w3-right" th:text="${incomingRequests.size()}">0</span>
+                        </button>
+                        <ul id="incomingReq" class="w3-hide w3-ul w3-card-4" th:each="user : ${incomingRequests}">
+                            <li class="w3-bar">
+                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                                    <i class="fa fa-times w3-text-theme"></i>
+                                </span>
+                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                                    <i class="fa fa-check w3-text-theme"></i>
+                                </span>
+                                <a th:href="@{'/user/' + ${user.getId()}}">
+                                    <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
+                                </a>
+                                <div class="w3-bar-item dropdown-menu-label">
+                                    <span class="w3-large" style="margin: auto" th:text="${user.firstName}+' '+${user.lastName}">Mike Dodo</span><br>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <!--Outgoing Friend Request-->
+    <!--TODO >1 item-->
+                        <button onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                            <i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests
+                            <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
+                        </button>
+                        <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4" th:each="user : ${outgoingRequests}">
+                            <li class="w3-bar">
+                                <a th:href="@{'/user/' + ${user.getId()}}">
+                                    <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
+                                </a>
+                                <div class="w3-bar-item dropdown-menu-label">
+                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}" style="">Mike Dodo</span><br>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div th:case="'FRIENDS'" class="w3-card w3-round">
@@ -133,7 +169,7 @@
                 </div>
                 <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <p>request sent</p>
+                        <div class="w3-button w3-block  w3-left-align">request sent</div>
                     </div>
                 </div>
                 <div th:case="'REQUEST_REJECTED'" class="w3-card w3-round">
@@ -209,6 +245,21 @@
     <p>Footer копирайты</p>
 </footer>
 
+
+<script>
+
+    function dropDownMenu(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") === -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-theme-d1";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-theme-d1", "");
+        }
+    }
+</script>
 
 </body>
 </html>
