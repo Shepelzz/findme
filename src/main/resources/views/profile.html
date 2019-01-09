@@ -113,11 +113,35 @@
                 <!--</div>-->
             <!--</div>-->
             <!--<br>-->
-            <p th:text="${profileStatus.name()}"></p>
 
-            <!--<div th:switch="${profileStatus.value}">-->
-                <!---->
-            <!--</div>-->
+            <div th:switch="${profileStatus.name()}">
+                <div th:case="'OWNER'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests</button>
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests</button>
+                    </div>
+                </div>
+                <div th:case="'FRIENDS'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Remove Friend</button>
+                    </div>
+                </div>
+                <div th:case="'NOT_FRIENDS'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Add Friend</button>
+                    </div>
+                </div>
+                <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <p>request sent</p>
+                    </div>
+                </div>
+                <div th:case="'REQUEST_REJECTED'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <p>request declined</p>
+                    </div>
+                </div>
+            </div>
             <br>
 
 
