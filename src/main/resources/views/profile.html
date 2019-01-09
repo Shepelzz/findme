@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <body>
 
+<!--<div th:if="${session.user.getId()}==${userId}">-->
+    <!--<p>Mine</p>-->
+<!--</div>-->
+
+
 <!-- Navbar -->
 <div class="w3-top">
     <div class="w3-theme-d2 w3-left-align w3-large">
@@ -51,7 +56,7 @@
                     </h4>
                     <div class="w3-center">
                         <!--<img src="/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px" alt="Avatar">-->
-                        <div class="photo-container">photo</div>
+                        <div class="w3-circle photo-container">photo</div>
                     </div>
                     <hr>
 
@@ -93,25 +98,48 @@
             </div>
             <br>
 
-            <!-- Accordion -->
+            <!--Requests-->
+            <!--<div th:if="${isOwner}" class="w3-card w3-round">-->
+                <!--<div class="w3-white">-->
+                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests</button>-->
+                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests</button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div th:if="${not isOwner}" class="w3-card w3-round">-->
+                <!--<div class="w3-white">-->
+                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Add Friend</button>-->
+                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Remove Friend</button>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<br>-->
+            <p th:text="${profileStatus.name()}"></p>
+
+            <!--<div th:switch="${profileStatus.value}">-->
+                <!---->
+            <!--</div>-->
+            <br>
+
+
+            <!-- Menu -->
             <div class="w3-card w3-round">
                 <div class="w3-white">
                     <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> Friends</button>
-                    <div id="Demo1" class="w3-hide w3-container">
-                        <p>Some text..</p>
-                    </div>
-                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> Photos</button>
+                    <!--<div id="Demo1" class="w3-hide w3-container">-->
+                        <!--<p>Some text..</p>-->
+                    <!--</div>-->
+                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> Photos</button>-->
                 </div>
             </div>
             <br>
 
             <!-- Interests -->
-            <div class="w3-card w3-round w3-white w3-hide-small">
-                <div class="w3-container">
-                    <p>Interests</p>
+            <!--<div class="w3-card w3-round w3-white w3-hide-small">-->
+                <!--<div class="w3-container">-->
+                    <!--<p>Interests</p>-->
 
-                </div>
-            </div>
+                <!--</div>-->
+            <!--</div>-->
             <!-- End Left Column -->
         </div>
 
@@ -130,20 +158,20 @@
                 </div>
             </div>
 
-            <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-                <img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-                <span class="w3-right w3-opacity">how time ago</span>
-                <h4>/Some friend/</h4><br>
-                <hr class="w3-clear">
-                <p>/Some text./</p>
-                <div class="w3-row-padding" style="margin:0 -16px">
-                    <div class="w3-half">
-                        <img src="/w3images/lights.jpg" style="width:100%" alt="/Some image/" class="w3-margin-bottom">
-                    </div>
-                </div>
-                <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
-                <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>
-            </div>
+            <!--<div class="w3-container w3-card w3-white w3-round w3-margin"><br>-->
+                <!--<img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
+                <!--<span class="w3-right w3-opacity">how time ago</span>-->
+                <!--<h4>/Some friend/</h4><br>-->
+                <!--<hr class="w3-clear">-->
+                <!--<p>/Some text./</p>-->
+                <!--<div class="w3-row-padding" style="margin:0 -16px">-->
+                    <!--<div class="w3-half">-->
+                        <!--<img src="/w3images/lights.jpg" style="width:100%" alt="/Some image/" class="w3-margin-bottom">-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>-->
+                <!--<button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>-->
+            <!--</div>-->
 
             <!-- End Middle Column -->
         </div>
@@ -156,6 +184,7 @@
 <footer class="w3-center custom-footer">
     <p>Footer копирайты</p>
 </footer>
+
 
 </body>
 </html>

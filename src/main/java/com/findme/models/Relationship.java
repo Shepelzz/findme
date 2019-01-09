@@ -1,5 +1,7 @@
 package com.findme.models;
 
+import com.findme.types.RelationshipStatus;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,7 +25,8 @@ public class Relationship extends GeneralModel{
         this.id = id;
     }
 
-    @Column(name = "USER_FROM_ID")
+    @ManyToOne
+    @JoinColumn(name="USER_FROM_ID", nullable = false)
     public User getUserFrom() {
         return userFrom;
     }
@@ -32,7 +35,8 @@ public class Relationship extends GeneralModel{
         this.userFrom = userFrom;
     }
 
-    @Column(name = "USER_TO_ID")
+    @ManyToOne
+    @JoinColumn(name="USER_TO_ID", nullable = false)
     public User getUserTo() {
         return userTo;
     }
@@ -41,6 +45,7 @@ public class Relationship extends GeneralModel{
         this.userTo = userTo;
     }
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
     public RelationshipStatus getStatus() {
         return status;

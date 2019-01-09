@@ -10,6 +10,7 @@ import com.findme.utils.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -55,19 +56,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public User login(String email, String password) throws InternalServerError, BadRequestException {
-        Map<String, String> userParams = new HashMap<>();
-        userParams.put("email", email);
-        userParams.put("password", password);
-
-        AbstractChainValidator emailValidator = new EmailValidator();
-        AbstractChainValidator passwordValidator = new PasswordValidator();
-
-        emailValidator.setNextAbstractChainValidator(passwordValidator);
-        emailValidator.check(userParams);
-
         User user = userDAO.getUserByAuthorization(email, password);
         if(user == null)
-            throw new BadRequestException("User is not registered.");
+            throw new BadRequestException("Username or password is incorrect.");
         return user;
     }
 
@@ -93,5 +84,11 @@ public class UserServiceImpl implements UserService {
 
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
             throw new BadRequestException("There is already registered user with this email or phone.");
+    }
+
+    private void checkAuthorization(HttpSession session) throws BadRequestException{
+
+        if(session.getAttribute("user") == null)
+            throw new BadRequestException("User is not logged in");
     }
 }

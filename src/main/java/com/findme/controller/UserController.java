@@ -6,12 +6,17 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
+import com.findme.types.RelationshipStatus;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +34,21 @@ public class UserController {
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
-    public String profile(Model model, @PathVariable String userId){
+    public String profile(HttpSession session, Model model, @PathVariable String userId){
+        User currentUser = (User) session.getAttribute("user");
+        if(currentUser==null) {
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/badRequest";
+        }
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
+            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : RelationshipStatus.FRIENDS);
+
+            //TODO
+            //add incoming req
+            //add outgoing req
+            //add friends list
+
             return "profile";
         } catch (NumberFormatException e){
             model.addAttribute("error", e);
@@ -46,7 +63,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(HttpSession session, HttpServletRequest request, HttpServletResponse response, @ModelAttribute User user){
+    public ResponseEntity<String> registerUser(@ModelAttribute User user){
         try {
             userService.save(user);
             return new ResponseEntity<>( HttpStatus.OK);
@@ -63,7 +80,7 @@ public class UserController {
             User user = userService.login(request.getParameter("email"), request.getParameter("password"));
                 session.setAttribute("user", user);
                 session.setAttribute("userName", user.getFirstName()+" "+user.getLastName());
-            return new ResponseEntity<>( HttpStatus.OK);
+            return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e){
@@ -77,15 +94,12 @@ public class UserController {
         return "redirect:/";
     }
 
-
-
-
-    @RequestMapping(path = "/edit-user/{userId}", method = RequestMethod.PUT)
-    public @ResponseBody
-    User update(Model model){
-
-        return null;
-    }
+//    @RequestMapping(path = "/edit-user/{userId}", method = RequestMethod.PUT)
+//    public @ResponseBody
+//    User update(Model model){
+//
+//        return null;
+//    }
 
     @RequestMapping(path = "/remove-user/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(@PathVariable String userId){
@@ -96,4 +110,11 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "/add-friend/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> addFriend(Session session, @PathVariable String userId){
+        return null;
+    }
+
+
 }
