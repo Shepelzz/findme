@@ -7,12 +7,11 @@ import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.types.RelationshipStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,33 +24,27 @@ public class RelationshipController {
         this.relationshipDAO = relationshipDAO;
     }
 
-//    @RequestMapping(path = "/user/{userId}", method = RequestMethod.POST)
-//    public ResponseEntity<String> incomingReqList(HttpSession session, Model model, @PathVariable String userId){
-//        User currentUser = (User) session.getAttribute("user");
-//        if(currentUser==null) {
-//            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-//            return "errors/badRequest";
-//        }
-//        try {
-////            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-////            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : RelationshipStatus.FRIENDS);
-//
-//            //TODO
-//            //add incoming req
-//            //add outgoing req
-//            //add friends list
-//
-//            return "profile";
-//        } catch (NumberFormatException e){
-//            model.addAttribute("error", e);
-//            return "errors/badRequest";
-//        } catch (InternalServerError ise){
-//            model.addAttribute("error", ise);
-//            return "errors/internalServerError";
-//        } catch (NotFoundException nofe){
-//            model.addAttribute("error", nofe);
-//            return "errors/notFound";
-//        }
-//    }
+    //TODO send friend req
+    @RequestMapping(path = "/friend-add/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> addFriend(@PathVariable("userId") String userId){
+        return null;
+    }
 
+    //TODO remove friend
+    @RequestMapping(path = "/friend-remove/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> friendRemove(@PathVariable("userId") String userId){
+        return null;
+    }
+
+    //TODO accept friend req
+    @RequestMapping(path = "/friend-request-accept/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> friendRequestAccept(HttpSession session,@PathVariable("userId") String userId){
+            return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    //TODO reject friend req
+    @RequestMapping(path = "/friend-request-reject/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> friendRequestReject(@PathVariable("userId") String userId){
+        return null;
+    }
 }

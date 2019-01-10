@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
 <link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body>
 
 <!--<div th:if="${session.user.getId()}==${userId}">-->
@@ -118,18 +119,18 @@
                 <div th:case="'OWNER'" class="w3-card w3-round">
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
-                        <button onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-left fa-fw w3-margin-right"></i>Incoming requests
                             <span class="w3-right" th:text="${incomingRequests.size()}">0</span>
                         </button>
                         <ul id="incomingReq" class="w3-hide w3-ul w3-card-4">
-                            <li class="w3-bar" th:each="user : ${incomingRequests}">
-                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                            <li class="w3-bar" th:each="user : ${incomingRequests}" th:id="'incomingReq-' + ${user.getId()}">
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|reject('${user.getId()}')|">
                                     <i class="fa fa-times w3-text-theme"></i>
-                                </span>
-                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                                </button>
+                                <button id="accept" class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|accept('${user.getId()}')|">
                                     <i class="fa fa-check w3-text-theme"></i>
-                                </span>
+                                </button>
                                 <a th:href="@{'/user/' + ${user.getId()}}">
                                     <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                                 </a>
@@ -140,7 +141,7 @@
                         </ul>
 
                         <!--Outgoing Friend Request-->
-                        <button onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${outgoingRequests.size() > 0}" onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-right fa-fw w3-margin-right"></i>Outgoing requests
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
@@ -158,12 +159,12 @@
                 </div>
                 <div th:case="'FRIENDS'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend</button>
+                        <button id="removeFriend" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend</button>
                     </div>
                 </div>
                 <div th:case="'NOT_FRIENDS'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend</button>
+                        <button id="addFriend" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend</button>
                     </div>
                 </div>
                 <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
@@ -172,8 +173,8 @@
                     </div>
                 </div>
                 <div th:case="'REQUEST_REJECTED'" class="w3-card w3-round">
-                    <div class="w3-white">
-                        <p>request declined</p>
+                    <div class="w3-pale-red">
+                        <div class="w3-button w3-block w3-left-align">request rejected</div>
                     </div>
                 </div>
             </div>
@@ -259,7 +260,7 @@
 <script>
 
     function dropDownMenu(id) {
-        var x = document.getElementById(id);
+        let x = document.getElementById(id);
         if (x.className.indexOf("w3-show") === -1) {
             x.className += " w3-show";
             x.previousElementSibling.className += " w3-theme-d1";
@@ -269,6 +270,47 @@
                 x.previousElementSibling.className.replace(" w3-theme-d1", "");
         }
     }
+
+    function accept(id) {
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-accept/" + id,
+            success: function success() {
+                alert('accepted '+id);
+                debugger;
+                $('#incomingReq-'+id).hide();
+            },
+            error: function (xhr) {
+                debugger;
+                alert(xhr.responseText);
+            }
+        });
+    };
+
+    function reject(id) {
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-reject/" + id,
+            success: function success() {
+                alert('removed '+id);
+                debugger;
+                $('#incomingReq-'+id).hide();
+            },
+            error: function (xhr) {
+                debugger;
+                alert(xhr.responseText);
+            }
+        });
+    };
+
+    // $('#addFriend').click(function () {
+    //     alert('add');
+    // });
+    //
+    // $('#removeFriend').click(function () {
+    //     alert('remove');
+    // });
 </script>
 
 </body>

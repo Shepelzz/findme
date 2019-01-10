@@ -50,7 +50,7 @@ public class UserController {
             model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(currentUser));
             model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(currentUser));
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(requestUser));
-            model.addAttribute("friendsCount", -1);
+            model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(requestUser));
 
             //TODO
             //add outgoing req

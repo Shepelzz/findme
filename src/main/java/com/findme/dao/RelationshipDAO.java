@@ -11,9 +11,9 @@ public interface RelationshipDAO extends GeneralDAO<Relationship>{
 
     RelationshipStatus getRelationshipStatus(User user, User friend) throws InternalServerError;
 
-//    void sendFriendRequest(User user, User friend);
-//    void acceptFriendRequest(User user, User friend);
-//    void declineFriendRequest(User user, User friend);
+//    void addFriend(User user, User friend);
+    void acceptFriendRequest(User user, User friend) throws InternalServerError;
+    void rejectFriendRequest(User user, User friend) throws InternalServerError;
 //
 //    void removeFriend(User user, User friend);
 //
@@ -21,6 +21,7 @@ public interface RelationshipDAO extends GeneralDAO<Relationship>{
     List<User> getOutgoingRequests(User user) throws InternalServerError;
     List<User> getFriendsList(User user) throws InternalServerError;
     List<User> getSmallFriendsList(User user) throws InternalServerError;
+    Long getFriendsCount(User user) throws InternalServerError;
 
 
 
