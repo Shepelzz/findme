@@ -19,6 +19,9 @@ public interface RelationshipDAO extends GeneralDAO<Relationship>{
 //
     List<User> getIncomingRequests(User user) throws InternalServerError;
     List<User> getOutgoingRequests(User user) throws InternalServerError;
+    List<User> getFriendsList(User user) throws InternalServerError;
+    List<User> getSmallFriendsList(User user) throws InternalServerError;
+
 
 
 

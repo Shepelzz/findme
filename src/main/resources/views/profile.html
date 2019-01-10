@@ -96,8 +96,8 @@
                     <br>
                 </div>
             </div>
-            <br>
 
+            <div style="padding: 10px;">Status: <span th:text="${profileStatus.name()}">somebody</span></div>
             <!--Requests-->
             <!--<div th:if="${isOwner}" class="w3-card w3-round">-->
                 <!--<div class="w3-white">-->
@@ -119,7 +119,7 @@
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
                         <button onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
-                            <i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests
+                            <i class="fa fa-arrow-left fa-fw w3-margin-right"></i>Incoming requests
                             <span class="w3-right" th:text="${incomingRequests.size()}">0</span>
                         </button>
                         <ul id="incomingReq" class="w3-hide w3-ul w3-card-4">
@@ -141,7 +141,7 @@
 
                         <!--Outgoing Friend Request-->
                         <button onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
-                            <i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests
+                            <i class="fa fa-arrow-right fa-fw w3-margin-right"></i>Outgoing requests
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
                         <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4">
@@ -158,12 +158,12 @@
                 </div>
                 <div th:case="'FRIENDS'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Remove Friend</button>
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend</button>
                     </div>
                 </div>
                 <div th:case="'NOT_FRIENDS'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Add Friend</button>
+                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend</button>
                     </div>
                 </div>
                 <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
@@ -183,11 +183,21 @@
             <!-- Menu -->
             <div class="w3-card w3-round">
                 <div class="w3-white">
-                    <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> Friends</button>
-                    <!--<div id="Demo1" class="w3-hide w3-container">-->
-                        <!--<p>Some text..</p>-->
-                    <!--</div>-->
-                    <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-images fa-fw w3-margin-right"></i> Photos</button>-->
+                    <button onclick="dropDownMenu('friendsSmallList')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
+                        <span class="w3-right" th:text="${friendsCount}">0</span>
+                    </button>
+                    <ul id="friendsSmallList" class="w3-hide w3-ul w3-card-4">
+                        <li class="w3-bar" th:each="user : ${friendsSmallList}">
+                            <a th:href="@{'/user/' + ${user.getId()}}">
+                                <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
+                            </a>
+                            <div class="w3-bar-item dropdown-menu-label">
+                                <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
             <br>

@@ -44,10 +44,13 @@ public class UserController {
             return "errors/badRequest";
         }
         try {
-            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : RelationshipStatus.FRIENDS);
+            User requestUser = userService.findById(Long.valueOf(userId));
+            model.addAttribute("user", requestUser);
+            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : relationshipDAO.getRelationshipStatus(currentUser, requestUser));
             model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(currentUser));
             model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(currentUser));
+            model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(requestUser));
+            model.addAttribute("friendsCount", -1);
 
             //TODO
             //add outgoing req
