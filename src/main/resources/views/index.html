@@ -98,8 +98,8 @@
                                         </div>
                                         <hr>
                                         <div class="w3-padding-small">
-                                            <label class="w3-margin-right w3-text-theme"><p id="loading" style="display:none">waiting... </p></label>
-                                            <button type="submit" class="w3-button w3-theme">Register</button>
+                                            <label id="loading" class="w3-margin-right w3-text-theme"><p style="display:none">waiting... </p></label>
+                                            <button id="bt" type="submit" class="w3-button w3-theme">Register</button>
                                         </div>
                                     </div>
 
@@ -164,7 +164,7 @@
     var loader = $('#loaderGif');
 
     // //submit reg form
-    $("#registration").submit(function register() {
+    $("#registration-form").submit(function register() {
         loader.show();
         event.preventDefault();
         $.ajax({
@@ -173,12 +173,13 @@
             // async: false,
             data: $('#registration-form').serialize(),
             success:function success() {
+                debugger;
                 loader.hide();
                 alert('User registered successfully');
                 window.location.reload(true);
             },
             error: function(xhr) {
-                // debugger;
+                debugger;
                 loader.hide();
                 alert(xhr.responseText);
             }

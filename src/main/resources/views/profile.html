@@ -122,8 +122,8 @@
                             <i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests
                             <span class="w3-right" th:text="${incomingRequests.size()}">0</span>
                         </button>
-                        <ul id="incomingReq" class="w3-hide w3-ul w3-card-4" th:each="user : ${incomingRequests}">
-                            <li class="w3-bar">
+                        <ul id="incomingReq" class="w3-hide w3-ul w3-card-4">
+                            <li class="w3-bar" th:each="user : ${incomingRequests}">
                                 <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
                                     <i class="fa fa-times w3-text-theme"></i>
                                 </span>
@@ -134,24 +134,23 @@
                                     <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                                 </a>
                                 <div class="w3-bar-item dropdown-menu-label">
-                                    <span class="w3-large" style="margin: auto" th:text="${user.firstName}+' '+${user.lastName}">Mike Dodo</span><br>
+                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
                                 </div>
                             </li>
                         </ul>
 
                         <!--Outgoing Friend Request-->
-    <!--TODO >1 item-->
                         <button onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
-                        <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4" th:each="user : ${outgoingRequests}">
-                            <li class="w3-bar">
+                        <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4">
+                            <li class="w3-bar" th:each="user : ${outgoingRequests}">
                                 <a th:href="@{'/user/' + ${user.getId()}}">
                                     <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                                 </a>
                                 <div class="w3-bar-item dropdown-menu-label">
-                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}" style="">Mike Dodo</span><br>
+                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
                                 </div>
                             </li>
                         </ul>
@@ -214,6 +213,7 @@
                             <p contenteditable="true" class="w3-border w3-padding"></p>
                             <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
                         </div>
+
                     </div>
                 </div>
             </div>
