@@ -12,11 +12,11 @@ import java.util.List;
 
 @Repository
 public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements RelationshipDAO {
-    public static final String SQL_GET_RELATIONSHIP_STATUS = "SELECT r.status FROM Relationship r WHERE r.userFrom = :userFrom AND r.userTo = :userTo";
-    public static final String SQL_GET_INCOMING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userFrom.id = u.id WHERE r.status = :status AND r.userTo = :userTo";
-    public static final String SQL_GET_OUTGOING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom";
-    public static final String SQL_GET_FRIENDS = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom ORDER BY u.lastName";
-    public static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r.userTo) AS cnt FROM Relationship r WHERE r.status = :status AND r.userFrom = :userFrom";
+    private static final String SQL_GET_RELATIONSHIP_STATUS = "SELECT r.status FROM Relationship r WHERE r.userFrom = :userFrom AND r.userTo = :userTo";
+    private static final String SQL_GET_INCOMING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userFrom.id = u.id WHERE r.status = :status AND r.userTo = :userTo";
+    private static final String SQL_GET_OUTGOING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom";
+    private static final String SQL_GET_FRIENDS = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom ORDER BY u.lastName";
+    private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r.userTo) AS cnt FROM Relationship r WHERE r.status = :status AND r.userFrom = :userFrom";
 
     @Override
     public RelationshipStatus getRelationshipStatus(User user, User friend) throws InternalServerError{
