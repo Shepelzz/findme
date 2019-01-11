@@ -7,27 +7,76 @@ import com.findme.models.User;
 import com.findme.types.RelationshipStatus;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
 public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements RelationshipDAO {
-    private static final String SQL_GET_RELATIONSHIP_STATUS = "SELECT r.status FROM Relationship r WHERE r.userFrom = :userFrom AND r.userTo = :userTo";
-    private static final String SQL_GET_INCOMING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userFrom.id = u.id WHERE r.status = :status AND r.userTo = :userTo";
-    private static final String SQL_GET_OUTGOING_REQ = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom";
-    private static final String SQL_GET_FRIENDS = "SELECT u FROM Relationship r LEFT JOIN User u ON r.userTo.id = u.id WHERE r.status = :status AND r.userFrom = :userFrom ORDER BY u.lastName";
-    private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r.userTo) AS cnt FROM Relationship r WHERE r.status = :status AND r.userFrom = :userFrom";
+    private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS) VALUES (:userFromId, :userToId, :status)";
+    private static final String SQL_DELETE_NEW_RELATIONSHIP = "DELETE FROM RELATIONSHIP WHERE USER_FROM_ID = :userFromId AND USER_TO_ID = :userToId";
+    private static final String SQL_UPDATE_NEW_RELATIONSHIP = "UPDATE RELATIONSHIP SET STATUS = :status WHERE USER_FROM_ID = :userFromId AND USER_TO_ID = :userToId";
+
+    private static final String SQL_GET_RELATIONSHIP_STATUS = "SELECT r.STATUS FROM RELATIONSHIP r WHERE r.USER_FROM_ID = :userFromId AND r.USER_TO_ID = :userToId";
+    private static final String SQL_GET_INCOMING_REQ = "SELECT u.* FROM RELATIONSHIP r LEFT JOIN USERS u ON r.USER_FROM_ID = u.USER_ID WHERE r.STATUS = :status AND r.USER_TO_ID = :userToId";
+    private static final String SQL_GET_OUTGOING_REQ = "SELECT u.* FROM RELATIONSHIP r LEFT JOIN USERS u ON r.USER_TO_ID = u.USER_ID WHERE r.STATUS = :status AND r.USER_FROM_ID = :userFromId";
+    private static final String SQL_GET_FRIENDS = "SELECT u.* FROM RELATIONSHIP r LEFT JOIN USERS u ON r.USER_TO_ID = u.USER_ID WHERE r.STATUS = :status AND r.USER_FROM_ID = :userFromId ORDER BY u.LAST_NAME";
+    private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r.USER_TO_ID) AS cnt FROM RELATIONSHIP r WHERE r.STATUS = :status AND r.USER_FROM_ID = :userFromId";
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public RelationshipStatus getRelationshipStatus(User user, User friend) throws InternalServerError{
+    public void addRelationship(String userFromId, String userToId, RelationshipStatus status) throws InternalServerError {
+        try {
+            int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
+                    .setParameter("userFromId", Long.valueOf(userFromId))
+                    .setParameter("userToId", Long.valueOf(userToId))
+                    .setParameter("status", status.toString())
+                    .executeUpdate();
+
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public void deleteRelationship(String userFromId, String userToId) throws InternalServerError {
+        try {
+            int res = entityManager.createNativeQuery(SQL_DELETE_NEW_RELATIONSHIP)
+                    .setParameter("userFromId", userFromId)
+                    .setParameter("userToId", userToId)
+                    .executeUpdate();
+
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public void updateRelationship(String userFromId, String userToId, RelationshipStatus status) throws InternalServerError {
+        try {
+            int res = entityManager.createNativeQuery(SQL_UPDATE_NEW_RELATIONSHIP)
+                    .setParameter("userFromId", userFromId)
+                    .setParameter("userToId", userToId)
+                    .setParameter("status", status.toString())
+                    .executeUpdate();
+
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError{
         try {
             RelationshipStatus result = RelationshipStatus.NOT_FRIENDS;
-            List<RelationshipStatus> statusList = entityManager.createQuery(SQL_GET_RELATIONSHIP_STATUS, RelationshipStatus.class)
-                    .setParameter("userFrom", user)
-                    .setParameter("userTo", friend)
+            List<String> statusList = entityManager.createNativeQuery(SQL_GET_RELATIONSHIP_STATUS)
+                    .setParameter("userFromId", userFromId)
+                    .setParameter("userToId", userToId)
                     .getResultList();
             if(statusList != null && statusList.size() > 0)
-                result = statusList.get(0);
+                result = RelationshipStatus.valueOf(statusList.get(0));
             return result;
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
@@ -35,23 +84,11 @@ public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements
     }
 
     @Override
-    @Transactional
-    public void acceptFriendRequest(User user, User friend) throws InternalServerError {
-
-    }
-
-    @Override
-    @Transactional
-    public void rejectFriendRequest(User user, User friend) throws InternalServerError {
-
-    }
-
-    @Override
-    public List<User> getIncomingRequests(User user) throws InternalServerError{
+    public List<User> getIncomingRequests(String userId) throws InternalServerError{
         try {
-            return entityManager.createQuery(SQL_GET_INCOMING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUEST_SENT)
-                    .setParameter("userTo", user)
+            return (List<User>) entityManager.createNativeQuery(SQL_GET_INCOMING_REQ)
+                    .setParameter("status", RelationshipStatus.REQUEST_SENT.toString())
+                    .setParameter("userToId", userId)
                     .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
@@ -59,11 +96,11 @@ public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements
     }
 
     @Override
-    public List<User> getOutgoingRequests(User user) throws InternalServerError{
+    public List<User> getOutgoingRequests(String userId) throws InternalServerError{
         try {
-            return entityManager.createQuery(SQL_GET_OUTGOING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUEST_SENT)
-                    .setParameter("userFrom", user)
+            return (List<User>) entityManager.createNativeQuery(SQL_GET_OUTGOING_REQ)
+                    .setParameter("status", RelationshipStatus.REQUEST_SENT.toString())
+                    .setParameter("userFromId", userId)
                     .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
@@ -71,11 +108,11 @@ public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements
     }
 
     @Override
-    public List<User> getFriendsList(User user) throws InternalServerError {
+    public List<User> getFriendsList(String userId) throws InternalServerError {
         try {
-            return entityManager.createQuery(SQL_GET_FRIENDS, User.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
-                    .setParameter("userFrom", user)
+            return (List<User>) entityManager.createNativeQuery(SQL_GET_FRIENDS)
+                    .setParameter("status", RelationshipStatus.FRIENDS.toString())
+                    .setParameter("userFromId", userId)
                     .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
@@ -83,11 +120,11 @@ public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements
     }
 
     @Override
-    public List<User> getSmallFriendsList(User user) throws InternalServerError {
+    public List<User> getSmallFriendsList(String userId) throws InternalServerError {
         try {
-            return entityManager.createQuery(SQL_GET_FRIENDS, User.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
-                    .setParameter("userFrom", user)
+            return (List<User>) entityManager.createNativeQuery(SQL_GET_FRIENDS)
+                    .setParameter("status", RelationshipStatus.FRIENDS.toString())
+                    .setParameter("userFromId", userId)
                     .setMaxResults(6)
                     .getResultList();
         }catch (Exception e){
@@ -96,12 +133,12 @@ public class RelationshipDAOImpl extends GeneralDAOImpl<Relationship> implements
     }
 
     @Override
-    public Long getFriendsCount(User user) throws InternalServerError {
+    public Long getFriendsCount(String userId) throws InternalServerError {
         try {
-            return entityManager.createQuery(SQL_GET_FRIENDS_COUNT, Long.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
-                    .setParameter("userFrom", user)
-                    .getSingleResult();
+            return ((Number) entityManager.createNativeQuery(SQL_GET_FRIENDS_COUNT)
+                    .setParameter("status", RelationshipStatus.FRIENDS.toString())
+                    .setParameter("userFromId", userId)
+                    .getSingleResult()).longValue();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }

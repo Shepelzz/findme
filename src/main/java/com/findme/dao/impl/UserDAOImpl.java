@@ -19,7 +19,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
 
     public List<User> getFirstUsers() throws InternalServerError{
         try {
-            return (List<User>) entityManager.createQuery(SQL_TOP_USERS, User.class)
+            return entityManager.createQuery(SQL_TOP_USERS, User.class)
                     .setMaxResults(10)
                     .getResultList();
         }catch (Exception e){

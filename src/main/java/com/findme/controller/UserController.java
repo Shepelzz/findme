@@ -38,23 +38,18 @@ public class UserController {
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(HttpSession session, Model model, @PathVariable String userId){
-        User currentUser = (User) session.getAttribute("user");
-        if(currentUser==null) {
+        String loggedUserId = (String) session.getAttribute("userId");
+        if(loggedUserId==null) {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/badRequest";
         }
         try {
-            User requestUser = userService.findById(Long.valueOf(userId));
-            model.addAttribute("user", requestUser);
-            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : relationshipDAO.getRelationshipStatus(currentUser, requestUser));
-            model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(currentUser));
-            model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(currentUser));
-            model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(requestUser));
-            model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(requestUser));
-
-            //TODO
-            //add outgoing req
-            //add friends list
+            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
+            model.addAttribute("profileStatus", loggedUserId.equals(userId) ? RelationshipStatus.OWNER : relationshipDAO.getRelationshipStatus(loggedUserId, userId));
+            model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
+            model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
+            model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
+            model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
 
             return "profile";
         } catch (NumberFormatException e){
@@ -85,7 +80,7 @@ public class UserController {
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request, HttpServletResponse response){
         try {
             User user = userService.login(request.getParameter("email"), request.getParameter("password"));
-                session.setAttribute("user", user);
+                session.setAttribute("userId", String.valueOf(user.getId()));
                 session.setAttribute("userName", user.getFirstName()+" "+user.getLastName());
             return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
         } catch (BadRequestException e){
