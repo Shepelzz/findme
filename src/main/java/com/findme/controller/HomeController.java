@@ -2,6 +2,7 @@ package com.findme.controller;
 
 import com.findme.dao.UserDAO;
 import com.findme.exception.InternalServerError;
+import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,9 @@ public class HomeController {
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session){
         try {
-            String loggedUserId = (String) session.getAttribute("userId");
-            if(loggedUserId != null){
-                return "redirect:/user/"+loggedUserId;
+            User currentUser = (User) session.getAttribute("user");
+            if(currentUser != null){
+                return "redirect:/user/"+currentUser.getId();
             }
 
             model.addAttribute("userList", userDAO.getFirstUsers());
@@ -43,8 +44,4 @@ public class HomeController {
         TimeUnit.SECONDS.sleep(1);
         return new ResponseEntity<>("trouble", HttpStatus.OK);
     }
-
-
-
-
 }

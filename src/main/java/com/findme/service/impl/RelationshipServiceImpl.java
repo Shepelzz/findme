@@ -4,7 +4,6 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
 import com.findme.exception.InternalServerError;
 import com.findme.service.RelationshipService;
-import com.findme.types.RelationshipStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,21 +31,21 @@ public class RelationshipServiceImpl implements RelationshipService {
     *    - если REQUEST_REJECTED - то обновляем на NOT_FRIENDS и создаем новую связь от нас к пользователю со статусом REQUEST_SENT
     */
     public void addFriend(String userFromId, String userToId) throws InternalServerError {
-        RelationshipStatus status = relationshipDAO.getRelationshipStatus(userToId, userFromId);
-        if(status == RelationshipStatus.NOT_FRIENDS)
-            relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.REQUEST_SENT);
-        else{
-            switch (status) {
-                case REQUEST_SENT: {
-                    relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.FRIENDS);
-                    relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
-                }
-                case REQUEST_REJECTED: {
-                    relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.NOT_FRIENDS);
-                    relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.REQUEST_SENT);
-                }
-            }
-        }
+//        RelationshipStatus status = relationshipDAO.getRelationshipStatus(userToId, userFromId);
+//        if(status == RelationshipStatus.NOT_FRIENDS)
+//            relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.REQUEST_SENT);
+//        else{
+//            switch (status) {
+//                case REQUEST_SENT: {
+//                    relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.FRIENDS);
+//                    relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
+//                }
+//                case REQUEST_REJECTED: {
+//                    relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.NOT_FRIENDS);
+//                    relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.REQUEST_SENT);
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -55,8 +54,8 @@ public class RelationshipServiceImpl implements RelationshipService {
     *   Связь от пользователя к нам удаляем
     */
     public void deleteFriend(String userFromId, String userToId) throws InternalServerError {
-        relationshipDAO.deleteRelationship(userFromId, userToId);
-        relationshipDAO.deleteRelationship(userToId, userFromId);
+//        relationshipDAO.deleteRelationship(userFromId, userToId);
+//        relationshipDAO.deleteRelationship(userToId, userFromId);
     }
 
     @Override
@@ -67,14 +66,14 @@ public class RelationshipServiceImpl implements RelationshipService {
     *       - нет - создаем новую связь со статусом FRIENDS
     */
     public void acceptFriend(String userFromId, String userToId) throws InternalServerError {
-        if(relationshipDAO.getRelationshipStatus(userToId, userFromId) != RelationshipStatus.REQUEST_SENT)
-            return;
-
-        relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.FRIENDS);
-        if(relationshipDAO.getRelationshipStatus(userFromId, userToId) != RelationshipStatus.NOT_FRIENDS)
-            relationshipDAO.updateRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
-        else
-            relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
+//        if(relationshipDAO.getRelationshipStatus(userToId, userFromId) != RelationshipStatus.REQUEST_SENT)
+//            return;
+//
+//        relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.FRIENDS);
+//        if(relationshipDAO.getRelationshipStatus(userFromId, userToId) != RelationshipStatus.NOT_FRIENDS)
+//            relationshipDAO.updateRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
+//        else
+//            relationshipDAO.addRelationship(userFromId, userToId, RelationshipStatus.FRIENDS);
     }
 
     @Override
@@ -83,7 +82,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     *   Если запрос был отменен, т.е. в статусе NOT_FRIENDS - все равно обновляем на REJECTED
     */
     public void rejectFriend(String userFromId, String userToId) throws InternalServerError {
-        relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.REQUEST_REJECTED);
+//        relationshipDAO.updateRelationship(userToId, userFromId, RelationshipStatus.REQUEST_REJECTED);
     }
 
     @Override
@@ -91,6 +90,6 @@ public class RelationshipServiceImpl implements RelationshipService {
     /*  Удаляем связь от нас к другу
     */
     public void cancelRequest(String userFromId, String userToId) throws InternalServerError {
-        relationshipDAO.deleteRelationship(userFromId, userToId);
+//        relationshipDAO.deleteRelationship(userFromId, userToId);
     }
 }
