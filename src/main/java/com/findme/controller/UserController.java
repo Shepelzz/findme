@@ -38,23 +38,24 @@ public class UserController {
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(HttpSession session, Model model, @PathVariable String userId){
-        User currentUser = (User) session.getAttribute("user");
-        if(currentUser==null) {
+        User loggedUser = (User) session.getAttribute("user");
+        if(loggedUser==null) {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/badRequest";
         }
         try {
-            User requestUser = userService.findById(Long.valueOf(userId));
-            model.addAttribute("user", requestUser);
-            model.addAttribute("profileStatus", currentUser.getId().equals(Long.valueOf(userId)) ? RelationshipStatus.OWNER : relationshipDAO.getRelationshipStatus(currentUser, requestUser));
-            model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(currentUser));
-            model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(currentUser));
-            model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(requestUser));
-            model.addAttribute("friendsCount", -1);
+            RelationshipStatus status = RelationshipStatus.OWNER;
+            if(!loggedUser.getId().equals(Long.valueOf(userId)))
+                status = relationshipDAO.getRelationshipStatus(String.valueOf(loggedUser.getId()), userId);
 
-            //TODO
-            //add outgoing req
-            //add friends list
+            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
+            model.addAttribute("profileStatus", status);
+            if(status == RelationshipStatus.OWNER){
+                model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(userId));
+                model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(userId));
+            }
+            model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
+            model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
 
             return "profile";
         } catch (NumberFormatException e){

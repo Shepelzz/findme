@@ -13,17 +13,13 @@
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <body>
-
-<!--<div th:if="${session.user.getId()}==${userId}">-->
-<!--<p>Mine</p>-->
-<!--</div>-->
-
+<div id="loaderGif"></div>
 
 <!-- Navbar -->
 <div class="w3-top">
     <div class="w3-theme-d2 w3-left-align w3-large">
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
-        <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
+        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
         <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name
             <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
         </div>
@@ -57,7 +53,6 @@
                     </h4>
                     <div class="w3-center">
                         <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="width:200px" alt="Avatar">
-                        <!--<div class="w3-circle photo-container">photo</div>-->
                     </div>
                     <hr>
 
@@ -99,59 +94,47 @@
             </div>
 
             <div style="padding: 10px;">Status: <span th:text="${profileStatus.name()}">somebody</span></div>
-            <!--Requests-->
-            <!--<div th:if="${isOwner}" class="w3-card w3-round">-->
-            <!--<div class="w3-white">-->
-            <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Incoming requests</button>-->
-            <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Outgoing requests</button>-->
-            <!--</div>-->
-            <!--</div>-->
-
-            <!--<div th:if="${not isOwner}" class="w3-card w3-round">-->
-            <!--<div class="w3-white">-->
-            <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Add Friend</button>-->
-            <!--<button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>Remove Friend</button>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<br>-->
 
             <div th:switch="${profileStatus.name()}">
                 <div th:case="'OWNER'" class="w3-card w3-round">
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
-                        <button onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-left fa-fw w3-margin-right"></i>Incoming requests
                             <span class="w3-right" th:text="${incomingRequests.size()}">0</span>
                         </button>
                         <ul id="incomingReq" class="w3-hide w3-ul w3-card-4">
-                            <li class="w3-bar" th:each="user : ${incomingRequests}">
-                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                            <li class="w3-bar" th:each="usr : ${incomingRequests}" th:id="'incomingReq-' + ${usr.getId()}">
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|rejectFriendRequest('${usr.getId()}')|">
                                     <i class="fa fa-times w3-text-theme"></i>
-                                </span>
-                                <span onclick="" class="w3-bar-item w3-button w3-white w3-right w3-padding-8">
+                                </button>
+                                <button id="accept" class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|acceptFriendRequest('${usr.getId()}')|">
                                     <i class="fa fa-check w3-text-theme"></i>
-                                </span>
-                                <a th:href="@{'/user/' + ${user.getId()}}">
+                                </button>
+                                <a th:href="@{'/user/' + ${usr.getId()}}">
                                     <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                                 </a>
                                 <div class="w3-bar-item dropdown-menu-label">
-                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
+                                    <span class="w3-large" th:text="${usr.firstName}+' '+${usr.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
                                 </div>
                             </li>
                         </ul>
 
                         <!--Outgoing Friend Request-->
-                        <button onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${outgoingRequests.size() > 0}" onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-right fa-fw w3-margin-right"></i>Outgoing requests
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
                         <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4">
-                            <li class="w3-bar" th:each="user : ${outgoingRequests}">
-                                <a th:href="@{'/user/' + ${user.getId()}}">
+                            <li class="w3-bar" th:each="usr : ${outgoingRequests}">
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${usr.getId()}')|">
+                                    <i class="fa fa-times w3-text-theme"></i>
+                                </button>
+                                <a th:href="@{'/user/' + ${usr.getId()}}">
                                     <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                                 </a>
                                 <div class="w3-bar-item dropdown-menu-label">
-                                    <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
+                                    <span class="w3-large" th:text="${usr.firstName}+' '+${usr.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
                                 </div>
                             </li>
                         </ul>
@@ -159,26 +142,34 @@
                 </div>
                 <div th:case="'FRIENDS'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend</button>
-                    </div>
-                </div>
-                <div th:case="'NOT_FRIENDS'" class="w3-card w3-round">
-                    <div class="w3-white">
-                        <button class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend</button>
+                        <button id="removeFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|deleteFriend('${user.getId()}')|">
+                            <i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend
+                        </button>
                     </div>
                 </div>
                 <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
                     <div class="w3-white">
-                        <div class="w3-button w3-block  w3-left-align">request sent</div>
+                        <div class="w3-button w3-block w3-left-align">request sent
+                            <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${usr.getId()}')|">
+                                <i class="fa fa-times w3-text-theme"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div th:case="'REQUEST_REJECTED'" class="w3-card w3-round">
-                    <div class="w3-white">
-                        <p>request declined</p>
+                    <div class="w3-pale-red">
+                        <div class="w3-button w3-block w3-left-align">request rejected</div>
                     </div>
                 </div>
+                <div th:case="'NOT_FRIENDS'" class="w3-card w3-round">
+                    <div class="w3-white">
+                        <button id="addFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|addFriend('${user.getId()}')|">
+                            <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend
+                        </button>
+                    </div>
+                </div>
+                <br>
             </div>
-            <br>
 
 
             <!-- Menu -->
@@ -194,7 +185,7 @@
                                 <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
                             </a>
                             <div class="w3-bar-item dropdown-menu-label">
-                                <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span><br>
+                                <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span>
                             </div>
                         </li>
                     </ul>
@@ -222,7 +213,7 @@
                         <div class="w3-container w3-padding">
                             <h6 class="w3-opacity">Create new post here: </h6>
                             <p contenteditable="true" class="w3-border w3-padding"></p>
-                            <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
+                            <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
                         </div>
 
                     </div>
@@ -240,8 +231,8 @@
             <!--<img src="/w3images/lights.jpg" style="width:100%" alt="/Some image/" class="w3-margin-bottom">-->
             <!--</div>-->
             <!--</div>-->
-            <!--<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>-->
-            <!--<button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>-->
+            <!--<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>-->
+            <!--<button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>-->
             <!--</div>-->
 
             <!-- End Middle Column -->
@@ -258,9 +249,10 @@
 
 
 <script>
+    var loader = $('#loaderGif');
 
     function dropDownMenu(id) {
-        var x = document.getElementById(id);
+        let x = document.getElementById(id);
         if (x.className.indexOf("w3-show") === -1) {
             x.className += " w3-show";
             x.previousElementSibling.className += " w3-theme-d1";
@@ -269,6 +261,89 @@
             x.previousElementSibling.className =
                 x.previousElementSibling.className.replace(" w3-theme-d1", "");
         }
+    }
+
+    function acceptFriendRequest(id) {
+        debugger;
+        loader.show();
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-accept/" + id,
+            success: function success() {
+                loader.hide();
+                $('#incomingReq-' + id).hide();
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    function rejectFriendRequest(id) {
+        loader.show();
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-reject/" + id,
+            success: function success() {
+                loader.hide();
+                $('#incomingReq-' + id).hide();
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    function cancelRequestToFriend(id) {
+        loader.show();
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-reject/" + id,
+            success: function success() {
+                loader.hide();
+                $('#incomingReq-' + id).hide();
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    function addFriend(id) {
+        loader.show();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-accept/" + id,
+            success: function success() {
+                loader.hide();
+                $('#incomingReq-' + id).hide();
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    function deleteFriend(id) {
+        loader.show();
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: "/friend-request-accept/" + id,
+            success: function success() {
+                loader.hide();
+                $('#incomingReq-' + id).hide();
+            },
+            error: function(xhr) {
+                loader.hide();
+                alert(xhr.responseText);
+            }
+        });
     }
 </script>
 

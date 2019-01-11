@@ -3,28 +3,19 @@ package com.findme.models;
 import com.findme.types.RelationshipStatus;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "RELATIONSHIP")
-public class Relationship extends GeneralModel{
-    private Long id;
+@IdClass(value = Relationship.RelationshipId.class)
+public class Relationship implements Serializable {
+
     private User userFrom;
     private User userTo;
     private RelationshipStatus status;
 
     @Id
-    @SequenceGenerator(name = "RELATIONSHIP_SEQ", sequenceName = "RELATIONSHIP_ID_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RELATIONSHIP_SEQ")
-    @Column(name = "RELATIONSHIP_ID")
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @ManyToOne
     @JoinColumn(name="USER_FROM_ID", nullable = false)
     public User getUserFrom() {
@@ -35,6 +26,7 @@ public class Relationship extends GeneralModel{
         this.userFrom = userFrom;
     }
 
+    @Id
     @ManyToOne
     @JoinColumn(name="USER_TO_ID", nullable = false)
     public User getUserTo() {
@@ -53,5 +45,42 @@ public class Relationship extends GeneralModel{
 
     public void setStatus(RelationshipStatus status) {
         this.status = status;
+    }
+
+
+    static class RelationshipId implements Serializable{
+        private User userFrom;
+        private User userTo;
+
+        public User getUserFrom() {
+            return userFrom;
+        }
+
+        public void setUserFrom(User userFrom) {
+            this.userFrom = userFrom;
+        }
+
+        public User getUserTo() {
+            return userTo;
+        }
+
+        public void setUserTo(User userTo) {
+            this.userTo = userTo;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RelationshipId that = (RelationshipId) o;
+            return Objects.equals(userFrom, that.userFrom) &&
+                    Objects.equals(userTo, that.userTo);
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(userFrom, userTo);
+        }
     }
 }
