@@ -58,7 +58,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     public void rejectFriend(String userFromId, String userToId) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel != null && rel.getStatus()==RelationshipStatus.REQUEST_SENT)
-            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), RelationshipStatus.FRIENDS);
+            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), RelationshipStatus.REQUEST_REJECTED);
     }
 
     @Override
