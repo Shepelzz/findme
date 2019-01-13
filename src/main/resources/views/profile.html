@@ -20,13 +20,13 @@
     <div class="w3-theme-d2 w3-left-align w3-large">
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
-        <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name
+        <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name
             <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
         </div>
-        <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.user==null ? 'display:none' : 'display:block'}">
+        <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.loggedUserId==null ? 'display:none' : 'display:block'}">
             <i class="fa fa-sign-out-alt"></i>
         </a>
-        <a href="#" th:href="@{/}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Login" th:style="${session.user==null ? 'display:block' : 'display:none'}">
+        <a href="#" th:href="@{/}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Login" th:style="${session.loggedUserId==null ? 'display:block' : 'display:none'}">
             <i class="fa fa-sign-in-alt"></i>
         </a>
     </div>
@@ -35,7 +35,7 @@
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
     <a href="#" class="w3-bar-item w3-button w3-padding-large">Messages</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding-large" th:text="${session.user != null ? session.user.getFirstName()+' '+session.user.getLastName() : ''}">User Name</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</a>
 </div>
 
 <!-- Page Container -->
@@ -92,10 +92,9 @@
                     <br>
                 </div>
             </div>
-
             <div style="padding: 10px;">Status: <span th:text="${profileStatus.name()}">somebody</span></div>
 
-            <div th:switch="${profileStatus.name()}">
+            <div id="relationship-status" th:switch="${profileStatus.name()}">
                 <div th:case="'OWNER'" class="w3-card w3-round">
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
@@ -126,7 +125,7 @@
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
                         <ul id="outgoingReq" class="w3-hide w3-ul w3-card-4">
-                            <li class="w3-bar" th:each="usr : ${outgoingRequests}">
+                            <li class="w3-bar" th:each="usr : ${outgoingRequests}" th:id="'outgoingReq-' + ${usr.getId()}">
                                 <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${usr.getId()}')|">
                                     <i class="fa fa-times w3-text-theme"></i>
                                 </button>
@@ -147,10 +146,10 @@
                         </button>
                     </div>
                 </div>
-                <div th:case="'REQUEST_SENT'" class="w3-card w3-round">
+                <div id="reqSent" th:case="'REQUEST_SENT'" class="w3-card w3-round">
                     <div class="w3-white">
                         <div class="w3-button w3-block w3-left-align">request sent
-                            <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${usr.getId()}')|">
+                            <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${user.getId()}')|">
                                 <i class="fa fa-times w3-text-theme"></i>
                             </button>
                         </div>
@@ -175,7 +174,7 @@
             <!-- Menu -->
             <div class="w3-card w3-round">
                 <div class="w3-white">
-                    <button onclick="dropDownMenu('friendsSmallList')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                    <button th:if="${profileStatus.name() == 'OWNER' || profileStatus.name() == 'FRIENDS'}" onclick="dropDownMenu('friendsSmallList')" class="w3-button w3-block w3-theme-l1 w3-left-align">
                         <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
                         <span class="w3-right" th:text="${friendsCount}">0</span>
                     </button>
@@ -275,7 +274,7 @@
             },
             error: function(xhr) {
                 loader.hide();
-                alert(xhr.responseText);
+                // alert(xhr.responseText);
             }
         });
     }
@@ -291,7 +290,7 @@
             },
             error: function(xhr) {
                 loader.hide();
-                alert(xhr.responseText);
+                // alert(xhr.responseText);
             }
         });
     }
@@ -300,10 +299,11 @@
         loader.show();
         $.ajax({
             type: "POST",
-            url: "/friend-request-reject/" + id,
+            url: "/request-cancel/" + id,
             success: function success() {
                 loader.hide();
-                $('#incomingReq-' + id).hide();
+                $('#outgoingReq-' + id).hide();
+                $('#reqSent').hide();
             },
             error: function(xhr) {
                 loader.hide();
@@ -317,10 +317,9 @@
         debugger;
         $.ajax({
             type: "POST",
-            url: "/friend-request-accept/" + id,
+            url: "/friend-add/" + id,
             success: function success() {
                 loader.hide();
-                $('#incomingReq-' + id).hide();
             },
             error: function(xhr) {
                 loader.hide();
@@ -334,10 +333,9 @@
         debugger;
         $.ajax({
             type: "POST",
-            url: "/friend-request-accept/" + id,
+            url: "/friend-remove/" + id,
             success: function success() {
                 loader.hide();
-                $('#incomingReq-' + id).hide();
             },
             error: function(xhr) {
                 loader.hide();

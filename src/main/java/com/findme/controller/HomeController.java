@@ -26,9 +26,9 @@ public class HomeController {
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session){
         try {
-            User currentUser = (User) session.getAttribute("user");
-            if(currentUser != null){
-                return "redirect:/user/"+currentUser.getId();
+            String loggedUserId = (String) session.getAttribute("loggedUserId");
+            if(loggedUserId != null){
+                return "redirect:/user/"+loggedUserId;
             }
 
             model.addAttribute("userList", userDAO.getFirstUsers());
@@ -37,11 +37,5 @@ public class HomeController {
             model.addAttribute("error", e);
             return "errors/internalServerError";
         }
-    }
-
-    @RequestMapping(path = "/test-ajax", method = RequestMethod.GET)
-    public ResponseEntity<String> testAjax() throws Exception{
-        TimeUnit.SECONDS.sleep(1);
-        return new ResponseEntity<>("trouble", HttpStatus.OK);
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -38,15 +39,15 @@ public class UserController {
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
     public String profile(HttpSession session, Model model, @PathVariable String userId){
-        User loggedUser = (User) session.getAttribute("user");
-        if(loggedUser==null) {
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/badRequest";
+            return "errors/forbidden";
         }
         try {
             RelationshipStatus status = RelationshipStatus.OWNER;
-            if(!loggedUser.getId().equals(Long.valueOf(userId)))
-                status = relationshipDAO.getRelationshipStatus(String.valueOf(loggedUser.getId()), userId);
+            if(!loggedUserId.equals(userId))
+                status = relationshipDAO.getRelationshipStatus(loggedUserId, userId);
 
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("profileStatus", status);
@@ -86,8 +87,9 @@ public class UserController {
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request, HttpServletResponse response){
         try {
             User user = userService.login(request.getParameter("email"), request.getParameter("password"));
-            session.setAttribute("user", user);
-            session.setAttribute("userName", user.getFirstName()+" "+user.getLastName());
+            session.setAttribute("loggedUserObj", user);
+            session.setAttribute("loggedUserId", String.valueOf(user.getId()));
+            session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
             return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -101,28 +103,4 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
-
-//    @RequestMapping(path = "/edit-user/{userId}", method = RequestMethod.PUT)
-//    public @ResponseBody
-//    User update(Model model){
-//
-//        return null;
-//    }
-
-    @RequestMapping(path = "/remove-user/{userId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteUser(@PathVariable String userId){
-        try {
-            userService.delete(Long.valueOf(userId));
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(path = "/add-friend/{userId}", method = RequestMethod.POST)
-    public ResponseEntity<String> addFriend(Session session, @PathVariable String userId){
-        return null;
-    }
-
-
 }
