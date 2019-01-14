@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -40,7 +39,6 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public void addRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
@@ -55,7 +53,6 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     }
 
     @Override
-    @Transactional
     public void deleteRelationship(Long userFromId, Long userToId) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_DELETE_RELATIONSHIP)
@@ -69,7 +66,6 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     }
 
     @Override
-    @Transactional
     public void updateRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
@@ -77,7 +73,6 @@ public class RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userToId", userToId)
                     .setParameter("status", status.toString())
                     .executeUpdate();
-
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
@@ -97,14 +92,6 @@ public class RelationshipDAOImpl implements RelationshipDAO{
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
-    }
-
-    @Override
-    public RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError{
-        Relationship relationship = getRelationship(userFromId, userToId);
-        if(relationship == null)
-            return RelationshipStatus.NOT_FRIENDS;
-        return relationship.getStatus();
     }
 
     @Override

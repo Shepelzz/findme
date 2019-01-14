@@ -21,5 +21,4 @@ public interface RelationshipDAO{
     Long getFriendsCount(String userId) throws InternalServerError;
 
     Relationship getRelationship(String userFromId, String userToId) throws InternalServerError;
-    RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError;
 }

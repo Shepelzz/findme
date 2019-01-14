@@ -1,14 +1,13 @@
 package com.findme.controller;
 
 import com.findme.dao.RelationshipDAO;
-import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
+import com.findme.service.RelationshipService;
 import com.findme.service.UserService;
 import com.findme.types.RelationshipStatus;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +21,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
 public class UserController {
     private UserService userService;
-    private UserDAO userDAO;
+    private RelationshipService relationshipService;
     private RelationshipDAO relationshipDAO;
 
     @Autowired
-    public UserController(UserService userService, UserDAO userDAO, RelationshipDAO relationshipDAO) {
+    public UserController(UserService userService, RelationshipService relationshipService, RelationshipDAO relationshipDAO) {
         this.userService = userService;
-        this.userDAO = userDAO;
+        this.relationshipService = relationshipService;
         this.relationshipDAO = relationshipDAO;
     }
 
@@ -47,7 +45,7 @@ public class UserController {
         try {
             RelationshipStatus status = RelationshipStatus.OWNER;
             if(!loggedUserId.equals(userId))
-                status = relationshipDAO.getRelationshipStatus(loggedUserId, userId);
+                status = relationshipService.getRelationshipStatus(loggedUserId, userId);
 
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("profileStatus", status);

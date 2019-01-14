@@ -1,7 +1,6 @@
 package com.findme.service.impl;
 
 import com.findme.dao.RelationshipDAO;
-import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.models.Relationship;
@@ -17,16 +16,29 @@ import javax.transaction.Transactional;
 public class RelationshipServiceImpl implements RelationshipService {
 
     private RelationshipDAO relationshipDAO;
-    private UserDAO userDAO;
 
     @Autowired
-    public RelationshipServiceImpl(RelationshipDAO relationshipDAO, UserDAO userDAO) {
+    public RelationshipServiceImpl(RelationshipDAO relationshipDAO) {
         this.relationshipDAO = relationshipDAO;
-        this.userDAO = userDAO;
     }
 
+    @Override
+    public RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError {
+        Relationship relationship = relationshipDAO.getRelationship(userFromId, userToId);
+        if(relationship == null)
+            return RelationshipStatus.NOT_FRIENDS;
+
+        if(relationship.getStatus() == RelationshipStatus.REQUEST_SENT && !relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
+            return RelationshipStatus.NOT_FRIENDS;
+
+        if(relationship.getStatus() == RelationshipStatus.REQUEST_REJECTED)
+            if(!relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
+                return RelationshipStatus.NOT_FRIENDS;
+        return relationship.getStatus();
+    }
 
     @Override
+    @Transactional
     public void addFriend(String userFromId, String userToId) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel == null) {
@@ -35,11 +47,16 @@ public class RelationshipServiceImpl implements RelationshipService {
             } catch (NumberFormatException e){
                 throw  new InternalServerError(e.getMessage());
             }
-        } else if(rel.getStatus() == RelationshipStatus.REQUEST_SENT)
+        } else if(rel.getStatus() == RelationshipStatus.REQUEST_SENT) {
             relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), RelationshipStatus.FRIENDS);
+        } else if(rel.getStatus() == RelationshipStatus.REQUEST_REJECTED) {
+            relationshipDAO.deleteRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId());
+            relationshipDAO.addRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUEST_SENT);
+        }
     }
 
     @Override
+    @Transactional
     public void deleteFriend(String userFromId, String userToId) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel != null && rel.getStatus()==RelationshipStatus.FRIENDS)
@@ -48,6 +65,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
+    @Transactional
     public void acceptFriend(String userFromId, String userToId) throws InternalServerError, BadRequestException {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel != null && rel.getStatus()==RelationshipStatus.REQUEST_SENT)
@@ -55,6 +73,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
+    @Transactional
     public void rejectFriend(String userFromId, String userToId) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel != null && rel.getStatus()==RelationshipStatus.REQUEST_SENT)
@@ -62,6 +81,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     }
 
     @Override
+    @Transactional
     public void cancelRequest(String userFromId, String userToId) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         if(rel != null && rel.getStatus()==RelationshipStatus.REQUEST_SENT)
