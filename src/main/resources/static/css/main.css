@@ -38,6 +38,7 @@ body{
     z-index: 9999;
     background: url(https://t.76.my/res/img/ajax-loader.gif?180321) no-repeat right 10px top 60px rgba(180,180,180,0.25);
 }
+.w3-content{max-width:1200px}
 
 /*html {*/
     /*height: 100%;*/

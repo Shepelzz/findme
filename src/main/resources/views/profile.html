@@ -20,9 +20,8 @@
     <div class="w3-theme-d2 w3-left-align w3-large">
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
         <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
-        <div class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name
-            <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
-        </div>
+        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</a>
+        <!--<img class="w3-bar-item w3-right" src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">-->
         <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.loggedUserId==null ? 'display:none' : 'display:block'}">
             <i class="fa fa-sign-out-alt"></i>
         </a>
@@ -39,17 +38,17 @@
 </div>
 
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;min-height:800px;margin-top:80px">
+<div class="w3-container w3-content" style="margin-top:80px">
     <!-- The Grid -->
     <div class="w3-row">
         <!-- Left Column -->
-        <div class="w3-col m3">
+        <div class="w3-col l4">
             <!-- Profile -->
             <div class="w3-card w3-round w3-white">
                 <div class="w3-container">
                     <h4 class="clear-inline w3-padding-small w3-center">
                         <p class="inline w3-center" th:text="${user.firstName}+' '+${user.lastName}">User Name</p>
-                        <i class="inline w3-padding-small"><a  href=""><i class="fa fa-edit fa-fw w3-margin-right w3-text-theme"></i></a></i>
+                        <i class="inline w3-padding-small"><a th:href="@{'/edit-user/' + ${user.id}}"><i class="fa fa-edit fa-fw w3-margin-right w3-text-theme"></i></a></i>
                     </h4>
                     <div class="w3-center">
                         <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="width:200px" alt="Avatar">
@@ -204,7 +203,7 @@
         </div>
 
         <!-- Middle Column -->
-        <div class="w3-col m9">
+        <div class="w3-col m8">
 
             <div class="w3-row-padding">
                 <div class="w3-col m12">
