@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -32,12 +34,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) throws InternalServerError, BadRequestException {
         validateNewUser(user);
+        user.setDateRegistered(new Date());
         return userDAO.save(user);
     }
 
     @Override
     public User update(User user) throws InternalServerError, BadRequestException {
-        //TODO
+        //TODO check fields
         return userDAO.update(user);
     }
 
@@ -55,10 +58,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    @Transactional
     public User login(String email, String password) throws InternalServerError, BadRequestException {
         User user = userDAO.getUserByAuthorization(email, password);
         if(user == null)
             throw new BadRequestException("Username or password is incorrect.");
+        user.setDateLastActive(new Date());
+        userDAO.update(user);
         return user;
     }
 
