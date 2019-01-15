@@ -69,28 +69,6 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/edit-user/{userId}", method = RequestMethod.GET)
-    public String editUserInfo(HttpSession session, Model model, @PathVariable String userId){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null || !loggedUserId.equals(userId)) {
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
-        }
-        try {
-            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            return "profileEdit";
-        } catch (NumberFormatException e){
-            model.addAttribute("error", e);
-            return "errors/badRequest";
-        } catch (InternalServerError ise){
-            model.addAttribute("error", ise);
-            return "errors/internalServerError";
-        } catch (NotFoundException nofe){
-            model.addAttribute("error", nofe);
-            return "errors/notFound";
-        }
-    }
-
     @RequestMapping(path = "/edit-user", method = RequestMethod.POST)
     public ResponseEntity<String> editUserSubmit(HttpSession session, @ModelAttribute User user){
         if(session.getAttribute("loggedUserId")==null) {
