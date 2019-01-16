@@ -12,20 +12,10 @@
 <link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+<script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
 <body>
-<div id="loaderGif"></div>
-
-<!-- Navbar -->
-<div class="w3-top">
-    <div class="w3-theme-d2 w3-left-align w3-large">
-        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
-    </div>
-</div>
-
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-</div>
+<div style="display: none" id="loaderGif"></div>
+<header th:replace="common/header.html :: header"></header>
 
 <!-- Page Container -->
 <div class="w3-container w3-content" style="margin-top:80px;">
@@ -149,42 +139,15 @@
         </div>
         <!-- End Grid -->
     </div>
-
     <!-- End Page Container -->
 
-
 <!-- Footer -->
-<footer class="w3-center custom-footer">
-    <p>Footer копирайты</p>
-</footer>
+<footer th:replace="common/footer.html :: footer"></footer>
 </div>
 </body>
 
 <script>
     var loader = $('#loaderGif');
-
-    // //submit reg form
-    $("#registration-form").submit(function register() {
-        loader.show();
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/register-user",
-            // async: false,
-            data: $('#registration-form').serialize(),
-            success:function success() {
-                debugger;
-                loader.hide();
-                alert('User registered successfully');
-                window.location.reload(true);
-            },
-            error: function(xhr) {
-                debugger;
-                loader.hide();
-                alert(xhr.responseText);
-            }
-        });
-    });
 
     $('#showUsers_btn').click(function () {
         var button =  $('#showUsers_btn');
@@ -199,28 +162,7 @@
         }
     });
 
-    function userDelete(id) {
-        if(confirm('Remove user with id: '+id+'?')) {
-            loader.show();
-            $.ajax({
-                type: "DELETE",
-                url: "remove-user/" + id,
-                // async: false,
-                success: function success() {
-                    debugger;
-                    loader.hide();
-                    alert('User removed successfully');
-                    window.location.reload(true);
-                },
-                error: function (xhr) {
-                    debugger;
-                    loader.hide();
-                    alert(xhr.responseText);
-                }
-            });
-        }
-    }
-
+    // user login
     $("#login").submit(function login() {
         loader.show();
         event.preventDefault();

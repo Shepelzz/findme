@@ -14,15 +14,7 @@
 <body>
 
 <!-- Navbar -->
-<div class="w3-top">
-    <div class="w3-theme-d2 w3-left-align w3-large">
-        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
-    </div>
-</div>
-
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-</div>
+<header th:replace="common/header.html :: header"></header>
 
 <!-- Page Container -->
 <div class="w3-container w3-content" style="max-width:1400px;min-height:80%;margin-top:80px">
@@ -33,9 +25,7 @@
 </div>
 
 <!-- Footer -->
-<footer class="w3-center custom-footer">
-    <p>Footer копирайты</p>
-</footer>
+<footer th:replace="common/footer.html :: footer"></footer>
 </body>
 
 </html>

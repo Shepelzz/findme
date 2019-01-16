@@ -12,35 +12,11 @@
 <link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/userProfile.js" th:src="@{/js/userProfile.js}"></script>
 <body>
 <div id="loaderGif"></div>
 
-<!-- Navbar -->
-<div class="w3-top">
-    <div class="w3-theme-d2 w3-left-align w3-large">
-        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
-        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i><span class="w3-badge w3-right w3-small w3-green">3</span></a>
-
-        <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
-            <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
-        </a>
-        <span class="w3-bar-item  w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</span>
-        <a href="#" th:href="@{/logout}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Logout" th:style="${session.loggedUserId==null ? 'display:none' : 'display:block'}">
-            <i class="fa fa-sign-out-alt"></i>
-        </a>
-        <a href="#" th:href="@{/}" class="w3-bar-item w3-hide-small w3-right w3-padding-large w3-hover-white" title="Login" th:style="${session.loggedUserId==null ? 'display:block' : 'display:none'}">
-            <i class="fa fa-sign-in-alt"></i>
-        </a>
-    </div>
-</div>
-
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-    <a href="#" class="w3-bar-item w3-button w3-padding-large">Messages<span class="w3-badge w3-right w3-small w3-green">3</span></a>
-    <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">
-        <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
-    </a>
-</div>
+<header th:replace="common/header.html :: header"></header>
 
 <!-- Page Container -->
 <div class="w3-container w3-content" style="margin-top:80px">
@@ -53,7 +29,7 @@
                 <div class="w3-container">
                     <h4 class="clear-inline w3-padding-small w3-center">
                         <p class="inline w3-center" th:text="${user.firstName}+' '+${user.lastName}">User Name</p>
-                        <i type="href" onclick="$('#editModalForm').show()" class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+                        <i th:if="${profileStatus.name()=='OWNER'}" onclick="$('#editModalForm').show()" class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
                     </h4>
                     <div class="w3-center">
                         <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="width:200px" alt="Avatar">
@@ -322,13 +298,8 @@
     </div>
 </div>
 
-
-
 <!-- Footer -->
-<footer class="w3-center custom-footer">
-    <p>Footer копирайты</p>
-</footer>
-
+<footer th:replace="common/footer.html :: footer"></footer>
 
 <script>
     var loader = $('#loaderGif');
@@ -345,87 +316,16 @@
         }
     }
 
-    function acceptFriendRequest(id) {
-        debugger;
-        loader.show();
-        $.ajax({
-            type: "POST",
-            url: "/friend-request-accept/" + id,
-            success: function success() {
-                loader.hide();
-                $('#incomingReq-' + id).hide();
-            },
-            error: function(xhr) {
-                loader.hide();
-                // alert(xhr.responseText);
-            }
-        });
+    var modal = document.getElementById('editModalForm');
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
     }
-
-    function rejectFriendRequest(id) {
-        loader.show();
-        $.ajax({
-            type: "POST",
-            url: "/friend-request-reject/" + id,
-            success: function success() {
-                loader.hide();
-                $('#incomingReq-' + id).hide();
-            },
-            error: function(xhr) {
-                loader.hide();
-                // alert(xhr.responseText);
-            }
-        });
-    }
-
-    function cancelRequestToFriend(id) {
-        loader.show();
-        $.ajax({
-            type: "POST",
-            url: "/request-cancel/" + id,
-            success: function success() {
-                loader.hide();
-                $('#outgoingReq-' + id).hide();
-                $('#reqSent').hide();
-            },
-            error: function(xhr) {
-                loader.hide();
-                alert(xhr.responseText);
-            }
-        });
-    }
-
-    function addFriend(id) {
-        loader.show();
-        debugger;
-        $.ajax({
-            type: "POST",
-            url: "/friend-add/" + id,
-            success: function success() {
-                loader.hide();
-            },
-            error: function(xhr) {
-                loader.hide();
-                alert(xhr.responseText);
-            }
-        });
-    }
-
-    function deleteFriend(id) {
-        loader.show();
-        debugger;
-        $.ajax({
-            type: "POST",
-            url: "/friend-remove/" + id,
-            success: function success() {
-                loader.hide();
-            },
-            error: function(xhr) {
-                loader.hide();
-                alert(xhr.responseText);
-            }
-        });
-    }
+    $(document).keydown(function(e) {
+        var code = e.keyCode || e.which;
+        if (code == 27) $(".w3-modal").hide();
+    });
 
     $("#user-edit-form").submit(function userEditSubmit() {
         loader.show();
@@ -450,19 +350,6 @@
             }
         });
     });
-
-
-    var modal = document.getElementById('editModalForm');
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    $(document).keydown(function(e) {
-        var code = e.keyCode || e.which;
-        if (code == 27) $(".w3-modal").hide();
-    });
 </script>
-
 </body>
 </html>
