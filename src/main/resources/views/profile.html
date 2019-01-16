@@ -223,80 +223,11 @@
     <!-- End Page Container -->
 </div>
 
-<!-- Edit MODAL -->
-<div id="editModalForm" class="w3-modal">
-    <div class="w3-modal-content w3-animate-zoom w3-container"><!--w3-card-->
-        <form id="user-edit-form" class="input-form">
-            <div class="w3-container w3-margin">
-
-                <h4 class="w3-opacity">Edit profile
-                    <i onclick="document.getElementById('editModalForm').style.display='none'"
-                       class="fa fa-times w3-button w3-display-topright w3-padding-large w3-text-theme"></i>
-                </h4>
-                <!--<h4 class="w3-opacity">Edit profile</h4>-->
-                <hr>
-                <p class="w3-opacity">Main information</p>
-                <input class="w3-hide" id="id" type="text" name="id" th:value="${user.id}">
-                <div class="w3-padding-small">
-                    <label for="first_name" class="w3-margin-right w3-text-theme">First name: </label>
-                    <input class="w3-border w3-padding" id="first_name" type="text" name="firstName" th:value="${user.firstName}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="last_name" class="w3-margin-right w3-text-theme">Last name: </label>
-                    <input class="w3-border w3-padding" id="last_name" type="text" name="lastName" th:value="${user.lastName}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="phone" class="w3-margin-right w3-text-theme">Phone: </label>
-                    <input class="w3-border w3-padding" id="phone" type="text" name="phone" th:value="${user.phone}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="email" class="w3-margin-right w3-text-theme">Email: </label>
-                    <input class="w3-border w3-padding" id="email" type="text" name="email" th:value="${user.email}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="password" class="w3-margin-right w3-text-theme">Password: </label>
-                    <input class="w3-border w3-padding" id="password" type="password" name="password" th:value="${user.password}">
-                </div>
-                <hr>
-                <p class="w3-opacity">Additional information</p>
-                <div class="w3-padding-small">
-                    <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
-                    <input class="w3-border w3-padding" id="country" type="text" name="country" th:value="${user.country}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="city" class="w3-margin-right w3-text-theme">City: </label>
-                    <input class="w3-border w3-padding" id="city" type="text" name="city" th:value="${user.city}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="age" class="w3-margin-right w3-text-theme">Age: </label>
-                    <input class="w3-border w3-padding" id="age" type="text" name="age" th:value="${user.age}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="relationshipStatus" class="w3-margin-right w3-text-theme">Relationship status: </label>
-                    <input class="w3-border w3-padding" id="relationshipStatus"type="text" name="relationshipStatus" th:value="${user.relationshipStatus}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="religion" class="w3-margin-right w3-text-theme">Religion: </label>
-                    <input class="w3-border w3-padding" id="religion" type="text" name="religion" th:value="${user.religion}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="school" class="w3-margin-right w3-text-theme">School: </label>
-                    <input class="w3-border w3-padding" id="school" type="text" name="school" th:value="${user.school}">
-                </div>
-                <div class="w3-padding-small">
-                    <label for="university" class="w3-margin-right w3-text-theme">University: </label>
-                    <input class="w3-border w3-padding" id="university" type="text" name="university" th:value="${user.university}">
-                </div>
-                <hr>
-                <div class="w3-padding-small">
-                    <label id="loading" class="w3-margin-right w3-text-theme"><p style="display:none">waiting... </p></label>
-                    <button type="submit" class="w3-button w3-theme">Save</button>
-                </div>
-            </div>
-        </form>
-        <br>
-    </div>
+<div th:if="${profileStatus.name()=='OWNER'}">
+    <!-- Edit form MODAL -->
+    <div th:replace="forms/userEditForm.html :: editModalForm"></div>
 </div>
+
 
 <!-- Footer -->
 <footer th:replace="common/footer.html :: footer"></footer>
