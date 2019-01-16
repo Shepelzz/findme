@@ -221,11 +221,10 @@
         </div>
         <!-- End Grid -->
     </div>
-
     <!-- End Page Container -->
 </div>
 
-<div th:if="${profileStatus.name()=='OWNER'}">
+<div th:if="${profileStatus.name()=='OWNER'}" style="margin-top: -50px">
     <!-- Edit form MODAL -->
     <div th:replace="forms/userEditForm.html :: editModalForm"></div>
 </div>

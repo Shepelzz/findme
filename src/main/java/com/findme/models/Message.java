@@ -16,6 +16,7 @@ public class Message extends GeneralModel{
     @Id
     @SequenceGenerator(name = "MESSAGE_SEQ", sequenceName = "MESSAGE_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQ")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MESSAGE_ID")
     @Override
     public Long getId() {

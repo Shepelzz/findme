@@ -20,6 +20,7 @@ public class Post extends GeneralModel{
     @Id
     @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "POST_ID")
     @Override
     public Long getId() {

@@ -36,6 +36,7 @@ public class User extends GeneralModel{
     @Id
     @SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQ")
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
     @Override
     public Long getId() {
