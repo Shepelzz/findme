@@ -152,25 +152,31 @@
                 <br>
             </div>
 
-
             <!-- Menu -->
             <div class="w3-round"><!--w3-card-->
                 <div class="w3-white">
-                    <button th:if="${profileStatus.name() == 'OWNER' || profileStatus.name() == 'FRIENDS'}" onclick="dropDownMenu('friendsSmallList')" class="w3-button w3-block w3-theme-l1 w3-left-align">
-                        <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
-                        <span class="w3-right" th:text="${friendsCount}">0</span>
-                    </button>
-                    <ul id="friendsSmallList" class="w3-hide w3-ul"><!--w3-card-->
-                        <li class="w3-bar" th:each="user : ${friendsSmallList}">
-                            <a th:href="@{'/user/' + ${user.getId()}}">
-                                <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-bar-item w3-circle w3-hide-small w3-padding-small" style="width:55px">
-                            </a>
-                            <div class="w3-bar-item dropdown-menu-label">
-                                <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'" style="">Mike D.</span>
+<!--TODO link on all friends list-->
+                    <div th:if="${profileStatus.name() == 'OWNER' || profileStatus.name() == 'FRIENDS'}">
+                        <a style="text-decoration:none" th:href="@{'/friends-user/' + ${user.getId()}}">
+                            <div class="w3-padding w3-block w3-theme-l1 w3-left-align">
+                                <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
+                                <span class="w3-right" th:text="${friendsCount}">0</span>
                             </div>
-                        </li>
-                    </ul>
-
+                        </a>
+                        <div class="w3-container" th:if="${friendsSmallList.size() > 0}">
+                            <div class="w3-row-padding">
+                                <br>
+                                <div class="w3-third" th:each="user : ${friendsSmallList}">
+                                    <div class="w3-margin-bottom" >
+                                        <a style="text-decoration:none" th:href="@{'/user/' + ${user.getId()}}">
+                                            <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" style="width:100%">
+                                            <div class="w3-medium w3-center" style="width: 100%" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'">Mike D.</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>
@@ -222,16 +228,15 @@
         <!-- End Grid -->
     </div>
     <!-- End Page Container -->
+    <!-- Footer -->
+    <footer th:replace="common/footer.html :: footer"></footer>
 </div>
 
 <div th:if="${profileStatus.name()=='OWNER'}" style="margin-top: -50px">
     <!-- Edit form MODAL -->
     <div th:replace="forms/userEditForm.html :: editModalForm"></div>
 </div>
-
-
-<!-- Footer -->
-<footer th:replace="common/footer.html :: footer"></footer>
+</body>
 
 <script>
     var loader = $('#loaderGif');
@@ -283,5 +288,4 @@
         });
     });
 </script>
-</body>
 </html>
