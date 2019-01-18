@@ -13,6 +13,16 @@ body{
 }
 .fixed {position: fixed; left: 0; bottom: 0;}
 
+.main-logo {
+    text-decoration:none;
+    color: rgba(255, 255, 255, 0.53);
+    font-weight: bold;
+    font-size: 20px;
+}
+.main-logo:hover {
+    color: rgba(255, 255, 255, 0.72);
+}
+
 .input-form label{
     text-align: right;
     display: inline-block;

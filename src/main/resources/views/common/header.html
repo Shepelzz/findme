@@ -2,15 +2,17 @@
     <!-- Navbar -->
     <div class="w3-top">
         <div class="w3-theme-d2 w3-left-align w3-large">
-            <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i>Find me</a>
+            <a href="/" th:href="@{/}" class="main-logo w3-bar-item w3-padding-large w3-wide" style="text-decoration:none">
+                Find me
+            </a>
             <span th:if="${session.loggedUserId!=null}">
                 <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="Messages">
                     <i class="fa fa-envelope"></i><span class="w3-badge w3-right w3-small w3-green">3</span>
                 </a>
                 <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-right w3-padding-large w3-hover-white" title="My Account">
-                    <img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+                    <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
                 </a>
-                <span class="w3-bar-item  w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</span>
+                <span class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</span>
                 <a href="#" th:href="@{/logout}" class="w3-bar-item w3-right w3-padding-large w3-hover-white" title="Logout">
                     <i class="fa fa-sign-out-alt"></i>
                 </a>
@@ -22,9 +24,9 @@
     </div>
     <!-- Navbar on small screens -->
     <!--<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">-->
-        <!--<a href="#" class="w3-bar-item w3-button w3-padding-large">Messages<span class="w3-badge w3-right w3-small w3-green">3</span></a>-->
-        <!--<a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">-->
-            <!--<img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">-->
-        <!--</a>-->
+    <!--<a href="#" class="w3-bar-item w3-button w3-padding-large">Messages<span class="w3-badge w3-right w3-small w3-green">3</span></a>-->
+    <!--<a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-hide-small w3-right w3-padding-large w3-hover-white" title="My Account">-->
+    <!--<img src="http://www.top-madagascar.com/assets/images/admin/user-admin.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">-->
+    <!--</a>-->
     <!--</div>-->
 </header>
