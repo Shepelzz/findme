@@ -21,6 +21,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan("com")
@@ -65,29 +66,36 @@ public class AppConfig implements WebMvcConfigurer {
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
-
         return em;
     }
 
     @Bean
     public DriverManagerDataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.ce5xbsungqgk.us-east-2.rds.amazonaws.com:1521:ORCL");
-        dataSource.setUsername("main");
-        dataSource.setPassword("11111111");
-//        dataSource.setDriverClassName(com.mysql.jdbc.Driver.class.getName());
-//        dataSource.setUrl("jdbc:mysql://localhost:3306/findme");
-//        dataSource.setUsername("Main");
+//        dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+//        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.ce5xbsungqgk.us-east-2.rds.amazonaws.com:1521:ORCL");
+//        dataSource.setUsername("main");
 //        dataSource.setPassword("11111111");
+        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=findme");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("Master12");
+        dataSource.setSchema("dbo");
         return dataSource;
+    }
+
+    private Properties properties(){
+        Properties p = new Properties();
+        p.setProperty("spring.jpa.show-sql", "true");
+        p.setProperty("spring.jpa.properties.hibernate.format_sql", "true");
+        return p;
     }
 
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf){
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
-
+        transactionManager.setJpaProperties(properties());
         return transactionManager;
     }
 
