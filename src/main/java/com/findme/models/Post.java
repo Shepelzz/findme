@@ -18,9 +18,9 @@ public class Post extends GeneralModel{
     //comments
 
     @Id
-//    @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_ID_SEQ", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "POST_SEQ", sequenceName = "POST_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "POST_SEQ")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POST_ID")
     @Override
     public Long getId() {
