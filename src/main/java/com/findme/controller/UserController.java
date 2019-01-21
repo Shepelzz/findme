@@ -7,7 +7,6 @@ import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.RelationshipService;
 import com.findme.service.UserService;
-import com.findme.types.RelationshipStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,20 +41,16 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
         }
+        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
         try {
-            RelationshipStatus status = RelationshipStatus.OWNER;
-            if(!loggedUserId.equals(userId))
-                status = relationshipService.getRelationshipStatus(loggedUserId, userId);
-
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("profileStatus", status);
-            if(status == RelationshipStatus.OWNER){
+            model.addAttribute("relationshipStatus", relationshipService.getRelationshipStatus(loggedUserId, userId).name());
+            if(loggedUserId.equals(userId)){
                 model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(userId));
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(userId));
             }
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
-
             return "profile";
         } catch (NumberFormatException e){
             model.addAttribute("error", e);
@@ -114,7 +109,7 @@ public class UserController {
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request, HttpServletResponse response){
         try {
             User user = userService.login(request.getParameter("email"), request.getParameter("password"));
-            session.setAttribute("loggedUserObj", user);
+            session.setAttribute("loggedUser", user);
             session.setAttribute("loggedUserId", String.valueOf(user.getId()));
             session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
             return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);

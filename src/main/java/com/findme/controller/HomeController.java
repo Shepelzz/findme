@@ -25,7 +25,7 @@ public class HomeController {
             if(loggedUserId != null){
                 return "redirect:/user/"+loggedUserId;
             }
-
+            model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
             //model.addAttribute("userList", userDAO.getFirstUsers());
             return "index";
 //        } catch (InternalServerError e){

@@ -14,9 +14,8 @@
 <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/userProfile.js" th:src="@{/js/userProfile.js}"></script>
-<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>
+<!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
-<div id="loaderGif"></div>
 
 <header th:replace="common/header.html :: header"></header>
 
@@ -31,7 +30,7 @@
                 <div class="w3-container">
                     <h4 class="clear-inline w3-padding-small w3-center">
                         <p class="inline w3-center" th:text="${user.firstName}+' '+${user.lastName}">User Name</p>
-                        <i th:if="${profileStatus.name()=='OWNER'}" onclick="$('#editModalForm').show()" class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+                        <i th:if="${loggedUser.getId() == user.id}" onclick="$('#editModalForm').show()" class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
                     </h4>
                     <div class="w3-center">
                         <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" class="w3-circle" style="width:200px" alt="Avatar">
@@ -74,10 +73,10 @@
                     <br>
                 </div>
             </div>
-            <div style="padding: 10px;">Status: <span th:text="${profileStatus.name()}">somebody</span></div>
+            <div style="padding: 10px;">Status: <span th:text="${relationshipStatus != null ? relationshipStatus : 'Owner'}">somebody</span></div>
 
-            <div id="relationship-status" th:switch="${profileStatus.name()}">
-                <div th:case="'OWNER'" class="w3-round"><!--w3-card-->
+            <div id="relationship-status">
+                <div th:if="${loggedUser.getId() == user.id}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
                         <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
@@ -121,14 +120,14 @@
                         </ul>
                     </div>
                 </div>
-                <div th:case="'FRIENDS'" class="w3-round"><!--w3-card-->
+                <div th:if="${relationshipStatus) == 'FRIENDS'}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
                         <button id="removeFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|deleteFriend('${user.getId()}')|">
                             <i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend
                         </button>
                     </div>
                 </div>
-                <div id="reqSent" th:case="'REQUEST_SENT'" class="w3-round"><!--w3-card-->
+                <div th:if="${relationshipStatus == 'REQUEST_SENT'}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
                         <div class="w3-button w3-block w3-left-align">request sent
                             <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|cancelRequestToFriend('${user.getId()}')|">
@@ -137,12 +136,12 @@
                         </div>
                     </div>
                 </div>
-                <div th:case="'REQUEST_REJECTED'" class="w3-round"><!--w3-card-->
+                <div th:if="${relationshipStatus == 'REQUEST_REJECTED'}" class="w3-round"><!--w3-card-->
                     <div class="w3-pale-red">
                         <div class="w3-button w3-block w3-left-align">request rejected</div>
                     </div>
                 </div>
-                <div th:case="'NOT_FRIENDS'" class="w3-round"><!--w3-card-->
+                <div th:if="${relationshipStatus == null && loggedUser.getId() != user.id}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
                         <button id="addFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|addFriend('${user.getId()}')|">
                             <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend
@@ -156,7 +155,7 @@
             <div class="w3-round"><!--w3-card-->
                 <div class="w3-white">
 <!--TODO link on all friends list-->
-                    <div th:if="${profileStatus.name() == 'OWNER' || profileStatus.name() == 'FRIENDS'}">
+                    <div th:if="${loggedUser.getId() == user.id || ( relationshipStatus == 'FRIENDS')}">
                         <a style="text-decoration:none" th:href="@{'/friends-user/' + ${user.getId()}}">
                             <div class="w3-padding w3-block w3-theme-l1 w3-left-align">
                                 <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
@@ -180,15 +179,6 @@
                 </div>
             </div>
             <br>
-
-            <!-- Interests -->
-            <!--<div class="w3-card w3-round w3-white w3-hide-small">-->
-            <!--<div class="w3-container">-->
-            <!--<p>Interests</p>-->
-
-            <!--</div>-->
-            <!--</div>-->
-            <!-- End Left Column -->
         </div>
 
         <!-- Middle Column -->
@@ -206,24 +196,6 @@
                     </div>
                 </div>
             </div>
-
-
-            <!--<div class="w3-container w3-card w3-white w3-round w3-margin"><br>-->
-            <!--<img src="/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
-            <!--<span class="w3-right w3-opacity">how time ago</span>-->
-            <!--<h4>/Some friend/</h4><br>-->
-            <!--<hr class="w3-clear">-->
-            <!--<p>/Some text./</p>-->
-            <!--<div class="w3-row-padding" style="margin:0 -16px">-->
-            <!--<div class="w3-half">-->
-            <!--<img src="/w3images/lights.jpg" style="width:100%" alt="/Some image/" class="w3-margin-bottom">-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>-->
-            <!--<button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button>-->
-            <!--</div>-->
-
-            <!-- End Middle Column -->
         </div>
         <!-- End Grid -->
     </div>
@@ -232,15 +204,13 @@
     <footer th:replace="common/footer.html :: footer"></footer>
 </div>
 
-<div th:if="${profileStatus.name()=='OWNER'}" style="margin-top: -50px">
+<div th:if="${loggedUser.getId() == user.id}" style="margin-top: -50px">
     <!-- Edit form MODAL -->
     <div th:replace="forms/userEditForm.html :: editModalForm"></div>
 </div>
 </body>
 
 <script>
-    var loader = $('#loaderGif');
-
     function dropDownMenu(id) {
         let x = document.getElementById(id);
         if (x.className.indexOf("w3-show") === -1) {
@@ -265,27 +235,21 @@
     });
 
     $("#user-edit-form").submit(function userEditSubmit() {
-        loader.show();
         event.preventDefault();
-        debugger;
         $.ajax({
             type: "POST",
             url: "/edit-user",
-            // async: false,
             data: $('#user-edit-form').serialize(),
             success:function success() {
-                debugger;
-                loader.hide();
                 alert('User data edited');
                 $('#editModalForm').hide()
-                // window.location.reload(true);
             },
             error: function(xhr) {
-                debugger;
-                loader.hide();
                 alert(xhr.responseText);
             }
         });
     });
+
+
 </script>
 </html>

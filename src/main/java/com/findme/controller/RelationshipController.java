@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -23,6 +24,15 @@ public class RelationshipController {
     public RelationshipController(RelationshipService relationshipService) {
         this.relationshipService = relationshipService;
     }
+
+    //      Buttons:    Status:
+    /*      accept  -   FRIENDS
+    *       reject  -   REQUEST_REJECTED
+    *       cancel  -   ?
+    *       add     -   REQUEST_SENT
+    *       delete  -   ?
+    *
+    * */
 
     //add friend
     @RequestMapping(path = "/friend-add/{userId}", method = RequestMethod.POST)
@@ -37,7 +47,6 @@ public class RelationshipController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     //remove friend
     @RequestMapping(path = "/friend-remove/{userId}", method = RequestMethod.POST)
@@ -55,11 +64,12 @@ public class RelationshipController {
 
     //accept friend req
     @RequestMapping(path = "/friend-request-accept/{userId}", method = RequestMethod.POST)
-    public ResponseEntity<String> friendRequestAccept(HttpSession session,@PathVariable("userId") String userId){
+    public ResponseEntity<String> friendRequestAccept(HttpSession session, @PathVariable("userId") String userId, HttpServletRequest request){
         if(session.getAttribute("loggedUserId")==null) {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
         try {
+//            System.out.println(request.getParameter("sss"));
             relationshipService.acceptFriend((String) session.getAttribute("loggedUserId"), userId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerError e){

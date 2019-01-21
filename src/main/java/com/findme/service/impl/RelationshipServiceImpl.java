@@ -26,14 +26,14 @@ public class RelationshipServiceImpl implements RelationshipService {
     public RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError {
         Relationship relationship = relationshipDAO.getRelationship(userFromId, userToId);
         if(relationship == null)
-            return RelationshipStatus.NOT_FRIENDS;
+            return null;
 
         if(relationship.getStatus() == RelationshipStatus.REQUEST_SENT && !relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
-            return RelationshipStatus.NOT_FRIENDS;
+            return null;
 
         if(relationship.getStatus() == RelationshipStatus.REQUEST_REJECTED)
             if(!relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
-                return RelationshipStatus.NOT_FRIENDS;
+                return null;
         return relationship.getStatus();
     }
 

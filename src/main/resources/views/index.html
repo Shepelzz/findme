@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
-<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>
+<!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
 <div style="display: none" id="loaderGif"></div>
 <header th:replace="common/header.html :: header"></header>
@@ -97,41 +97,6 @@
 
                                 </form>
                                 <!--<input id="showUsers_btn" class="w3-button w3-right w3-text-theme" type="button" value="show users list" />-->
-                            </div>
-
-                            <!--<div id="usersList" style="display:none;">-->
-                                <!--<div class="w3-padding-small">-->
-                                    <!--<p class="inline w3-margin-right w3-text-theme">Registered: </p>-->
-                                    <!--<div class="inline" th:text="${userList.size()}">50</div>-->
-                                <!--</div>-->
-                                <!--<br>-->
-                                <!--<table class="w3-table w3-striped w3-border">-->
-                                    <!--<tr>-->
-                                        <!--<th>ID</th>-->
-                                        <!--<th>NAME</th>-->
-                                        <!--<th>DATE REGISTERED</th>-->
-                                        <!--<th>LAST ACTIVITY</th>-->
-                                        <!--<th></th>-->
-                                        <!--<th></th>-->
-                                    <!--</tr>-->
-                                    <!--<tr th:each="user : ${userList}">-->
-                                        <!--<td th:text="${user.getId()}">0</td>-->
-                                        <!--<td th:text="${user.getFirstName()}+' '+${user.getLastName()}">Test Test</td>-->
-                                        <!--<td th:text="${user.getDateRegistered()}">2018-01-01</td>-->
-                                        <!--<td th:text="${user.getDateLastActive()}">2018-01-01</td>-->
-                                        <!--<td>-->
-                                            <!--<a th:href="@{'/user/' + ${user.getId()}}">-->
-                                                <!--<button type="button" class="w3-button w3-theme">-->
-                                                <!--<i class="fa fa-user-circle"></i> Profile</button>-->
-                                            <!--</a>-->
-                                        <!--</td>-->
-                                        <!--<td>-->
-                                            <!--<button id="userRemove" type="button" class="w3-button w3-theme" style="width: 50px" th:onclick="|userDelete('${user.getId()}')|">-->
-                                            <!--<i class="fa fa-trash"></i></button>-->
-                                        <!--</td>-->
-                                    <!--</tr>-->
-                                <!--</table>-->
-                            <!--</div>-->
                             <br>
                         </div>
                     </div>
@@ -149,7 +114,6 @@
 </body>
 
 <script>
-    var loader = $('#loaderGif');
 
     $('#showUsers_btn').click(function () {
         var button =  $('#showUsers_btn');
@@ -166,19 +130,15 @@
 
     // user login
     $("#login").submit(function login() {
-        loader.show();
         event.preventDefault();
         $.ajax({
             type: "POST",
             url: "/login",
             data: $('#login').serialize(),
             success:function success(data) {
-                loader.hide();
-                // alert('User logged in');
                 window.location.reload(true);
             },
             error: function(xhr) {
-                loader.hide();
                 alert(xhr.responseText);
             }
         });
@@ -186,22 +146,16 @@
 
     // submit reg form
     $("#registration-form").submit(function register() {
-        loader.show();
         event.preventDefault();
         $.ajax({
             type: "POST",
             url: "/register-user",
-            // async: false,
             data: $('#registration-form').serialize(),
             success:function success() {
-                debugger;
-                loader.hide();
                 alert('User registered successfully');
                 window.location.reload(true);
             },
             error: function(xhr) {
-                debugger;
-                loader.hide();
                 alert(xhr.responseText);
             }
         });
