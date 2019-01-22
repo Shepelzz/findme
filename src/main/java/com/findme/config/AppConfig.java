@@ -72,14 +72,14 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public DriverManagerDataSource dataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.ce5xbsungqgk.us-east-2.rds.amazonaws.com:1521:ORCL");
-        dataSource.setUsername("main");
-        dataSource.setPassword("11111111");
-//        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=findme");
-//        dataSource.setUsername("sa");
-//        dataSource.setPassword("Master12");
+//        dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+//        dataSource.setUrl("jdbc:oracle:thin:@gromcode-lessons.ce5xbsungqgk.us-east-2.rds.amazonaws.com:1521:ORCL");
+//        dataSource.setUsername("main");
+//        dataSource.setPassword("11111111");
+        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        dataSource.setUrl("jdbc:sqlserver://localhost:1433;databaseName=findme");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("Master12");
         return dataSource;
     }
 

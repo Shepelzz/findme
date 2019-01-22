@@ -167,12 +167,14 @@
                         <div class="w3-container" th:if="${friendsSmallList.size() > 0}">
                             <div class="w3-row-padding">
                                 <br>
-                                <div class="w3-third" th:each="user : ${friendsSmallList}">
-                                    <div class="w3-margin-bottom" >
-                                        <a style="text-decoration:none" th:href="@{'/user/' + ${user.getId()}}">
-                                            <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" style="width:100%">
-                                            <div class="w3-medium w3-center" style="width: 100%" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'">Mike D.</div>
-                                        </a>
+                                <div th:each="user : ${friendsSmallList}">
+                                    <div class="w3-third">
+                                        <div class="w3-margin-bottom" >
+                                            <a style="text-decoration:none" th:href="@{'/user/' + ${user.getId()}}">
+                                                <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" style="width:100%">
+                                                <div class="w3-medium w3-center" style="width: 100%" th:text="${user.firstName}+' '+${user.lastName.substring(0,1)}+'.'">Mike D.</div>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
