@@ -9,9 +9,8 @@ import java.util.List;
 
 public interface RelationshipDAO{
 
-    void addRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError;
-    void deleteRelationship(Long userFromId, Long userToId) throws InternalServerError;
-    void updateRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError;
+    void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError;
+    void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError;
 
 
     List<User> getIncomingRequests(String userId) throws InternalServerError;

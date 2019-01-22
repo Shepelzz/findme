@@ -15,8 +15,7 @@ import java.util.List;
 public class RelationshipDAOImpl implements RelationshipDAO{
 //TODO check
     private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS) VALUES (:userFromId, :userToId, :status)";
-    private static final String SQL_DELETE_RELATIONSHIP = "DELETE FROM RELATIONSHIP WHERE USER_FROM_ID = :userFromId AND USER_TO_ID = :userToId";
-    private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET STATUS = :status WHERE USER_FROM_ID = :userFromId AND USER_TO_ID = :userToId";
+    private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET USER_FROM_ID = :userFromId_new, USER_TO_ID = :userToId_new, STATUS = :status WHERE USER_FROM_ID = :userFromId_old AND USER_TO_ID = :userToId_old";
 
     private static final String SQL_GET_INCOMING_REQ = "SELECT r.userFrom FROM Relationship r WHERE r.status = :status AND r.userTo.id = :userId";
     private static final String SQL_GET_OUTGOING_REQ = "SELECT r.userTo FROM Relationship r WHERE r.status = :status AND r.userFrom.id = :userId";
@@ -39,7 +38,7 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     private EntityManager entityManager;
 
     @Override
-    public void addRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
+    public void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
                     .setParameter("userFromId", userFromId)
@@ -53,24 +52,13 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     }
 
     @Override
-    public void deleteRelationship(Long userFromId, Long userToId) throws InternalServerError {
-        try {
-            int res = entityManager.createNativeQuery(SQL_DELETE_RELATIONSHIP)
-                    .setParameter("userFromId", userFromId)
-                    .setParameter("userToId", userToId)
-                    .executeUpdate();
-
-        }catch (Exception e){
-            throw new InternalServerError(e.getMessage(), e.getCause());
-        }
-    }
-
-    @Override
-    public void updateRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
+    public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
-                    .setParameter("userFromId", userFromId)
-                    .setParameter("userToId", userToId)
+                    .setParameter("userFromId_old", userFromId_old)
+                    .setParameter("userToId_old", userToId_old)
+                    .setParameter("userFromId_new", userFromId_new)
+                    .setParameter("userToId_new", userToId_new)
                     .setParameter("status", status.toString())
                     .executeUpdate();
         }catch (Exception e){
@@ -98,7 +86,7 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getIncomingRequests(String userId) throws InternalServerError{
         try {
             return entityManager.createQuery(SQL_GET_INCOMING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUEST_SENT)
+                    .setParameter("status", RelationshipStatus.REQUESTED)
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
@@ -110,7 +98,7 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getOutgoingRequests(String userId) throws InternalServerError{
         try {
             return entityManager.createQuery(SQL_GET_OUTGOING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUEST_SENT)
+                    .setParameter("status", RelationshipStatus.REQUESTED)
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){

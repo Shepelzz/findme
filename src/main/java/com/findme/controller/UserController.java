@@ -41,17 +41,16 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
         }
-        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("relationshipStatus", relationshipService.getRelationshipStatus(loggedUserId, userId).name());
+            model.addAttribute("relationshipStatus", relationshipService.getRelationshipStatus(loggedUserId, userId));
             if(loggedUserId.equals(userId)){
                 model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(userId));
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(userId));
             }
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
-            return "profile";
+
         } catch (NumberFormatException e){
             model.addAttribute("error", e);
             return "errors/badRequest";
@@ -62,6 +61,8 @@ public class UserController {
             model.addAttribute("error", nofe);
             return "errors/notFound";
         }
+        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
+        return "profile";
     }
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.POST)
