@@ -63,6 +63,7 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Transactional
     public void relationshipUpdate(String userFromId, String userToId, String status) throws InternalServerError {
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
+
         Long userFromIdL, userToIdL;
         try{
             userFromIdL = Long.valueOf(userFromId);

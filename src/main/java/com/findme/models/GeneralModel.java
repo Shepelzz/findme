@@ -17,5 +17,4 @@ public abstract class GeneralModel {
     @Column(name = "ID")
     private Long id;
 
-
 }
