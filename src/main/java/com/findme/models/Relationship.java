@@ -1,6 +1,7 @@
 package com.findme.models;
 
 import com.findme.types.RelationshipStatus;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "RELATIONSHIP")
 @IdClass(value = Relationship.RelationshipId.class)
+@ToString
 public class Relationship implements Serializable {
 
     private User userFrom;
