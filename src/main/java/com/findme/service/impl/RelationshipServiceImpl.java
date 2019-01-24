@@ -48,6 +48,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         } catch (NumberFormatException e){
             throw new InternalServerError(e.getMessage());
         }
+
         if(rel == null ){
             relationshipDAO.saveRelationship(userFromIdL, userToIdL, RelationshipStatus.REQUESTED);
         }
