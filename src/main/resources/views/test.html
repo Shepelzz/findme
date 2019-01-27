@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.5.1/croppie.min.js"></script>
+    <title>Demo Croppie</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        #my-image, #use {
+            display: none;
+        }
+
+        .res {
+            width: 500px;
+            height: 200px;
+            background: silver;
+
+        }
+    </style>
+
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script>
+        window.onload=function() {
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#photoModalForm').show();
+                        $('#my-image').attr('src', e.target.result);
+                        var resize = new Croppie($('#my-image')[0], {
+                            viewport: {width: 150, height: 150},
+                            boundary: {width: 350, height: 350},
+                            showZoomer: false,
+                            enableResize: true,
+                            enableOrientation: true
+                        });
+                        $('#use').fadeIn();
+                        $('#use').on('click', function () {
+
+                            resize.result('base64').then(function (dataImg) {
+                                var data = [{image: dataImg}, {name: 'myimgage.jpg'}];
+                                // use ajax to send data to php
+                                $('#result').attr('src', dataImg);
+                                $('#photoModalForm').hide();
+                            })
+                        })
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
+        $("#imgInp").change(function() {
+            readURL(this);
+        });
+        }
+    </script>
+    <script src="../static/js/croppie.min.js"></script>
+    <link rel="stylesheet" href="../static/css/croppie.min.css">
+
+</head>
+
+<body>
+
+<input type='file' id="imgInp" />
+<div id="photoModalForm" class="w3-modal">
+    <img id="my-image" src="#" />
+    <button id="use">Upload</button>
+</div>
+
+<div class="res">
+    <img id="result" src="">
+</div>
+</body>
+
+</html>

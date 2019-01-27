@@ -6,7 +6,8 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import com.findme.utils.validation.*;
+import com.findme.utils.AbstractChainValidator;
+import com.findme.utils.userValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,10 +79,10 @@ public class UserServiceImpl implements UserService {
             userParams.put("phone", user.getPhone());
             userParams.put("password", user.getPassword());
 
-        AbstractChainValidator nameValidator = new NameValidator();
-        AbstractChainValidator emailValidator = new EmailValidator();
-        AbstractChainValidator phoneValidator = new PhoneValidator();
-        AbstractChainValidator passwordValidator = new PasswordValidator();
+        AbstractChainValidator<Map<String, String>> nameValidator = new NameValidator();
+        AbstractChainValidator<Map<String, String>> emailValidator = new EmailValidator();
+        AbstractChainValidator<Map<String, String>> phoneValidator = new PhoneValidator();
+        AbstractChainValidator<Map<String, String>> passwordValidator = new PasswordValidator();
 
         nameValidator.setNextAbstractChainValidator(emailValidator);
         emailValidator.setNextAbstractChainValidator(phoneValidator);

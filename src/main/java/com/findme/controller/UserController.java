@@ -12,14 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @Controller
 public class UserController {
@@ -67,11 +69,10 @@ public class UserController {
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.POST)
     public ResponseEntity<String> editUserSubmit(HttpSession session, @ModelAttribute User user){
-        if(session.getAttribute("loggedUserId")==null) {
+        if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        }
+
         try {
-//            user.setId(Long.valueOf(userId));
             userService.update(user);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
@@ -83,9 +84,9 @@ public class UserController {
 
     @RequestMapping(path = "/remove-user/{userId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(HttpSession session, @PathVariable String userId){
-        if(session.getAttribute("loggedUserId")==null) {
+        if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        }
+
         try {
             userService.delete(Long.valueOf(userId));
             return new ResponseEntity<>(HttpStatus.OK);

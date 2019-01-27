@@ -1,5 +1,6 @@
 package com.findme.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -108,6 +109,11 @@ public class AppConfig implements WebMvcConfigurer {
                         "classpath:/static/img/",
                         "classpath:/static/css/",
                         "classpath:/static/js/");
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 
 }

@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class RelationshipDAOImpl implements RelationshipDAO{
+public class  RelationshipDAOImpl implements RelationshipDAO{
 //TODO check
     private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS) VALUES (:userFromId, :userToId, :status)";
     private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET USER_FROM_ID = :userFromId_new, USER_TO_ID = :userToId_new, STATUS = :status WHERE USER_FROM_ID = :userFromId_old AND USER_TO_ID = :userToId_old";
@@ -20,12 +20,10 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     private static final String SQL_GET_INCOMING_REQ = "SELECT r.userFrom FROM Relationship r WHERE r.status = :status AND r.userTo.id = :userId";
     private static final String SQL_GET_OUTGOING_REQ = "SELECT r.userTo FROM Relationship r WHERE r.status = :status AND r.userFrom.id = :userId";
     private static final String SQL_GET_FRIENDS = "" +
-            "SELECT u FROM User u " +
-            "WHERE u IN (" +
-            "   SELECT r.userTo FROM Relationship r WHERE r.status = :status AND r.userFrom.id = :userId " +
-            ") OR u IN (" +
-            "   SELECT r.userFrom FROM Relationship r WHERE r.status = :status AND r.userTo.id = :userId " +
-            ") ORDER BY u.lastName";
+            "SELECT u" +
+            " FROM User u, Relationship r" +
+            " WHERE r.status = :status AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))";
+
     private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = :status AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
 
     private static final String SQL_GET_RELATIONSHIP = "" +
@@ -52,7 +50,7 @@ public class RelationshipDAOImpl implements RelationshipDAO{
     }
 
     @Override
-    public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
+        public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
                     .setParameter("userFromId_old", userFromId_old)

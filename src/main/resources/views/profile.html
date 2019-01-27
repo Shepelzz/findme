@@ -145,7 +145,7 @@
                 </div>
                 <div th:if="${(relationshipStatus == null || relationshipStatus.name() == 'CANCELED' || relationshipStatus.name() == 'DELETED') && loggedUser.getId() != user.id}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
-                        <button id="addFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestSave('${user.getId()}')|">
+                        <button id="addFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestSave('${user.getId()}','REQUESTED')|">
                             <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend
                         </button>
                     </div>
@@ -257,9 +257,9 @@
     function requestSave(userId) {
         $.ajax({
             type: "POST",
-            url: "/request-save",
-            dataType: "text",
-            data: {"userId": userId},
+            url: "/save-relationship",
+            dataType: "json",
+            data: {"userId": userId, "status": status},
             success: function success() {
                 window.location.reload(true);
             },
@@ -272,8 +272,8 @@
     function requestUpdate(userId, status) {
         $.ajax({
             type: "POST",
-            url: "/request-update",
-            dataType: "text",
+            url: "/update-relationship",
+            dataType: "json",
             data: {"userId": userId, "status": status},
             success: function success() {
                 window.location.reload(true);
@@ -283,8 +283,6 @@
             }
         });
     }
-
-
 
 </script>
 </html>
