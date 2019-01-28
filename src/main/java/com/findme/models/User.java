@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.BitSet;
 import java.util.Date;
 import java.util.List;
 
@@ -67,8 +66,8 @@ public class User extends GeneralModel{
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "userTo")
     private List<Message> messagesReceived;
 
-    @Column(name = "PHOTO")
-    private BitSet photo;
+//    @Column(name = "PHOTO")
+//    private BitSet photo;
 
 //    private String[] interests;
 

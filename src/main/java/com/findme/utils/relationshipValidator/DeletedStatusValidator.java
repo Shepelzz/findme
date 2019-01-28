@@ -12,8 +12,8 @@ public class DeletedStatusValidator extends AbstractChainValidator<Map<String, O
     protected void checkParam(Map<String, Object> paramsMap) throws BadRequestException {
 
         if(paramsMap.get("status") == RelationshipStatus.DELETED) {
-            System.out.println("deleted "+paramsMap.get("uerFromId")+"-"+paramsMap.get("userToId")+"-"+paramsMap.get("pipa"));
-
+            if(paramsMap.get("currentRelationship") == null)
+                throw new BadRequestException("DELETED Request can not be processed because there is no active relationship");
         }
     }
 }

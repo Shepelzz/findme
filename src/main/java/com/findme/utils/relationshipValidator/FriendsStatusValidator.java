@@ -12,7 +12,8 @@ public class FriendsStatusValidator extends AbstractChainValidator<Map<String, O
     protected void checkParam(Map<String, Object> paramsMap) throws BadRequestException {
 
         if(paramsMap.get("status") == RelationshipStatus.FRIENDS) {
-            System.out.println("friends "+paramsMap.get("uerFromId")+"-"+paramsMap.get("userToId")+"-"+paramsMap.get("pipa"));
+            if(paramsMap.get("currentRelationship") == null)
+                throw new BadRequestException("FRIENDS Request can not be processed because there is no active relationship");
         }
     }
 }

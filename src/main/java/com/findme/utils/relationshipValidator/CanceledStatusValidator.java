@@ -12,8 +12,8 @@ public class CanceledStatusValidator extends AbstractChainValidator<Map<String, 
     protected void checkParam(Map<String, Object> paramsMap) throws BadRequestException {
 
         if(paramsMap.get("status") == RelationshipStatus.CANCELED) {
-            System.out.println("canceled "+paramsMap.get("uerFromId")+"-"+paramsMap.get("userToId")+"-"+paramsMap.get("pipa"));
-
+            if(paramsMap.get("currentRelationship") == null)
+                throw new BadRequestException("CANCELED Request can not be processed because there is no active relationship");
         }
     }
 }

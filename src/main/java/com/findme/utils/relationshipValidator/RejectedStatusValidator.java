@@ -12,8 +12,8 @@ public class RejectedStatusValidator extends AbstractChainValidator<Map<String, 
     protected void checkParam(Map<String, Object> paramsMap) throws BadRequestException {
 
         if(paramsMap.get("status") == RelationshipStatus.REJECTED) {
-            System.out.println("rejected "+paramsMap.get("uerFromId")+"-"+paramsMap.get("userToId")+"-"+paramsMap.get("pipa"));
-
+            if(paramsMap.get("currentRelationship") == null)
+                throw new BadRequestException("REJECTED Request can not be processed because there is no active relationship");
         }
     }
 }
