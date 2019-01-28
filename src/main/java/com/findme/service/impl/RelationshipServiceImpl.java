@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -91,11 +92,10 @@ public class RelationshipServiceImpl implements RelationshipService {
         canceledVal.setNextAbstractChainValidator(deletedVal);
         deletedVal.setNextAbstractChainValidator(rejectedVal);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("status", RelationshipStatus.valueOf(status));
-        params.put("currentRelationship", rel);
-
-        friendsVal.check(params);
+        friendsVal.check(Collections.unmodifiableMap(new HashMap<String, Object>(){{
+            put("status", RelationshipStatus.valueOf(status));
+            put("currentRelationship", rel);
+        }}));
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
     }
 
@@ -104,13 +104,6 @@ public class RelationshipServiceImpl implements RelationshipService {
             Optional.of(userFromId).map(Long::valueOf);
             Optional.of(userToId).map(Long::valueOf);
             Optional.ofNullable(status).map(RelationshipStatus::valueOf);
-
-//            if(userFromId != null)
-//                Long.valueOf(userFromId);
-//            if(userToId != null)
-//                Long.valueOf(userToId);
-//            if(status != null)
-//                RelationshipStatus.valueOf(status);
         } catch (IllegalArgumentException e){
             throw new BadRequestException(e.getMessage());
         }

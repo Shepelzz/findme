@@ -6,6 +6,7 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
+import com.findme.types.RelationshipStatus;
 import com.findme.utils.AbstractChainValidator;
 import com.findme.utils.userValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +14,11 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private static final Pattern emailPattern = Pattern.compile("^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,}).{4,50}$", Pattern.CASE_INSENSITIVE);
-    private static final Pattern phonePattern = Pattern.compile("^\\+\\d{12}$");
-    private static final Pattern passwordPattern = Pattern.compile("^(?=\\S+$).{4,50}$");
-    private static final Pattern namePattern = Pattern.compile("^[\\p{L}]{4,50}+$");
-
     private UserDAO userDAO;
 
     @Autowired
@@ -34,14 +28,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) throws InternalServerError, BadRequestException {
-        validateNewUser(user);
+        validateUserMainData(user);
         user.setDateRegistered(new Date());
         return userDAO.save(user);
     }
 
     @Override
     public User update(User user) throws InternalServerError, BadRequestException {
-        //TODO check fields
+        validateUserMainData(user);
+
+        //check non important fields
+        user.setCountry(Optional.ofNullable(user.getCountry()).filter(x -> !x.trim().isEmpty()).orElse(null));
+        user.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(null));
+        user.setAge(Optional.ofNullable(user.getAge()).filter(x -> x > 0).orElse(null));
+        user.setRelationshipStatus(Optional.ofNullable(user.getRelationshipStatus()).filter(x -> !x.trim().isEmpty()).orElse(null));
+        user.setReligion(Optional.ofNullable(user.getReligion()).filter(x -> !x.trim().isEmpty()).orElse(null));
+        user.setSchool(Optional.ofNullable(user.getSchool()).filter(x -> !x.trim().isEmpty()).orElse(null));
+        user.setUniversity(Optional.ofNullable(user.getUniversity()).filter(x -> !x.trim().isEmpty()).orElse(null));
+
         return userDAO.update(user);
     }
 
@@ -70,14 +74,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-
-    private void validateNewUser(User user) throws BadRequestException, InternalServerError{
-        Map<String, String> userParams = new HashMap<>();
-            userParams.put("firstName", user.getFirstName());
-            userParams.put("lastName", user.getLastName());
-            userParams.put("email", user.getEmail());
-            userParams.put("phone", user.getPhone());
-            userParams.put("password", user.getPassword());
+    private void validateUserMainData(User user) throws BadRequestException, InternalServerError{
 
         AbstractChainValidator<Map<String, String>> nameValidator = new NameValidator();
         AbstractChainValidator<Map<String, String>> emailValidator = new EmailValidator();
@@ -88,15 +85,15 @@ public class UserServiceImpl implements UserService {
         emailValidator.setNextAbstractChainValidator(phoneValidator);
         phoneValidator.setNextAbstractChainValidator(passwordValidator);
 
-        nameValidator.check(userParams);
+        nameValidator.check(Collections.unmodifiableMap(new HashMap<String, String>(){{
+            put("firstName", user.getFirstName());
+            put("lastName", user.getLastName());
+            put("email", user.getEmail());
+            put("phone", user.getPhone());
+            put("password", user.getPassword());
+        }}));
 
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
             throw new BadRequestException("There is already registered user with this email or phone.");
-    }
-
-    private void checkAuthorization(HttpSession session) throws BadRequestException{
-
-        if(session.getAttribute("user") == null)
-            throw new BadRequestException("User is not logged in");
     }
 }
