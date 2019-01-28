@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) throws InternalServerError, BadRequestException {
-        validateUserMainData(user);
 
         //check non important fields
         user.setCountry(Optional.ofNullable(user.getCountry()).filter(x -> !x.trim().isEmpty()).orElse(null));
