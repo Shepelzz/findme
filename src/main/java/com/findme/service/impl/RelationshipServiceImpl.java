@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
@@ -100,12 +101,16 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     private void validateIncomingParams(String userFromId, String userToId, String status) throws BadRequestException{
         try{
-            if(userFromId != null)
-                Long.valueOf(userFromId);
-            if(userToId != null)
-                Long.valueOf(userToId);
-            if(status != null)
-                RelationshipStatus.valueOf(status);
+            Optional.of(userFromId).map(Long::valueOf);
+            Optional.of(userToId).map(Long::valueOf);
+            Optional.ofNullable(status).map(RelationshipStatus::valueOf);
+
+//            if(userFromId != null)
+//                Long.valueOf(userFromId);
+//            if(userToId != null)
+//                Long.valueOf(userToId);
+//            if(status != null)
+//                RelationshipStatus.valueOf(status);
         } catch (IllegalArgumentException e){
             throw new BadRequestException(e.getMessage());
         }
