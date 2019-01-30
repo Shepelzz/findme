@@ -53,14 +53,16 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
 
-        if(rel == null ){
-            relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-        } else if (rel.getStatus() == RelationshipStatus.REQUESTED){
-            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.FRIENDS);
-        }
-        else if (rel.getStatus() == RelationshipStatus.REJECTED || rel.getStatus() == RelationshipStatus.DELETED || rel.getStatus() == RelationshipStatus.CANCELED){
-            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-        }
+        if(rel != null)
+            throw new BadRequestException("Relationship save - failed. There is an active relationship");
+
+        relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
+//        else if (rel.getStatus() == RelationshipStatus.REQUESTED){
+//            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.FRIENDS);
+//        }
+//        else if (rel.getStatus() == RelationshipStatus.REJECTED || rel.getStatus() == RelationshipStatus.DELETED || rel.getStatus() == RelationshipStatus.CANCELED){
+//            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
+//        }
     }
 
     @Override
@@ -70,10 +72,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         User userTo = userDAO.findById(Long.valueOf(userToId));
-        if(userTo == null)
-            throw new BadRequestException("Relationship update - failed. User with id "+userToId+" was not found");
-        if(rel == null)
-            throw new BadRequestException("Relationship update - failed. There is no active relationship");
+        if(userTo == null || rel == null)
+            throw new BadRequestException("Relationship save - failed.");
         validateRelationshipUpdate(rel.getStatus(), RelationshipStatus.valueOf(status));
 
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
@@ -94,10 +94,12 @@ public class RelationshipServiceImpl implements RelationshipService {
         AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
         AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
         AbstractRelationshipValidator rejectedVal = new RejectedStatusValidator();
+        AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
 
         friendsVal.setNextAbstractChainValidator(canceledVal);
         canceledVal.setNextAbstractChainValidator(deletedVal);
         deletedVal.setNextAbstractChainValidator(rejectedVal);
+        rejectedVal.setNextAbstractChainValidator(requestedVal);
 
         friendsVal.check(oldStatus, newStatus);
     }
