@@ -1,12 +1,11 @@
 package com.findme.utils.userValidator;
 
 import com.findme.exception.BadRequestException;
-import com.findme.utils.AbstractChainValidator;
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class NameValidator extends AbstractChainValidator<Map<String,String>> {
+public class NameValidator extends AbstractUserValidator {
     private static final Pattern namePattern = Pattern.compile("^[\\p{L}]{4,50}+$");
     @Override
     protected void checkParam(Map<String, String> objectMap) throws BadRequestException {

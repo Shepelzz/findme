@@ -6,16 +6,13 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import com.findme.types.RelationshipStatus;
-import com.findme.utils.AbstractChainValidator;
+import com.findme.utils.userValidator.AbstractUserValidator;
 import com.findme.utils.userValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -75,10 +72,10 @@ public class UserServiceImpl implements UserService {
 
     private void validateUserMainData(User user) throws BadRequestException, InternalServerError{
 
-        AbstractChainValidator<Map<String, String>> nameValidator = new NameValidator();
-        AbstractChainValidator<Map<String, String>> emailValidator = new EmailValidator();
-        AbstractChainValidator<Map<String, String>> phoneValidator = new PhoneValidator();
-        AbstractChainValidator<Map<String, String>> passwordValidator = new PasswordValidator();
+        AbstractUserValidator nameValidator = new NameValidator();
+        AbstractUserValidator emailValidator = new EmailValidator();
+        AbstractUserValidator phoneValidator = new PhoneValidator();
+        AbstractUserValidator passwordValidator = new PasswordValidator();
 
         nameValidator.setNextAbstractChainValidator(emailValidator);
         emailValidator.setNextAbstractChainValidator(phoneValidator);

@@ -2,18 +2,15 @@ package com.findme.utils.relationshipValidator;
 
 import com.findme.exception.BadRequestException;
 import com.findme.types.RelationshipStatus;
-import com.findme.utils.AbstractChainValidator;
 
-import java.util.Map;
-
-public class RejectedStatusValidator extends AbstractChainValidator<Map<String, Object>> {
+public class RejectedStatusValidator extends AbstractRelationshipValidator {
 
     @Override
-    protected void checkParam(Map<String, Object> paramsMap) throws BadRequestException {
+    protected void checkParam(RelationshipStatus oldStatus, RelationshipStatus newStatus) throws BadRequestException {
 
-        if(paramsMap.get("status") == RelationshipStatus.REJECTED) {
-            if(paramsMap.get("currentRelationship") == null)
-                throw new BadRequestException("REJECTED Request can not be processed because there is no active relationship");
+        if(newStatus == RelationshipStatus.REJECTED) {
+            if(oldStatus != RelationshipStatus.REQUESTED)
+                throw new BadRequestException("REJECTED Request can not be processed");
         }
     }
 }

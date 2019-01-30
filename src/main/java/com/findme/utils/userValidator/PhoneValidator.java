@@ -1,12 +1,11 @@
 package com.findme.utils.userValidator;
 
 import com.findme.exception.BadRequestException;
-import com.findme.utils.AbstractChainValidator;
 
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class PhoneValidator extends AbstractChainValidator<Map<String,String>> {
+public class PhoneValidator extends AbstractUserValidator {
     private static final Pattern phonePattern = Pattern.compile("^\\+\\d{12}$");
     @Override
     protected void checkParam(Map<String, String> objectMap) throws BadRequestException {

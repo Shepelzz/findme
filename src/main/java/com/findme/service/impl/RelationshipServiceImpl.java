@@ -8,18 +8,11 @@ import com.findme.models.Relationship;
 import com.findme.models.User;
 import com.findme.service.RelationshipService;
 import com.findme.types.RelationshipStatus;
-import com.findme.utils.AbstractChainValidator;
-import com.findme.utils.relationshipValidator.CanceledStatusValidator;
-import com.findme.utils.relationshipValidator.DeletedStatusValidator;
-import com.findme.utils.relationshipValidator.FriendsStatusValidator;
-import com.findme.utils.relationshipValidator.RejectedStatusValidator;
+import com.findme.utils.relationshipValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -55,15 +48,14 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     @Transactional
-    public void relationshipSave(String userFromId, String userToId) throws InternalServerError, BadRequestException{
+    public void saveRelationship(String userFromId, String userToId) throws InternalServerError, BadRequestException{
         validateIncomingParams(userFromId, userToId, null);
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
 
         if(rel == null ){
             relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-        }
-        else if (rel.getStatus() == RelationshipStatus.REQUESTED){
+        } else if (rel.getStatus() == RelationshipStatus.REQUESTED){
             relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.FRIENDS);
         }
         else if (rel.getStatus() == RelationshipStatus.REJECTED || rel.getStatus() == RelationshipStatus.DELETED || rel.getStatus() == RelationshipStatus.CANCELED){
@@ -73,29 +65,17 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Override
     @Transactional
-    public void relationshipUpdate(String userFromId, String userToId, String status) throws InternalServerError, BadRequestException{
+    public void updateRelationship(String userFromId, String userToId, String status) throws InternalServerError, BadRequestException{
         validateIncomingParams(userFromId, userToId, status);
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
-
-        //Validate user to id
         User userTo = userDAO.findById(Long.valueOf(userToId));
         if(userTo == null)
-            throw new BadRequestException("Relationship process - failed. User with id "+userToId+" was not found");
+            throw new BadRequestException("Relationship update - failed. User with id "+userToId+" was not found");
+        if(rel == null)
+            throw new BadRequestException("Relationship update - failed. There is no active relationship");
+        validateRelationshipUpdate(rel.getStatus(), RelationshipStatus.valueOf(status));
 
-        AbstractChainValidator<Map<String, Object>> friendsVal = new FriendsStatusValidator();
-        AbstractChainValidator<Map<String, Object>> canceledVal = new CanceledStatusValidator();
-        AbstractChainValidator<Map<String, Object>> deletedVal = new DeletedStatusValidator();
-        AbstractChainValidator<Map<String, Object>> rejectedVal = new RejectedStatusValidator();
-
-        friendsVal.setNextAbstractChainValidator(canceledVal);
-        canceledVal.setNextAbstractChainValidator(deletedVal);
-        deletedVal.setNextAbstractChainValidator(rejectedVal);
-
-        friendsVal.check(Collections.unmodifiableMap(new HashMap<String, Object>(){{
-            put("status", RelationshipStatus.valueOf(status));
-            put("currentRelationship", rel);
-        }}));
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
     }
 
@@ -107,5 +87,18 @@ public class RelationshipServiceImpl implements RelationshipService {
         } catch (IllegalArgumentException e){
             throw new BadRequestException(e.getMessage());
         }
+    }
+
+    private void validateRelationshipUpdate(RelationshipStatus oldStatus, RelationshipStatus newStatus) throws BadRequestException{
+        AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
+        AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
+        AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
+        AbstractRelationshipValidator rejectedVal = new RejectedStatusValidator();
+
+        friendsVal.setNextAbstractChainValidator(canceledVal);
+        canceledVal.setNextAbstractChainValidator(deletedVal);
+        deletedVal.setNextAbstractChainValidator(rejectedVal);
+
+        friendsVal.check(oldStatus, newStatus);
     }
 }

@@ -31,7 +31,7 @@ public class RelationshipController {
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
-            relationshipService.relationshipSave((String) session.getAttribute("loggedUserId"), userId);;
+            relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);;
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerError e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,8 +45,7 @@ public class RelationshipController {
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
-            relationshipService.relationshipUpdate((String) session.getAttribute("loggedUserId"), userId, status);
-            System.out.println("ok");
+            relationshipService.updateRelationship((String) session.getAttribute("loggedUserId"), userId, status);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerError e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
