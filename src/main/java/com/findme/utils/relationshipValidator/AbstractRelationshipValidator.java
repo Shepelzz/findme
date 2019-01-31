@@ -1,6 +1,7 @@
 package com.findme.utils.relationshipValidator;
 
 import com.findme.exception.BadRequestException;
+import com.findme.models.Relationship;
 import com.findme.types.RelationshipStatus;
 
 import java.util.Date;
@@ -12,13 +13,14 @@ public abstract class AbstractRelationshipValidator {
         this.nextChainValidator = nextChainValidator;
     }
 
-    public void check(RelationshipStatus currentStatus, RelationshipStatus newStatus, Date relDateModified, int friendsCnt, int outgoingReqCnt) throws BadRequestException {
-            checkParam(currentStatus, newStatus, relDateModified, friendsCnt, outgoingReqCnt);
+    public void check(Relationship relationship, RelationshipStatus newStatus, int friendsCnt, int outgoingReqCnt) throws BadRequestException {
+        if(checkParam(relationship, newStatus, friendsCnt, outgoingReqCnt))
+            return;
         if(nextChainValidator!= null)
-            nextChainValidator.check(currentStatus, newStatus, relDateModified, friendsCnt, outgoingReqCnt);
+            nextChainValidator.check(relationship, newStatus, friendsCnt, outgoingReqCnt);
         else
             throw new BadRequestException("Action cannot be performed to this user.");
     }
 
-    protected abstract void checkParam(RelationshipStatus currentStatus, RelationshipStatus newStatus, Date relDateModified, int friendsCnt, int outgoingReqCnt);
+    abstract boolean checkParam(Relationship relationship, RelationshipStatus newStatus, int friendsCnt, int outgoingReqCnt) throws BadRequestException ;
 }

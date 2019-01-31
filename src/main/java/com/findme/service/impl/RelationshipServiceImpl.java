@@ -61,13 +61,13 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         User userTo = userDAO.findById(Long.valueOf(userToId));
-        int friendsCount = 0 ,outgoingReqCount = 0;
+        int friendsCount,outgoingReqCount;
         friendsCount = relationshipDAO.getFriendsCount(userFromId);
         outgoingReqCount = relationshipDAO.getOutgoingRequestsCount(userFromId);
 
         if(userTo == null || rel == null)
             throw new BadRequestException("Relationship save - failed.");
-        validateRelationshipUpdate(rel.getStatus(), RelationshipStatus.valueOf(status), rel.getDateModified(), friendsCount, outgoingReqCount);
+        validateRelationshipUpdate(rel, RelationshipStatus.valueOf(status), friendsCount, outgoingReqCount);
 
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
     }
@@ -82,7 +82,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         }
     }
 
-    private void validateRelationshipUpdate(RelationshipStatus oldStatus, RelationshipStatus newStatus, Date relDateModified, int friendsCnt, int outgoingReqCnt) throws BadRequestException{
+    private void validateRelationshipUpdate(Relationship relationship, RelationshipStatus newStatus, int friendsCnt, int outgoingReqCnt) throws BadRequestException{
         AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
         AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
         AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
@@ -94,6 +94,6 @@ public class RelationshipServiceImpl implements RelationshipService {
         deletedVal.setNextAbstractChainValidator(rejectedVal);
         rejectedVal.setNextAbstractChainValidator(requestedVal);
 
-        friendsVal.check(oldStatus, newStatus, relDateModified, friendsCnt, outgoingReqCnt);
+        friendsVal.check(relationship, newStatus, friendsCnt, outgoingReqCnt);
     }
 }
