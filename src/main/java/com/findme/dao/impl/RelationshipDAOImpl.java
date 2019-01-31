@@ -25,7 +25,6 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
             " WHERE r.status = :status AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))";
 
     private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = :status AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
-
     private static final String SQL_GET_RELATIONSHIP = "" +
             "SELECT r FROM Relationship r " +
             "WHERE (r.userFrom.id = :userFromId AND r.userTo.id = :userToId) " +

@@ -4,9 +4,11 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
+import com.findme.models.Relationship;
 import com.findme.models.User;
 import com.findme.service.RelationshipService;
 import com.findme.service.UserService;
+import com.findme.types.RelationshipStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -41,15 +44,17 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
         }
+
         try {
+            Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
+
+            model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(loggedUserId, userId, rel)));
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("relStatusFromLoggedUser", relationshipService.getRelationshipStatus(loggedUserId, userId));
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
 
-            if(!loggedUserId.equals(userId)){
-                model.addAttribute("relStatusFromCurrentUser", relationshipService.getRelationshipStatus(userId, loggedUserId));
-            }
+            if(rel != null)
+                model.addAttribute("relStatus", rel.getStatus());
             if(loggedUserId.equals(userId)){
                 model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
@@ -65,6 +70,7 @@ public class UserController {
             model.addAttribute("error", nofe);
             return "errors/notFound";
         }
+
         model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
         return "profile";
     }
@@ -128,5 +134,41 @@ public class UserController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/";
+    }
+
+    private String getButtonsViewProperty(String userFromId, String userToId, Relationship rel) throws BadRequestException{
+        Long userFromIdL;
+        Long userToIdL;
+        try {
+            userFromIdL = Long.valueOf(userFromId);
+            userToIdL = Long.valueOf(userToId);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+        //add friend(save)
+        if(rel == null)
+            return "btn-addSave";
+
+        //remove friend
+        if(rel.getStatus() == RelationshipStatus.FRIENDS)
+            return "btn-remove";
+
+        //request sent
+        if(rel.getStatus()==RelationshipStatus.REQUESTED && rel.getUserTo().getId().equals(userToIdL))
+            return "btn-sent";
+
+        //request rejected
+        if(rel.getStatus()==RelationshipStatus.REJECTED && rel.getUserFrom().getId().equals(userToIdL))
+            return "btn-rejected";
+
+        //add friend(update)
+        if(rel.getStatus() != RelationshipStatus.REQUESTED && rel.getStatus() != RelationshipStatus.FRIENDS)
+            return "btn-addUpd";
+
+        //accept request
+        if(rel.getStatus() == RelationshipStatus.REQUESTED && rel.getUserFrom().getId().equals(userToIdL))
+            return "btn-accept";
+
+        return null;
     }
 }

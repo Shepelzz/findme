@@ -73,7 +73,7 @@
                     <br>
                 </div>
             </div>
-            <div style="padding: 10px;">Status: <span th:text="${loggedUser.getId() == user.id ? 'Owner' : (relStatusFromLoggedUser != null ? relStatusFromLoggedUser.name() : 'undefined')}">somebody</span></div>
+            <div style="padding: 10px;">Status: <span th:text="${loggedUser.getId() == user.id ? 'Owner' : (relStatus != null ? relStatus.name() : 'undefined')}">somebody</span></div>
 
             <!--Friends features block-->
             <div id="relationship-status">
@@ -123,54 +123,57 @@
                 </div>
 
                 <div th:if="${loggedUser.getId() != user.id}">
-                    <div th:if="${relStatusFromLoggedUser != null}">
-                        <div th:if="${relStatusFromLoggedUser.name() == 'FRIENDS'}" class="w3-round"><!--w3-card-->
-                            <div class="w3-white">
-                                <button id="removeFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestUpdate('${user.getId()}','DELETED')|">
-                                    <i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend
-                                </button>
-                            </div>
+                    <!--Remove Friend-->
+                    <div th:if="${btnViewProp == 'btn-remove'}" class="w3-round"><!--w3-card-->
+                        <div class="w3-white">
+                            <button id="removeFriend" class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestUpdate('${user.getId()}','DELETED')|">
+                                <i class="fa fa-user-minus fa-fw w3-margin-right"></i>Remove Friend
+                            </button>
                         </div>
-                        <div th:if="${relStatusFromLoggedUser.name() == 'REQUESTED'}" class="w3-round"><!--w3-card-->
-                            <div class="w3-white">
-                                <div class="w3-button w3-block w3-left-align">request sent
-                                    <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|">
-                                        <i class="fa fa-times w3-text-theme"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div th:if="${relStatusFromLoggedUser.name() == 'REJECTED'}" class="w3-round"><!--w3-card-->
-                            <div class="w3-pale-red">
-                                <div class="w3-button w3-block w3-left-align">request rejected</div>
-                            </div>
-                        </div>
-                        <div th:if="${relStatusFromLoggedUser.name() == 'CANCELED' || relStatusFromLoggedUser.name() == 'DELETED' || relStatusFromCurrentUser.name() == 'REJECTED'}" class="w3-round"><!--w3-card-->
-                            <div class="w3-white">
-                                <button class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestUpdate('${user.getId()}','REQUESTED')|">
-                                    <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend (update)
+                    </div>
+                    <!--Request sent-->
+                    <div th:if="${btnViewProp == 'btn-sent'}" class="w3-round"><!--w3-card-->
+                        <div class="w3-white">
+                            <div class="w3-button w3-block w3-left-align">request sent
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|">
+                                    <i class="fa fa-times w3-text-theme"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div th:if="${relStatusFromLoggedUser == null}">
-                        <div th:if="${relStatusFromCurrentUser == null}" class="w3-round"><!--w3-card-->
-                            <div class="w3-white">
-                                <button class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestSave('${user.getId()}')|">
-                                    <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend (new)
-                                </button>
-                            </div>
+                    <!--Request rejected-->
+                    <div th:if="${btnViewProp == 'btn-rejected'}" class="w3-round"><!--w3-card-->
+                        <div class="w3-pale-red">
+                            <div class="w3-button w3-block w3-left-align">request rejected</div>
                         </div>
-                        <div th:if="${relStatusFromCurrentUser != null && relStatusFromCurrentUser.name() == 'REQUESTED'}"class="w3-round"><!--w3-card-->
-                            <div class="w3-white">
-                                <div class="w3-button w3-block w3-left-align">Accept request
-                                    <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|">
-                                        <i class="fa fa-times w3-text-theme"></i>
-                                    </button>
-                                    <button class="w3-bar-item w3-button w3-white w3-right" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|">
-                                        <i class="fa fa-check w3-text-theme"></i>
-                                    </button>
-                                </div>
+                    </div>
+                    <!--Add friend (update)-->
+                    <div th:if="${btnViewProp == 'btn-addUpd'}" class="w3-round"><!--w3-card-->
+                        <div class="w3-white">
+                            <button class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestUpdate('${user.getId()}','REQUESTED')|">
+                                <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend (update)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--Add friend (save)-->
+                    <div th:if="${btnViewProp == 'btn-addSave'}" class="w3-round"><!--w3-card-->
+                        <div class="w3-white">
+                            <button class="w3-button w3-block w3-theme-l1 w3-left-align" th:onclick="|requestSave('${user.getId()}')|">
+                                <i class="fa fa-user-plus fa-fw w3-margin-right"></i>Add Friend (save)
+                            </button>
+                        </div>
+                    </div>
+                    <!--Accept request-->
+                    <div th:if="${btnViewProp == 'btn-accept'}"class="w3-round"><!--w3-card-->
+                        <div class="w3-white">
+                            <div class="w3-button w3-block w3-left-align">Accept request
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|">
+                                    <i class="fa fa-times w3-text-theme"></i>
+                                </button>
+                                <button class="w3-bar-item w3-button w3-white w3-right" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|">
+                                    <i class="fa fa-check w3-text-theme"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -182,7 +185,7 @@
             <div class="w3-round"><!--w3-card-->
                 <div class="w3-white">
 <!--TODO link on all friends list-->
-                    <div th:if="${loggedUser.getId() == user.id || (relStatusFromLoggedUser != null && relStatusFromLoggedUser.name() == 'FRIENDS')}">
+                    <div th:if="${loggedUser.getId() == user.id || (relStatus != null && relStatus.name() == 'FRIENDS')}">
                         <a style="text-decoration:none" th:href="@{'/friends-user/' + ${user.getId()}}">
                             <div class="w3-padding w3-block w3-theme-l1 w3-left-align">
                                 <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
