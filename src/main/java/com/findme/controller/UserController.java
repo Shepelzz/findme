@@ -43,13 +43,17 @@ public class UserController {
         }
         try {
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("relationshipStatus", relationshipService.getRelationshipStatus(loggedUserId, userId));
-            if(loggedUserId.equals(userId)){
-                model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(userId));
-                model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(userId));
-            }
+            model.addAttribute("relStatusFromLoggedUser", relationshipService.getRelationshipStatus(loggedUserId, userId));
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
+
+            if(!loggedUserId.equals(userId)){
+                model.addAttribute("relStatusFromCurrentUser", relationshipService.getRelationshipStatus(userId, loggedUserId));
+            }
+            if(loggedUserId.equals(userId)){
+                model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
+                model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
+            }
 
         } catch (BadRequestException e){
             model.addAttribute("error", e);

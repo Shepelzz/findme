@@ -37,12 +37,12 @@ public class RelationshipServiceImpl implements RelationshipService {
         if(relationship == null)
             return null;
 
-        if(relationship.getStatus() == RelationshipStatus.REQUESTED && !relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
-            return null;
-
-        if(relationship.getStatus() == RelationshipStatus.REJECTED)
-            if(relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
-                return null;
+//        if(relationship.getStatus() == RelationshipStatus.REQUESTED && !relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
+//            return null;
+//
+//        if(relationship.getStatus() == RelationshipStatus.REJECTED)
+//            if(relationship.getUserFrom().getId().equals(Long.valueOf(userFromId)))
+//                return null;
         return relationship.getStatus();
     }
 
@@ -57,12 +57,6 @@ public class RelationshipServiceImpl implements RelationshipService {
             throw new BadRequestException("Relationship save - failed. There is an active relationship");
 
         relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-//        else if (rel.getStatus() == RelationshipStatus.REQUESTED){
-//            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.FRIENDS);
-//        }
-//        else if (rel.getStatus() == RelationshipStatus.REJECTED || rel.getStatus() == RelationshipStatus.DELETED || rel.getStatus() == RelationshipStatus.CANCELED){
-//            relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-//        }
     }
 
     @Override
