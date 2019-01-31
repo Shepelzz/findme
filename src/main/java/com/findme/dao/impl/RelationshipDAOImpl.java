@@ -9,26 +9,28 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public class  RelationshipDAOImpl implements RelationshipDAO{
 //TODO check
-    private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS) VALUES (:userFromId, :userToId, :status)";
-    private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET USER_FROM_ID = :userFromId_new, USER_TO_ID = :userToId_new, STATUS = :status WHERE USER_FROM_ID = :userFromId_old AND USER_TO_ID = :userToId_old";
+    private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS, DATE_MODIFIED) VALUES (:userFromId, :userToId, :status, :dateModified)";
+    private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET USER_FROM_ID = :userFromId_new, USER_TO_ID = :userToId_new, STATUS = :status, DATE_MODIFIED = :dateModified WHERE USER_FROM_ID = :userFromId_old AND USER_TO_ID = :userToId_old";
 
-    private static final String SQL_GET_INCOMING_REQ = "SELECT r.userFrom FROM Relationship r WHERE r.status = :status AND r.userTo.id = :userId";
-    private static final String SQL_GET_OUTGOING_REQ = "SELECT r.userTo FROM Relationship r WHERE r.status = :status AND r.userFrom.id = :userId";
+    private static final String SQL_GET_INCOMING_REQ = "SELECT r.userFrom FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userTo.id = :userId";
+    private static final String SQL_GET_OUTGOING_REQ = "SELECT r.userTo FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userFrom.id = :userId";
     private static final String SQL_GET_FRIENDS = "" +
             "SELECT u" +
             " FROM User u, Relationship r" +
-            " WHERE r.status = :status AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))";
-
-    private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = :status AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
+            " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))";
     private static final String SQL_GET_RELATIONSHIP = "" +
             "SELECT r FROM Relationship r " +
             "WHERE (r.userFrom.id = :userFromId AND r.userTo.id = :userToId) " +
             "OR (r.userTo.id = :userFromId AND r.userFrom.id = :userToId)";
+
+    private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = 'FRIENDS' AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
+    private static final String SQL_GET_OUTGOING_REQ_COUNT = "SELECT COUNT(r) FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userFrom.id = :userId";
 
 
     @PersistenceContext
@@ -41,6 +43,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userFromId", userFromId)
                     .setParameter("userToId", userToId)
                     .setParameter("status", status.toString())
+                    .setParameter("dateModified", new Date())
                     .executeUpdate();
 
         }catch (Exception e){
@@ -57,6 +60,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userFromId_new", userFromId_new)
                     .setParameter("userToId_new", userToId_new)
                     .setParameter("status", status.toString())
+                    .setParameter("dateModified", new Date())
                     .executeUpdate();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
@@ -83,7 +87,6 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getIncomingRequests(String userId) throws InternalServerError{
         try {
             return entityManager.createQuery(SQL_GET_INCOMING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUESTED)
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
@@ -95,7 +98,6 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getOutgoingRequests(String userId) throws InternalServerError{
         try {
             return entityManager.createQuery(SQL_GET_OUTGOING_REQ, User.class)
-                    .setParameter("status", RelationshipStatus.REQUESTED)
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
@@ -107,7 +109,6 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getFriendsList(String userId) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_FRIENDS, User.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
@@ -119,7 +120,6 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
     public List<User> getSmallFriendsList(String userId) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_FRIENDS, User.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
                     .setParameter("userId", Long.valueOf(userId))
                     .setMaxResults(6)
                     .getResultList();
@@ -129,12 +129,22 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
     }
 
     @Override
-    public Long getFriendsCount(String userId) throws InternalServerError {
+    public int getFriendsCount(String userId) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_FRIENDS_COUNT, Long.class)
-                    .setParameter("status", RelationshipStatus.FRIENDS)
                     .setParameter("userId", Long.valueOf(userId))
-                    .getSingleResult();
+                    .getSingleResult().intValue();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public int getOutgoingRequestsCount(String userId) throws InternalServerError {
+        try {
+            return entityManager.createQuery(SQL_GET_OUTGOING_REQ_COUNT, Long.class)
+                    .setParameter("userId", Long.valueOf(userId))
+                    .getSingleResult().intValue();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }

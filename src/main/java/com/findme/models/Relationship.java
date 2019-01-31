@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +17,7 @@ public class Relationship implements Serializable {
     private User userFrom;
     private User userTo;
     private RelationshipStatus status;
+    private Date dateModified;
 
     @Id
     @ManyToOne
@@ -49,6 +51,14 @@ public class Relationship implements Serializable {
         this.status = status;
     }
 
+    @Column(name = "DATE_MODIFIED")
+    public Date getDateModified() {
+        return dateModified;
+    }
+
+    public void setDateModified(Date dateModified) {
+        this.dateModified = dateModified;
+    }
 
     static class RelationshipId implements Serializable{
         private User userFrom;

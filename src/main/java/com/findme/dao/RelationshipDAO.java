@@ -17,7 +17,8 @@ public interface RelationshipDAO{
     List<User> getOutgoingRequests(String userId) throws InternalServerError;
     List<User> getFriendsList(String userId) throws InternalServerError;
     List<User> getSmallFriendsList(String userId) throws InternalServerError;
-    Long getFriendsCount(String userId) throws InternalServerError;
+    int getFriendsCount(String userId) throws InternalServerError;
+    int getOutgoingRequestsCount(String userId) throws InternalServerError;
 
     Relationship getRelationship(String userFromId, String userToId) throws InternalServerError;
 }
