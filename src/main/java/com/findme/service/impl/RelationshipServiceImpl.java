@@ -33,63 +33,34 @@ public class RelationshipServiceImpl implements RelationshipService {
     @Transactional
     public RelationshipStatus getRelationshipStatus(String userFromId, String userToId) throws InternalServerError, BadRequestException {
         validateIncomingParams(userFromId, userToId, null);
-
         Relationship relationship = relationshipDAO.getRelationship(userFromId, userToId);
-        if(relationship == null)
-            return null;
-
-        return relationship.getStatus();
+        return relationship == null ? null : relationship.getStatus();
     }
 
     @Override
     @Transactional
     public void saveRelationship(String userFromId, String userToId) throws InternalServerError, BadRequestException{
-        validateIncomingParams(userFromId, userToId, null);
-
-        Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
-        if(rel != null)
-            throw new BadRequestException("Relationship save - failed. There is an active relationship");
-
-        if(relationshipDAO.getFriendsCount(userFromId) >= 100 || relationshipDAO.getOutgoingRequestsCount(userFromId) >= 10)
-            throw new BadRequestException("Action cannot be performed to this user.");
-
+        validateRelationshipSave(userFromId, userToId);
         relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
     }
 
     @Override
     @Transactional
     public void updateRelationship(String userFromId, String userToId, String status) throws InternalServerError, BadRequestException{
+        Relationship currentRelationship = relationshipDAO.getRelationship(userFromId, userToId);
+        validateRelationshipUpdate(currentRelationship, userFromId, userFromId, status);
+        relationshipDAO.updateRelationship(
+                currentRelationship.getUserFrom().getId(), currentRelationship.getUserTo().getId(),
+                Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
+    }
+
+    private void validateRelationshipUpdate(Relationship currentRelationship, String userFromId, String userToId, String status) throws BadRequestException, InternalServerError{
         validateIncomingParams(userFromId, userToId, status);
 
-        Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         User userTo = userDAO.findById(Long.valueOf(userToId));
-        if(userTo == null || rel == null)
-            throw new BadRequestException("Relationship save - failed.");
+        if(userTo == null || currentRelationship == null)
+            throw new BadRequestException("Relationship save - failed. Wrong data.");
 
-        RelationshipValidatorParams params = RelationshipValidatorParams.newBuilder()
-                .setOldStatus(rel.getStatus())
-                .setNewStatus(RelationshipStatus.valueOf(status))
-                .setRelationshipDateModified(rel.getDateModified())
-                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
-                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
-                .build();
-
-        validateRelationshipUpdate(params);
-
-        relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
-    }
-
-    private void validateIncomingParams(String userFromId, String userToId, String status) throws BadRequestException{
-        try{
-            Optional.of(userFromId).map(Long::valueOf);
-            Optional.of(userToId).map(Long::valueOf);
-            Optional.ofNullable(status).map(RelationshipStatus::valueOf);
-        } catch (IllegalArgumentException e){
-            throw new BadRequestException(e.getMessage());
-        }
-    }
-
-    private void validateRelationshipUpdate(RelationshipValidatorParams params) throws BadRequestException{
         AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
         AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
         AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
@@ -101,6 +72,37 @@ public class RelationshipServiceImpl implements RelationshipService {
         deletedVal.setNextAbstractChainValidator(rejectedVal);
         rejectedVal.setNextAbstractChainValidator(requestedVal);
 
-        friendsVal.check(params);
+        friendsVal.check(RelationshipValidatorParams.newBuilder()
+                .setOldStatus(currentRelationship.getStatus())
+                .setNewStatus(RelationshipStatus.valueOf(status))
+                .setRelationshipDateModified(currentRelationship.getDateModified())
+                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
+                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+                .build());
+    }
+
+    private void validateRelationshipSave(String userFromId, String userToId) throws BadRequestException, InternalServerError{
+        validateIncomingParams(userFromId, userToId, null);
+
+        if(relationshipDAO.getRelationship(userFromId, userToId) != null)
+            throw new BadRequestException("Relationship save - failed. There is an active relationship");
+
+        AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
+        requestedVal.check(RelationshipValidatorParams.newBuilder()
+                .setOldStatus(RelationshipStatus.DELETED)
+                .setNewStatus(RelationshipStatus.REQUESTED)
+                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
+                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+                .build());
+    }
+
+    private void validateIncomingParams(String userFromId, String userToId, String status) throws BadRequestException{
+        try{
+            Optional.of(userFromId).map(Long::valueOf);
+            Optional.of(userToId).map(Long::valueOf);
+            Optional.ofNullable(status).map(RelationshipStatus::valueOf);
+        } catch (IllegalArgumentException e){
+            throw new BadRequestException(e.getMessage());
+        }
     }
 }
