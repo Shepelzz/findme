@@ -1,8 +1,8 @@
 package com.findme.dao;
 
 import com.findme.exception.InternalServerError;
-import com.findme.models.Relationship;
-import com.findme.models.User;
+import com.findme.model.Relationship;
+import com.findme.model.User;
 import com.findme.types.RelationshipStatus;
 
 import java.util.List;

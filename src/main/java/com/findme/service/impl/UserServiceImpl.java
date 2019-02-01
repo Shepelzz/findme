@@ -4,7 +4,7 @@ import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.models.User;
+import com.findme.model.User;
 import com.findme.service.UserService;
 import com.findme.utils.validator.params.UserValidatorParams;
 import com.findme.utils.validator.userValidator.*;

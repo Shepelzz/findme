@@ -4,7 +4,7 @@ import com.findme.dao.PostDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.models.Post;
+import com.findme.model.Post;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -2,7 +2,7 @@ package com.findme.dao.impl;
 
 import com.findme.dao.UserDAO;
 import com.findme.exception.InternalServerError;
-import com.findme.models.User;
+import com.findme.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

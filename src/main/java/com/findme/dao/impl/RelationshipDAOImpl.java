@@ -2,8 +2,8 @@ package com.findme.dao.impl;
 
 import com.findme.dao.RelationshipDAO;
 import com.findme.exception.InternalServerError;
-import com.findme.models.Relationship;
-import com.findme.models.User;
+import com.findme.model.Relationship;
+import com.findme.model.User;
 import com.findme.types.RelationshipStatus;
 import org.springframework.stereotype.Repository;
 

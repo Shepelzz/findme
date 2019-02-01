@@ -1,7 +1,7 @@
 package com.findme.dao.impl;
 
 import com.findme.dao.PostDAO;
-import com.findme.models.Post;
+import com.findme.model.Post;
 import org.springframework.stereotype.Repository;
 
 @Repository
