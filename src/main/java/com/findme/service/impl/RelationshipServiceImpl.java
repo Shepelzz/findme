@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.Optional;
 
 
@@ -47,9 +46,11 @@ public class RelationshipServiceImpl implements RelationshipService {
         validateIncomingParams(userFromId, userToId, null);
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
-
         if(rel != null)
             throw new BadRequestException("Relationship save - failed. There is an active relationship");
+
+        if(relationshipDAO.getFriendsCount(userFromId) >= 100 || relationshipDAO.getOutgoingRequestsCount(userFromId) >= 10)
+            throw new BadRequestException("Action cannot be performed to this user.");
 
         relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
     }
@@ -61,12 +62,13 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         Relationship rel = relationshipDAO.getRelationship(userFromId, userToId);
         User userTo = userDAO.findById(Long.valueOf(userToId));
+        if(userTo == null || rel == null)
+            throw new BadRequestException("Relationship save - failed.");
+
         int friendsCount,outgoingReqCount;
         friendsCount = relationshipDAO.getFriendsCount(userFromId);
         outgoingReqCount = relationshipDAO.getOutgoingRequestsCount(userFromId);
 
-        if(userTo == null || rel == null)
-            throw new BadRequestException("Relationship save - failed.");
         validateRelationshipUpdate(rel, RelationshipStatus.valueOf(status), friendsCount, outgoingReqCount);
 
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));

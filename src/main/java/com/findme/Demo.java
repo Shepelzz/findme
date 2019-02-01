@@ -1,13 +1,9 @@
 package com.findme;
 
-import com.findme.exception.BadRequestException;
-import com.findme.types.RelationshipStatus;
-
-import java.util.Arrays;
+import java.text.ParseException;
 
 public class Demo {
-    public static void main(String[] args) throws BadRequestException {
-
+    public static void main(String[] args) throws ParseException {
 
 
 

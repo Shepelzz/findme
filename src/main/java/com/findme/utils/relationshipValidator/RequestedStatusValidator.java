@@ -1,6 +1,5 @@
 package com.findme.utils.relationshipValidator;
 
-import com.findme.exception.BadRequestException;
 import com.findme.models.Relationship;
 import com.findme.types.RelationshipStatus;
 
@@ -13,7 +12,9 @@ public class RequestedStatusValidator extends AbstractRelationshipValidator {
 
     @Override
     protected boolean checkParam(Relationship relationship, RelationshipStatus newStatus, int friendsCnt, int outgoingReqCnt) {
-        return Arrays.stream(CURRENT_STATUS).anyMatch(relationship.getStatus()::equals) && newStatus.equals(NEW_STATUS);
+        return Arrays.stream(CURRENT_STATUS).anyMatch(relationship.getStatus()::equals) && newStatus.equals(NEW_STATUS)
+                && friendsCnt < 100
+                && outgoingReqCnt < 10;
 
 
 
