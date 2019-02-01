@@ -6,13 +6,14 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import com.findme.utils.userValidator.AbstractUserValidator;
-import com.findme.utils.userValidator.*;
+import com.findme.utils.validator.params.UserValidatorParams;
+import com.findme.utils.validator.userValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,13 +82,13 @@ public class UserServiceImpl implements UserService {
         emailValidator.setNextAbstractChainValidator(phoneValidator);
         phoneValidator.setNextAbstractChainValidator(passwordValidator);
 
-        nameValidator.check(Collections.unmodifiableMap(new HashMap<String, String>(){{
-            put("firstName", user.getFirstName());
-            put("lastName", user.getLastName());
-            put("email", user.getEmail());
-            put("phone", user.getPhone());
-            put("password", user.getPassword());
-        }}));
+        nameValidator.check(UserValidatorParams.newBuilder()
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
+                .setEmail(user.getEmail())
+                .setPhone(user.getPhone())
+                .setPassword(user.getPassword())
+                .build());
 
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
             throw new BadRequestException("There is already registered user with this email or phone.");

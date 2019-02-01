@@ -8,7 +8,8 @@ import com.findme.models.Relationship;
 import com.findme.models.User;
 import com.findme.service.RelationshipService;
 import com.findme.types.RelationshipStatus;
-import com.findme.utils.relationshipValidator.*;
+import com.findme.utils.validator.params.RelationshipValidatorParams;
+import com.findme.utils.validator.relationshipValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,11 +66,15 @@ public class RelationshipServiceImpl implements RelationshipService {
         if(userTo == null || rel == null)
             throw new BadRequestException("Relationship save - failed.");
 
-        int friendsCount,outgoingReqCount;
-        friendsCount = relationshipDAO.getFriendsCount(userFromId);
-        outgoingReqCount = relationshipDAO.getOutgoingRequestsCount(userFromId);
+        RelationshipValidatorParams params = RelationshipValidatorParams.newBuilder()
+                .setOldStatus(rel.getStatus())
+                .setNewStatus(RelationshipStatus.valueOf(status))
+                .setRelationshipDateModified(rel.getDateModified())
+                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
+                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+                .build();
 
-        validateRelationshipUpdate(rel, RelationshipStatus.valueOf(status), friendsCount, outgoingReqCount);
+        validateRelationshipUpdate(params);
 
         relationshipDAO.updateRelationship(rel.getUserFrom().getId(), rel.getUserTo().getId(), Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
     }
@@ -84,7 +89,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         }
     }
 
-    private void validateRelationshipUpdate(Relationship relationship, RelationshipStatus newStatus, int friendsCnt, int outgoingReqCnt) throws BadRequestException{
+    private void validateRelationshipUpdate(RelationshipValidatorParams params) throws BadRequestException{
         AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
         AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
         AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
@@ -96,6 +101,6 @@ public class RelationshipServiceImpl implements RelationshipService {
         deletedVal.setNextAbstractChainValidator(rejectedVal);
         rejectedVal.setNextAbstractChainValidator(requestedVal);
 
-        friendsVal.check(relationship, newStatus, friendsCnt, outgoingReqCnt);
+        friendsVal.check(params);
     }
 }
