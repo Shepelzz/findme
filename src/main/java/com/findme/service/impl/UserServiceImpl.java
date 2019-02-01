@@ -82,12 +82,12 @@ public class UserServiceImpl implements UserService {
         emailValidator.setNextAbstractChainValidator(phoneValidator);
         phoneValidator.setNextAbstractChainValidator(passwordValidator);
 
-        nameValidator.check(UserValidatorParams.newBuilder()
-                .setFirstName(user.getFirstName())
-                .setLastName(user.getLastName())
-                .setEmail(user.getEmail())
-                .setPhone(user.getPhone())
-                .setPassword(user.getPassword())
+        nameValidator.check(UserValidatorParams.builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .password(user.getPassword())
                 .build());
 
         if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)

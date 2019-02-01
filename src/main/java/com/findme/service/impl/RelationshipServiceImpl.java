@@ -72,12 +72,12 @@ public class RelationshipServiceImpl implements RelationshipService {
         deletedVal.setNextAbstractChainValidator(rejectedVal);
         rejectedVal.setNextAbstractChainValidator(requestedVal);
 
-        friendsVal.check(RelationshipValidatorParams.newBuilder()
-                .setOldStatus(currentRelationship.getStatus())
-                .setNewStatus(RelationshipStatus.valueOf(status))
-                .setRelationshipDateModified(currentRelationship.getDateModified())
-                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
-                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+        friendsVal.check(RelationshipValidatorParams.builder()
+                .oldStatus(currentRelationship.getStatus())
+                .newStatus(RelationshipStatus.valueOf(status))
+                .relationshipDateModified(currentRelationship.getDateModified())
+                .friendsCnt(relationshipDAO.getFriendsCount(userFromId))
+                .outgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
                 .build());
     }
 
@@ -88,11 +88,11 @@ public class RelationshipServiceImpl implements RelationshipService {
             throw new BadRequestException("Relationship save - failed. There is an active relationship");
 
         AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
-        requestedVal.check(RelationshipValidatorParams.newBuilder()
-                .setOldStatus(RelationshipStatus.DELETED)
-                .setNewStatus(RelationshipStatus.REQUESTED)
-                .setFriendsCnt(relationshipDAO.getFriendsCount(userFromId))
-                .setOutgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+        requestedVal.check(RelationshipValidatorParams.builder()
+                .oldStatus(RelationshipStatus.DELETED)
+                .newStatus(RelationshipStatus.REQUESTED)
+                .friendsCnt(relationshipDAO.getFriendsCount(userFromId))
+                .outgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
                 .build());
     }
 
