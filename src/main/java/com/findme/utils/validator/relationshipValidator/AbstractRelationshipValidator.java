@@ -11,13 +11,10 @@ public abstract class AbstractRelationshipValidator {
     }
 
     public void check(RelationshipValidatorParams params) throws BadRequestException {
-        if(checkParam(params))
-            return;
+        checkParam(params);
         if(nextChainValidator!= null)
             nextChainValidator.check(params);
-        else
-            throw new BadRequestException("Action cannot be performed to this user.");
     }
 
-    abstract boolean checkParam(RelationshipValidatorParams params) throws BadRequestException ;
+    abstract void checkParam(RelationshipValidatorParams params) throws BadRequestException ;
 }
