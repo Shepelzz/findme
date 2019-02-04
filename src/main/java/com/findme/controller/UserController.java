@@ -27,13 +27,11 @@ import java.util.Objects;
 @Controller
 public class UserController {
     private UserService userService;
-    private RelationshipService relationshipService;
     private RelationshipDAO relationshipDAO;
 
     @Autowired
-    public UserController(UserService userService, RelationshipService relationshipService, RelationshipDAO relationshipDAO) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO) {
         this.userService = userService;
-        this.relationshipService = relationshipService;
         this.relationshipDAO = relationshipDAO;
     }
 

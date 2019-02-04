@@ -135,7 +135,7 @@
                     <div th:if="${btnViewProp == 'btn-sent'}" class="w3-round"><!--w3-card-->
                         <div class="w3-white">
                             <div class="w3-button w3-block w3-left-align">request sent
-                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|">
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|" style="margin-bottom: -7px;margin-top: -7px">
                                     <i class="fa fa-times w3-text-theme"></i>
                                 </button>
                             </div>
@@ -168,10 +168,10 @@
                     <div th:if="${btnViewProp == 'btn-accept'}"class="w3-round"><!--w3-card-->
                         <div class="w3-white">
                             <div class="w3-button w3-block w3-left-align">Accept request
-                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|">
+                                <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|" style="margin-bottom: -7px;margin-top: -7px">
                                     <i class="fa fa-times w3-text-theme"></i>
                                 </button>
-                                <button class="w3-bar-item w3-button w3-white w3-right" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|">
+                                <button class="w3-bar-item w3-button w3-white w3-right" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|" style="margin-bottom: -7px;margin-top: -7px">
                                     <i class="fa fa-check w3-text-theme"></i>
                                 </button>
                             </div>
@@ -214,17 +214,68 @@
         <!-- Middle Column -->
         <div class="w3-col m8">
 
-            <div class="w3-row-padding">
+            <div class="w3-row-padding w3-margin-bottom">
                 <div class="w3-col m12">
-                    <div class="w3-round w3-white"><!--w3-card-->
+                    <div class="w3-white"><!--w3-card-->
                         <div class="w3-container w3-padding">
                             <h6 class="w3-opacity">Create new post here: </h6>
                             <p contenteditable="true" class="w3-border w3-padding"></p>
                             <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
+                            <!--<a type="button" class="w3-button w3-theme w3-right" style="margin-left: 3px"><i class="fa fa-pencil-alt"></i>  Post</a>-->
+                            <!--<a type="button" class="w3-button w3-theme w3-right"><i class="fa fa-pencil-alt"></i>  Post</a>-->
+                            <i onclick="$('').show()" class="inline w3-padding-small fa fa-map-marker-alt fa-fw w3-margin-right w3-text-theme w3-hover-opacity" style="margin-left: 20px"></i>
+                            <i onclick="$('').show()" class="inline w3-padding-small fa fa-user-tag fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
                         </div>
 
                     </div>
                 </div>
+            </div>
+
+            <div class="w3-row-padding">
+                <div class="w3-col m12">
+                    <div class="w3-white">
+                        <div class="w3-container w3-padding">
+                            <h6 class="w3-opacity inline">Filters: </h6>
+                            <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
+                            <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
+                            <input list="posted" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Users posted</label>
+                            <button id="apply_post_filter" class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('')|" style="margin-bottom: -5px;margin-top: -5px">
+                                <i class="fa fa-check w3-text-theme"></i>
+                            </button>
+                        </div>
+                        <datalist id="posted" >
+                            <option value="User1">
+                            <option value="User2">
+                            <option value="User3">
+                            <option value="User4">
+                            <option value="User5">
+                        </option>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-container w3-white w3-margin"><br>
+                <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <span class="w3-right w3-opacity">1 min</span>
+                <h4 class="inline">Test User</h4><p class="inline w3-opacity w3-margin-left"> with Odin and others in Ukraine</p><br>
+                <hr class="w3-clear">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <div class="w3-container w3-white w3-margin"><br>
+                <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <span class="w3-right w3-opacity">12 min</span>
+                <h4 class="inline">Shepel Yevhen</h4><p class="inline w3-opacity w3-margin-left"> in Ukraine</p><br>
+                <hr class="w3-clear">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+
+            <div class="w3-container w3-white w3-margin"><br>
+                <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                <span class="w3-right w3-opacity">45 min</span>
+                <h4 class="inline">Dodic</h4><p class="inline w3-opacity w3-margin-left"> with Anna and Anton in Ukraine</p><br>
+                <hr class="w3-clear">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
         </div>
         <!-- End Grid -->
