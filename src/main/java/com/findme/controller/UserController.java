@@ -14,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,11 +25,13 @@ import java.util.Objects;
 public class UserController {
     private UserService userService;
     private RelationshipDAO relationshipDAO;
+    private RelationshipService relationshipService;
 
     @Autowired
-    public UserController(UserService userService, RelationshipDAO relationshipDAO) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService) {
         this.userService = userService;
         this.relationshipDAO = relationshipDAO;
+        this.relationshipService = relationshipService;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
@@ -42,22 +41,18 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
         }
-
         try {
             Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
-
             model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(loggedUserId, userId, rel)));
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
-
             if(rel != null)
                 model.addAttribute("relStatus", rel.getStatus());
             if(loggedUserId.equals(userId)){
                 model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
             }
-
         } catch (BadRequestException e){
             model.addAttribute("error", e);
             return "errors/badRequest";
@@ -68,7 +63,6 @@ public class UserController {
             model.addAttribute("error", nofe);
             return "errors/notFound";
         }
-
         model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
         return "profile";
     }
@@ -77,7 +71,6 @@ public class UserController {
     public ResponseEntity<String> editUserSubmit(HttpSession session, @ModelAttribute User user){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-
         try {
             userService.update(user);
             return new ResponseEntity<>( HttpStatus.OK);
@@ -92,7 +85,6 @@ public class UserController {
     public ResponseEntity<String> deleteUser(HttpSession session, @PathVariable String userId){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-
         try {
             userService.delete(Long.valueOf(userId));
             return new ResponseEntity<>(HttpStatus.OK);
@@ -133,6 +125,35 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
+
+    @RequestMapping(path = "/save-relationship", method = RequestMethod.POST)
+    public ResponseEntity<String> requestSave(HttpSession session, @RequestParam String userId){
+        if(session.getAttribute("loggedUserId")==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        try {
+            relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);;
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerError e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "/update-relationship", method = RequestMethod.POST)
+    public ResponseEntity<String> requestUpdate(HttpSession session, @RequestParam String userId, String status){
+        if(session.getAttribute("loggedUserId")==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        try {
+            relationshipService.updateRelationship((String) session.getAttribute("loggedUserId"), userId, status);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InternalServerError e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     private String getButtonsViewProperty(String userFromId, String userToId, Relationship rel) throws BadRequestException{
         Long userFromIdL;

@@ -1,5 +1,6 @@
 package com.findme.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(callSuper = true)
 public class User extends GeneralModel{
 
     @Column(name = "FIRST_NAME")
