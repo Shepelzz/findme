@@ -45,18 +45,16 @@ public class HomeController {
         Post post = new Post();
         post.setUserPosted(userDAO.findById(1L));
         post.setDatePosted(new Date());
-        post.setLocation("Egypt");
-        post.setMessage("hehehhehe");
-        post.setUserPagePosted(userDAO.findById(1L));
+        post.setLocation("Cyprus");
+        post.setMessage("moremoremoremore olololo tressses");
+        post.setUserPagePosted(userDAO.findById(3L));
         post.setUsersTagged(new ArrayList<>());
 
 
-        post.addTaggedUser(userDAO.findById(15L));
-        post.addTaggedUser(userDAO.findById(11L));
+        post.addTaggedUser(userDAO.findById(2L));
+        post.addTaggedUser(userDAO.findById(5L));
 
         System.out.println("1 - ok");
-
-        postDAO.findById(1L);
 
         postDAO.save(post);
         return "index";
