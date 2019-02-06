@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
@@ -106,7 +105,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request){
         try {
             User user = userService.login(request.getParameter("email"), request.getParameter("password"));
             session.setAttribute("loggedUser", user);

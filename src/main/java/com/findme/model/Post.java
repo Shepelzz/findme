@@ -1,6 +1,9 @@
 package com.findme.model;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,7 +15,7 @@ import java.util.List;
 @Getter @Setter @ToString
 @EqualsAndHashCode(callSuper = true)
 
-public class Post extends GeneralModel{
+public class Post extends GeneralModel {
 
     @Column(name = "MESSAGE")
     private String message;

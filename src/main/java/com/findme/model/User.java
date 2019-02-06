@@ -11,9 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS")
-@Getter
-@Setter
-@ToString
+@Getter @Setter @ToString
 @EqualsAndHashCode(callSuper = true)
 public class User extends GeneralModel{
 

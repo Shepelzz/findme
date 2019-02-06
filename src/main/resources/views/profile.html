@@ -80,7 +80,7 @@
                 <div th:if="${loggedUser.getId() == user.id}" class="w3-round"><!--w3-card-->
                     <div class="w3-white">
                         <!--Incoming Friend Request-->
-                        <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq',true)" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-left fa-fw w3-margin-right"></i>Incoming requests
                             <span class="w3-right" th:text="${incomingRequests.size()}">5</span>
                         </button>
@@ -102,7 +102,7 @@
                         </ul>
 
                         <!--Outgoing Friend Request-->
-                        <button th:if="${outgoingRequests.size() > 0}" onclick="dropDownMenu('outgoingReq')" class="w3-button w3-block w3-theme-l1 w3-left-align">
+                        <button th:if="${outgoingRequests.size() > 0}" onclick="dropDownMenu('outgoingReq',true)" class="w3-button w3-block w3-theme-l1 w3-left-align">
                             <i class="fa fa-arrow-right fa-fw w3-margin-right"></i>Outgoing requests
                             <span class="w3-right" th:text="${outgoingRequests.size()}">0</span>
                         </button>
@@ -218,13 +218,22 @@
                 <div class="w3-col m12">
                     <div class="w3-white"><!--w3-card-->
                         <div class="w3-container w3-padding">
-                            <h6 class="w3-opacity">Create new post here: </h6>
-                            <p contenteditable="true" class="w3-border w3-padding"></p>
-                            <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
-                            <!--<a type="button" class="w3-button w3-theme w3-right" style="margin-left: 3px"><i class="fa fa-pencil-alt"></i>  Post</a>-->
-                            <!--<a type="button" class="w3-button w3-theme w3-right"><i class="fa fa-pencil-alt"></i>  Post</a>-->
-                            <i onclick="$('').show()" class="inline w3-padding-small fa fa-map-marker-alt fa-fw w3-margin-right w3-text-theme w3-hover-opacity" style="margin-left: 20px"></i>
-                            <i onclick="$('').show()" class="inline w3-padding-small fa fa-user-tag fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+                            <form id="createPost_form">
+                                <h6 class="w3-opacity">Create new post here: </h6>
+                                <p contenteditable="true" class="w3-border w3-padding"></p>
+                                <div id="locationInput" class="w3-padding-small w3-hide">
+                                    <label for="location" class="w3-margin-right w3-text-theme">Location: </label>
+                                    <input class="w3-border w3-padding" id="location" type="text" name="location">
+                                </div>
+                                <div id="taggedUsers" class="w3-padding-small w3-hide">
+                                    <label for="location" class="w3-margin-right w3-text-theme">Tagged friends: </label>
+                                    <input class="w3-border w3-padding" id="tagged" type="text" name="tagged">
+                                </div>
+                                <button type="submit" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
+                                <i onclick="dropDownMenu('locationInput',false)" class="inline w3-padding-small fa fa-map-marker-alt fa-fw w3-margin-right w3-text-theme w3-hover-opacity" style="margin-left: 20px"></i>
+                                <i onclick="dropDownMenu('taggedUsers',false)" class="inline w3-padding-small fa fa-user-tag fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+
+                            </form>
                         </div>
 
                     </div>
@@ -292,11 +301,12 @@
 </body>
 
 <script>
-    function dropDownMenu(id) {
+    function dropDownMenu(id, activeTheme) {
         let x = document.getElementById(id);
         if (x.className.indexOf("w3-show") === -1) {
             x.className += " w3-show";
-            x.previousElementSibling.className += " w3-theme-d1";
+            if(activeTheme)
+                x.previousElementSibling.className += " w3-theme-d1";
         } else {
             x.className = x.className.replace("w3-show", "");
             x.previousElementSibling.className =
