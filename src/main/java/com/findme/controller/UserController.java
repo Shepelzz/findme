@@ -4,8 +4,8 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.model.Relationship;
-import com.findme.model.User;
+import com.findme.entity.Relationship;
+import com.findme.entity.User;
 import com.findme.service.RelationshipService;
 import com.findme.service.UserService;
 import com.findme.types.RelationshipStatus;
@@ -130,7 +130,7 @@ public class UserController {
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
-            relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);;
+            relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InternalServerError e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

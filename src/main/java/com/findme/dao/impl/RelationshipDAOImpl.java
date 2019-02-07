@@ -2,8 +2,8 @@ package com.findme.dao.impl;
 
 import com.findme.dao.RelationshipDAO;
 import com.findme.exception.InternalServerError;
-import com.findme.model.Relationship;
-import com.findme.model.User;
+import com.findme.entity.Relationship;
+import com.findme.entity.User;
 import com.findme.types.RelationshipStatus;
 import org.springframework.stereotype.Repository;
 
@@ -145,6 +145,34 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
             return entityManager.createQuery(SQL_GET_OUTGOING_REQ_COUNT, Long.class)
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public int getValidFriendsCountByIdList(List<Long> ids) throws InternalServerError {
+        String SQL_GET_VALID_USERS_COUNT_BY_IDS = "SELECT COUNT(u) FROM User u WHERE u.id IN (:userIdList)";
+        try {
+            return entityManager.createQuery(SQL_GET_VALID_USERS_COUNT_BY_IDS, Long.class)
+                    .setParameter("userIdList", ids)
+                    .getSingleResult().intValue();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public List<User> getFriendsByIdList(Long userId, List<Long> friendsIds) throws InternalServerError {
+        String SQL_GET_FRIENDS_LIST_BY_IDS = "SELECT u" +
+                " FROM User u, Relationship r" +
+                " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))" +
+                " AND u.id IN (:friendsIdList)";
+        try {
+            return entityManager.createQuery(SQL_GET_FRIENDS_LIST_BY_IDS, User.class)
+                    .setParameter("userId", userId)
+                    .setParameter("friendsIdList", friendsIds)
+                    .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }

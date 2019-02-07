@@ -1,4 +1,4 @@
-package com.findme.model;
+package com.findme.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,14 +38,6 @@ public class Post extends GeneralModel {
     @JoinTable(name="USERS_TAGGED", joinColumns = @JoinColumn(name = "POST_ID"),
             inverseJoinColumns = @JoinColumn(name = "USER_ID"))
     private List<User> usersTagged;
-
-    public void addTaggedUser(User user) {
-        usersTagged.add(user);
-    }
-
-    public void removeTag(User user) {
-        usersTagged.remove(user);
-    }
 
 
     //TODO

@@ -1,4 +1,4 @@
-package com.findme.model;
+package com.findme.entity;
 
 import java.io.Serializable;
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<title>Find me</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
+<link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
+<link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
+<link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/userProfile.js" th:src="@{/js/userProfile.js}"></script>
+<!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
+<body>
+
+
+<form id="registration-form" class="input-form">
+    <p class="w3-opacity">Please fill in this form to create an account.</p>
+    <hr>
+    <div class="w3-container">
+
+            <!--<label for="message" class="w3-margin-right w3-text-theme">Message: </label>-->
+            <input class="w3-border w3-padding" id="message" placeholder="Enter your message" type="text" name="message">
+
+
+            <!--<label for="location" class="w3-margin-right w3-text-theme">Location: </label>-->
+            <input class="w3-border w3-padding" id="location" placeholder="Enter your location" type="text" name="location">
+
+        <hr>
+        <div class="w3-padding-small">
+            <!--<label id="loading" class="w3-margin-right w3-text-theme"><p style="display:none">waiting... </p></label>-->
+            <button id="bt" type="submit" class="w3-button w3-theme">Register</button>
+        </div>
+    </div>
+
+</form>
+
+
+</body>
+
+<script>
+
+    // submit reg form
+    $("#registration-form").submit(function register() {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/save-post",
+            data: $('#registration-form').serialize(),
+            success:function success() {
+                alert('User registered successfully');
+                window.location.reload(true);
+            },
+            error: function(xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    });
+
+</script>
+</html>

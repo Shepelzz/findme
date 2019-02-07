@@ -1,8 +1,8 @@
 package com.findme.dao;
 
 import com.findme.exception.InternalServerError;
-import com.findme.model.Relationship;
-import com.findme.model.User;
+import com.findme.entity.Relationship;
+import com.findme.entity.User;
 import com.findme.types.RelationshipStatus;
 
 import java.util.List;
@@ -19,6 +19,9 @@ public interface RelationshipDAO{
     List<User> getSmallFriendsList(String userId) throws InternalServerError;
     int getFriendsCount(String userId) throws InternalServerError;
     int getOutgoingRequestsCount(String userId) throws InternalServerError;
+
+    int getValidFriendsCountByIdList(List<Long> ids) throws InternalServerError;
+    List<User> getFriendsByIdList(Long userId, List<Long> friendsIds) throws InternalServerError;
 
     Relationship getRelationship(String userFromId, String userToId) throws InternalServerError;
 }

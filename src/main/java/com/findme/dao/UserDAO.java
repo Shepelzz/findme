@@ -1,7 +1,7 @@
 package com.findme.dao;
 
 import com.findme.exception.InternalServerError;
-import com.findme.model.User;
+import com.findme.entity.User;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.findme.dao;
 
-import com.findme.model.Post;
+import com.findme.entity.Post;
 
 public interface PostDAO extends GeneralDAO<Post>{
 }

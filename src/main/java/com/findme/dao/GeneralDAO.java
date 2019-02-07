@@ -1,7 +1,7 @@
 package com.findme.dao;
 
 import com.findme.exception.InternalServerError;
-import com.findme.model.GeneralModel;
+import com.findme.entity.GeneralModel;
 
 public interface GeneralDAO<T extends GeneralModel> {
 

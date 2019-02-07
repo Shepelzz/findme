@@ -4,7 +4,7 @@ import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.model.User;
+import com.findme.entity.User;
 import com.findme.service.UserService;
 import com.findme.utils.validator.params.UserValidatorParams;
 import com.findme.utils.validator.userValidator.*;
@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) throws InternalServerError, BadRequestException {
-
+    public User update(User user) throws InternalServerError{
         //check non important fields
         user.setCountry(Optional.ofNullable(user.getCountry()).filter(x -> !x.trim().isEmpty()).orElse(null));
         user.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(null));

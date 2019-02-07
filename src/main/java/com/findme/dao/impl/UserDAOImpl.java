@@ -2,7 +2,7 @@ package com.findme.dao.impl;
 
 import com.findme.dao.UserDAO;
 import com.findme.exception.InternalServerError;
-import com.findme.model.User;
+import com.findme.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +12,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
     private static final String SQL_TOP_USERS = "SELECT u FROM User u ORDER BY dateRegistered DESC";
     private static final String SQL_GET_USER_BY_EMAIL_OR_PHONE = "SELECT u FROM User u WHERE email = :email OR phone = :phone";
     private static final String SQL_GET_USER_BY_AUTH = "SELECT u FROM User u WHERE email = :email AND password = :password";
+
 
     public UserDAOImpl() {
         setClazz(User.class);
@@ -58,5 +59,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
+
+
 
 }
