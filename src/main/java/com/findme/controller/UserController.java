@@ -6,6 +6,8 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.entity.Relationship;
 import com.findme.entity.User;
+import com.findme.model.PostInfo;
+import com.findme.service.PostService;
 import com.findme.service.RelationshipService;
 import com.findme.service.UserService;
 import com.findme.types.RelationshipStatus;
@@ -25,12 +27,14 @@ public class UserController {
     private UserService userService;
     private RelationshipDAO relationshipDAO;
     private RelationshipService relationshipService;
+    private PostService postService;
 
     @Autowired
-    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService, PostService postService) {
         this.userService = userService;
         this.relationshipDAO = relationshipDAO;
         this.relationshipService = relationshipService;
+        this.postService = postService;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
@@ -150,6 +154,24 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(path = "/save-post", method = RequestMethod.POST)
+    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session, @RequestParam String userId){
+        if(session.getAttribute("loggedUserId")==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+
+        postInfo.setUserPagePostedId(userId);
+        postInfo.setUserPostedId((String) session.getAttribute("loggedUserId"));
+
+        try {
+            postService.save(postInfo);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerError | NumberFormatException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

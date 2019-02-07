@@ -11,6 +11,4 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
         setClazz(Post.class);
     }
 
-
-
 }

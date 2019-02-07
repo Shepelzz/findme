@@ -19,7 +19,9 @@ import com.findme.utils.validator.postValidator.UserPagePostedValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -36,30 +38,34 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post save(PostInfo postInfo) throws InternalServerError, BadRequestException {
-        Relationship rel = relationshipDAO.getRelationship(String.valueOf(postInfo.getUserPostedId()), String.valueOf(postInfo.getUserPagePostedId()));
-        List<User> usersTagged = relationshipDAO.getFriendsByIdList(postInfo.getUserPostedId(), postInfo.getUsersTaggedIds());
+        validateIncomingParams(postInfo.getUserPostedId(), postInfo.getUserPagePostedId());
+
+        User userPosted = userDAO.findById(Long.valueOf(postInfo.getUserPostedId()));
+        User userPagePosted = userDAO.findById(Long.valueOf(postInfo.getUserPagePostedId()));
+        Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(String.valueOf(postInfo.getUserPostedId()), String.valueOf(postInfo.getUserPagePostedId()));
+        List<User> usersTagged = relationshipDAO.getFriendsByIdList(userPosted.getId(), postInfo.getUsersTaggedIds());
 
         validatePostInfo(
             PostValidatorParams.builder()
                     .postInfo(postInfo)
-                    .relBtwAuthorAndPagePostedUser(rel)
+                    .relBtwAuthorAndPagePostedUser(relBtwAuthorAndPagePostedUser)
                     .usersTagged(usersTagged)
                     .build()
         );
 
         Post post = new Post();
-        post.setUserPosted(userDAO.findById(postInfo.getUserPostedId()));
-        post.setUserPagePosted(userDAO.findById(postInfo.getUserPagePostedId()));
-        post.setDatePosted(postInfo.getDatePosted());
-        post.setLocation(postInfo.getLocation());
-        post.setMessage(postInfo.getMessage());
-        post.setUsersTagged(usersTagged);
+            post.setUserPosted(userPosted);
+            post.setUserPagePosted(userPagePosted);
+            post.setDatePosted(new Date());
+            post.setLocation(postInfo.getLocation());
+            post.setMessage(postInfo.getMessage());
+            post.setUsersTagged(usersTagged);
 
         return postDAO.save(post);
     }
 
     @Override
-    public Post update(Post post) throws InternalServerError, BadRequestException {
+    public Post update(Post post) throws InternalServerError {
         return postDAO.update(post);
     }
 
@@ -74,6 +80,15 @@ public class PostServiceImpl implements PostService {
         if(post == null)
             throw new NotFoundException("Post with id "+id+" was not found");
         return post;
+    }
+
+    private void validateIncomingParams(String userFromId, String userToId) throws BadRequestException{
+        try{
+            Optional.of(userFromId).map(Long::valueOf);
+            Optional.of(userToId).map(Long::valueOf);
+        } catch (IllegalArgumentException e){
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     private void validatePostInfo(PostValidatorParams params) throws BadRequestException{
