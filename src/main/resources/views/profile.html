@@ -218,21 +218,20 @@
                 <div class="w3-col m12">
                     <div class="w3-white"><!--w3-card-->
                         <div class="w3-container w3-padding">
-                            <form id="createPost_form">
+                            <form id="createPost_form" method="post" th:object="${PostInfo}" th:action="@{'/save-post/' + ${user.getId()}}">
                                 <h6 class="w3-opacity">Create new post here: </h6>
-                                <p contenteditable="true" class="w3-border w3-padding"></p>
+                                <input class="w3-border w3-padding" style="width: 100%; margin-bottom: 10px" id="message" placeholder="Enter your message" type="text" name="message">
                                 <div id="locationInput" class="w3-padding-small w3-hide">
                                     <label for="location" class="w3-margin-right w3-text-theme">Location: </label>
                                     <input class="w3-border w3-padding" id="location" type="text" name="location">
                                 </div>
                                 <div id="taggedUsers" class="w3-padding-small w3-hide">
-                                    <label for="location" class="w3-margin-right w3-text-theme">Tagged friends: </label>
-                                    <input class="w3-border w3-padding" id="tagged" type="text" name="tagged">
+                                    <label for="usersTaggedIds" class="w3-margin-right w3-text-theme">Tagged friends ids (1,2,3): </label>
+                                    <input class="w3-border w3-padding" id="usersTaggedIds" type="text" name="usersTaggedIds">
                                 </div>
                                 <button type="submit" class="w3-button w3-theme"><i class="fa fa-pencil-alt"></i>  Post</button>
                                 <i onclick="dropDownMenu('locationInput',false)" class="inline w3-padding-small fa fa-map-marker-alt fa-fw w3-margin-right w3-text-theme w3-hover-opacity" style="margin-left: 20px"></i>
                                 <i onclick="dropDownMenu('taggedUsers',false)" class="inline w3-padding-small fa fa-user-tag fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
-
                             </form>
                         </div>
 

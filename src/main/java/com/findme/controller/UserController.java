@@ -175,11 +175,11 @@ public class UserController {
         }
     }
 
-//    @RequestMapping(path = "/save-post", method = RequestMethod.GET)
-//    public String testget(Model model){
-//        model.addAttribute("userId", 1L);
-//        return "postFormTest";
-//    }
+    @RequestMapping(path = "/save-post", method = RequestMethod.GET)
+    public String testget(Model model){
+        model.addAttribute("userId", 1L);
+        return "postFormTest";
+    }
 
 
     private String getButtonsViewProperty(String userFromId, String userToId, Relationship rel) throws BadRequestException{

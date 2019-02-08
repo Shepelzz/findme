@@ -18,7 +18,8 @@
 <body>
 
 
-<form class="input-form" method="post" th:object="${PostInfo}" th:action="@{/save-post/__${userId}}">
+<form class="input-form" method="post" th:object="${PostInfo}" th:action="@{'/save-post/' + ${userId}}">
+    <!--th:action="@{/save-post/__${userId}}">-->
     <p class="w3-opacity">Please fill in this form to create an account.</p>
     <hr>
     <div class="w3-container">
@@ -29,6 +30,7 @@
 
             <!--<label for="location" class="w3-margin-right w3-text-theme">Location: </label>-->
             <input class="w3-border w3-padding" id="location" placeholder="Enter your location" type="text" name="location">
+            <input class="w3-border w3-padding" id="usersTaggedIds" placeholder="Enter your location" type="text" name="usersTaggedIds">
 
         <hr>
         <div class="w3-padding-small">
