@@ -157,8 +157,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/save-post", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session, @RequestParam String userId){
+    @RequestMapping(path = "/save-post/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session, @PathVariable String userId){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
 
@@ -174,6 +174,12 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @RequestMapping(path = "/save-post", method = RequestMethod.GET)
+//    public String testget(Model model){
+//        model.addAttribute("userId", 1L);
+//        return "postFormTest";
+//    }
 
 
     private String getButtonsViewProperty(String userFromId, String userToId, Relationship rel) throws BadRequestException{
