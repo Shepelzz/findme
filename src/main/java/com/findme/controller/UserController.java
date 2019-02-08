@@ -49,7 +49,7 @@ public class UserController {
         }
         try {
             Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
-            model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(loggedUserId, userId, rel)));
+            model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(userId, rel)));
             model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("friendsSmallList", relationshipDAO.getSmallFriendsList(userId));
             model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
@@ -162,7 +162,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/save-post", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session){
+    public ResponseEntity<String> savePost(@ModelAttribute PostInfo postInfo, HttpSession session){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         postInfo.setUserPostedId((String) session.getAttribute("loggedUserId"));
@@ -176,18 +176,24 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/save-post", method = RequestMethod.GET)
-    public String testget(Model model){
-        model.addAttribute("userId", 1L);
-        return "postFormTest";
+
+    @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.POST)
+    public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
+        if(session.getAttribute("loggedUserId")==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+//        try {
+//            postService.delete(Long.valueOf(postId));
+//            return new ResponseEntity<>( HttpStatus.OK);
+//        } catch (InternalServerError | NumberFormatException e){
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        return null;
     }
 
 
-    private String getButtonsViewProperty(String userFromId, String userToId, Relationship rel) throws BadRequestException{
-        Long userFromIdL;
+    private String getButtonsViewProperty(String userToId, Relationship rel) throws BadRequestException{
         Long userToIdL;
         try {
-            userFromIdL = Long.valueOf(userFromId);
             userToIdL = Long.valueOf(userToId);
         } catch (NumberFormatException e) {
             throw new BadRequestException(e.getMessage());

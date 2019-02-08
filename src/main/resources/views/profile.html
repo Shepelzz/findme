@@ -246,14 +246,12 @@
             <div th:if="${userPagePostList != null}" class="w3-row-padding">
                 <div class="w3-col m12">
                     <div class="w3-white">
-                        <div class="w3-container w3-padding">
+                        <div class="w3-container w3-padding" style="position: relative">
                             <h6 class="w3-opacity inline">Filters: </h6>
                             <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
                             <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
                             <input list="posted" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Users posted</label>
-                            <button id="apply_post_filter" class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('')|" style="margin-bottom: -5px;margin-top: -5px">
-                                <i class="fa fa-check w3-text-theme"></i>
-                            </button>
+                            <i class="fa fa-check w3-button w3-text-theme w3-padding-large" style="position: absolute; margin-top: -5px; right: 0"></i>
                         </div>
                         <datalist id="posted" >
                             <option value="User1"></option>
@@ -267,13 +265,18 @@
             </div>
 
             <div th:if="${userPagePostList != null}">
-                <div th:each="post : ${userPagePostList}" class="w3-container w3-white w3-margin">
+                <div th:each="post : ${userPagePostList}" class="w3-container w3-white w3-margin" style="position: relative">
+                    <i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>
+                    <div class="post-menu w3-hide">
+                        <div class="post-menu-item w3-opacity">Edit post</div>
+                        <div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>
+                    </div>
                     <div>
                         <br>
                         <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-                        <span class="w3-right w3-opacity" th:text="${post.datePosted}">1 min</span>
+                        <span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>
                         <h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>
-                            <p th:text="${post.getTaggedUsersAndLocationToString()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
+                            <p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
                         <hr class="w3-clear">
                         <p th:text="${post.message}">Test message</p>
                     </div>
@@ -380,6 +383,23 @@
             }
         });
     });
+
+    function postDelete(postId) {
+        $.ajax({
+            type: "POST",
+            url: "/delete-post",
+            dataType: "text",
+            data: {"postId": postId},
+            success: function success() {
+                window.location.reload(true);
+            },
+            error: function(xhr) {
+                alert(xhr.responseText);
+                window.location.reload(true);
+            }
+        });
+    }
+
 
 
 

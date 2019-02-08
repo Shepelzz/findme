@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class Post extends GeneralModel {
     private List<User> usersTagged;
 
 
-    public String getTaggedUsersAndLocationToString(){
+    public String getTaggedUsersAndLocation(){
         StringBuilder result = new StringBuilder();
         if(usersTagged != null && usersTagged.size() > 0){
             result.append("with ");
@@ -58,6 +59,9 @@ public class Post extends GeneralModel {
         return result.toString();
     }
 
+    public String getDatePostedString() {
+        return  new SimpleDateFormat("dd.MM.yyyy HH:mm").format(datePosted);
+    }
 
     //TODO
     //levels permissions
