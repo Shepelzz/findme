@@ -273,7 +273,7 @@
                         <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
                         <span class="w3-right w3-opacity" th:text="${post.datePosted}">1 min</span>
                         <h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>
-                            <p th:if="${post.usersTagged.size() > 0}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
+                            <p th:text="${post.getTaggedUsersAndLocationToString()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
                         <hr class="w3-clear">
                         <p th:text="${post.message}">Test message</p>
                     </div>

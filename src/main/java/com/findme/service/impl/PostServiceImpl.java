@@ -12,10 +12,7 @@ import com.findme.exception.NotFoundException;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
-import com.findme.utils.validator.postValidator.AbstractPostValidator;
-import com.findme.utils.validator.postValidator.LocationValidator;
-import com.findme.utils.validator.postValidator.MessageValidator;
-import com.findme.utils.validator.postValidator.UserPagePostedValidator;
+import com.findme.utils.validator.postValidator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,9 +94,11 @@ public class PostServiceImpl implements PostService {
         AbstractPostValidator usersValidator = new UserPagePostedValidator();
         AbstractPostValidator messageValidator = new MessageValidator();
         AbstractPostValidator locationValidator = new LocationValidator();
+        AbstractPostValidator usersTaggedValidator = new UserTaggedValidator();
 
         usersValidator.setNextAbstractChainValidator(messageValidator);
         messageValidator.setNextAbstractChainValidator(locationValidator);
+        locationValidator.setNextAbstractChainValidator(usersTaggedValidator);
 
         usersValidator.check(params);
     }
