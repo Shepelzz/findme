@@ -18,20 +18,18 @@
 <body>
 
 
-<form class="input-form" method="post" th:object="${PostInfo}" th:action="@{'/save-post/' + ${userId}}">
-    <!--th:action="@{/save-post/__${userId}}">-->
+<form id="save_post_form">
+    <!--class="input-form" method="post" th:object="${PostInfo}" th:action="@{/save-post}">-->
     <p class="w3-opacity">Please fill in this form to create an account.</p>
     <hr>
     <div class="w3-container">
-
+            <input class="w3-border w3-padding" id="userPagePostedId" type="text" name="userPagePostedId">
             <!--<label for="message" class="w3-margin-right w3-text-theme">Message: </label>-->
             <input class="w3-border w3-padding" id="message" placeholder="Enter your message" type="text" name="message">
 
-
             <!--<label for="location" class="w3-margin-right w3-text-theme">Location: </label>-->
             <input class="w3-border w3-padding" id="location" placeholder="Enter your location" type="text" name="location">
-            <input class="w3-border w3-padding" id="usersTaggedIds" placeholder="Enter your location" type="text" name="usersTaggedIds">
-
+            <input class="w3-border w3-padding" id="usersTaggedIds" type="text" name="usersTaggedIds">
         <hr>
         <div class="w3-padding-small">
             <!--<label id="loading" class="w3-margin-right w3-text-theme"><p style="display:none">waiting... </p></label>-->
@@ -43,4 +41,24 @@
 
 
 </body>
+
+<script>
+
+    $("#save_post_form").submit(function register() {
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/save-post",
+            data: $('#registration-form').serialize(),
+            success:function success() {
+                alert('Ok');
+                window.location.reload(true);
+            },
+            error: function(xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    });
+
+</script>
 </html>

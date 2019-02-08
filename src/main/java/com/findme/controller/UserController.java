@@ -1,5 +1,6 @@
 package com.findme.controller;
 
+import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
@@ -28,13 +29,15 @@ public class UserController {
     private RelationshipDAO relationshipDAO;
     private RelationshipService relationshipService;
     private PostService postService;
+    private PostDAO postDAO;
 
     @Autowired
-    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService, PostService postService) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService, PostService postService, PostDAO postDAO) {
         this.userService = userService;
         this.relationshipDAO = relationshipDAO;
         this.relationshipService = relationshipService;
         this.postService = postService;
+        this.postDAO = postDAO;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)
@@ -56,6 +59,7 @@ public class UserController {
                 model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
             }
+            model.addAttribute("userPagePostList", postDAO.getPostList(userId));
         } catch (BadRequestException e){
             model.addAttribute("error", e);
             return "errors/badRequest";
@@ -157,14 +161,11 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/save-post/{userId}", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session, @PathVariable String userId){
+    @RequestMapping(path = "/save-post", method = RequestMethod.POST)
+    public ResponseEntity<String> registerUser(@ModelAttribute PostInfo postInfo, HttpSession session){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-
-        postInfo.setUserPagePostedId(userId);
         postInfo.setUserPostedId((String) session.getAttribute("loggedUserId"));
-
         try {
             postService.save(postInfo);
             return new ResponseEntity<>( HttpStatus.OK);

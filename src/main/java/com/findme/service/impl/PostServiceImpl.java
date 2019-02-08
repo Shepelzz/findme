@@ -43,7 +43,9 @@ public class PostServiceImpl implements PostService {
         User userPosted = userDAO.findById(Long.valueOf(postInfo.getUserPostedId()));
         User userPagePosted = userDAO.findById(Long.valueOf(postInfo.getUserPagePostedId()));
         Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(String.valueOf(postInfo.getUserPostedId()), String.valueOf(postInfo.getUserPagePostedId()));
-        List<User> usersTagged = relationshipDAO.getFriendsByIdList(userPosted.getId(), postInfo.getUsersTaggedIds());
+        List<User> usersTagged = null;
+        if(postInfo.getUsersTaggedIds() != null && postInfo.getUsersTaggedIds().size() > 0)
+            usersTagged = relationshipDAO.getFriendsByIdList(userPosted.getId(), postInfo.getUsersTaggedIds());
 
         validatePostInfo(
             PostValidatorParams.builder()

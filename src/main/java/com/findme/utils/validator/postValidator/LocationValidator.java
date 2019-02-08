@@ -6,11 +6,11 @@ import com.findme.utils.validator.params.PostValidatorParams;
 import java.util.regex.Pattern;
 
 public class LocationValidator extends AbstractPostValidator{
-    private static final Pattern locationNamePattern = Pattern.compile("^[\\p{L}]{4,50}+$");
+    private static final Pattern locationNamePattern = Pattern.compile("^[a-zA-Z]+(?:[\\s-][a-zA-Z]+)*$");
 
     @Override
     protected void checkParam(PostValidatorParams params) throws BadRequestException {
-        if(!locationNamePattern.matcher(params.getPostInfo().getLocation()).matches())
+        if(!params.getPostInfo().getLocation().equals("") && !locationNamePattern.matcher(params.getPostInfo().getLocation()).matches())
             throw new BadRequestException("Location is not valid.");
     }
 }
