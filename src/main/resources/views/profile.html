@@ -243,24 +243,26 @@
                 </div>
             </div>
 
-            <div th:if="${userPagePostList != null}" class="w3-row-padding">
+            <div class="w3-row-padding">
+                <!--th:if="${userPagePostList != null}"-->
                 <div class="w3-col m12">
-                    <div class="w3-white">
+                    <form id="postFilter" class="w3-white">
                         <div class="w3-container w3-padding" style="position: relative">
                             <h6 class="w3-opacity inline">Filters: </h6>
-                            <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
-                            <input type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
-                            <input list="posted" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Users posted</label>
-                            <i class="fa fa-check w3-button w3-text-theme w3-padding-large" style="position: absolute; margin-top: -5px; right: 0"></i>
+                            <input id="ownerPosts" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
+                            <input id="friendsPosts" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
+                            <!--<input list="posted" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Users posted</label>-->
+                            <input id="usersPostedIds" class="w3-border" style="margin-left: 15px" placeholder="Users ids:" type="text" name="usersPostedIds">
+                            <i id="filterButton" class="fa fa-filter w3-button w3-text-theme w3-padding-large" style="position: absolute; margin-top: -5px; right: 0"></i>
                         </div>
-                        <datalist id="posted" >
-                            <option value="User1"></option>
-                            <option value="User2"></option>
-                            <option value="User3"></option>
-                            <option value="User4"></option>
-                            <option value="User5"></option>
-                        </datalist>
-                    </div>
+                        <!--<datalist id="posted" >-->
+                            <!--<option value="User1"></option>-->
+                            <!--<option value="User2"></option>-->
+                            <!--<option value="User3"></option>-->
+                            <!--<option value="User4"></option>-->
+                            <!--<option value="User5"></option>-->
+                        <!--</datalist>-->
+                    </form>
                 </div>
             </div>
 

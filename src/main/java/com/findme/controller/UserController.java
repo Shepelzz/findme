@@ -2,11 +2,11 @@ package com.findme.controller;
 
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
+import com.findme.entity.Relationship;
+import com.findme.entity.User;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.entity.Relationship;
-import com.findme.entity.User;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import com.findme.service.RelationshipService;
