@@ -3,7 +3,7 @@ package com.findme.service;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.entity.User;
+import com.findme.model.User;
 
 public interface UserService{
 

@@ -1,39 +1,31 @@
 package com.findme;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Arrays;
 
 public class Demo {
     public static void main(String[] args) throws Exception {
+        int[] unsorted = {32, 39,21, 45, 23, 3};
 
-        Date datePosted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse("2019-02-08T10:37:19Z");
+//        System.out.println(Arrays.toString(unsorted));
 
-//        getDaysAgo(datePosted);
+        for(int i = unsorted.length-1 ; i > 0 ; i--) {
+            for (int j = 0; j < i; j++) {
+                if (unsorted[j] > unsorted[j + 1]) {
+                    int tmp = unsorted[j];
+                    unsorted[j] = unsorted[j + 1];
+                    unsorted[j + 1] = tmp;
+                }
+            }
+        }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        Date date = new Date();
-        System.out.println(sdf.format(date));
+        System.out.println(Arrays.toString(unsorted));
+
+
+
+
 
 
     }
 
-    public static String getDaysAgo(Date datePosted){
-        StringBuffer result = new StringBuffer();
-        Date currentDate = new Date();
-        long diff = currentDate.getTime()-datePosted.getTime();
-        long diffSeconds = diff / 1000;
-        long diffMinutes = diff / (60 * 1000);
-        long diffHours = diff / (60 * 60 * 1000);
-
-        System.out.println(diff);
-        System.out.println(diffSeconds);
-        System.out.println(diffMinutes);
-        System.out.println(diffHours);
-
-//        if(diffSeconds < 60)
-//            result.append(diffSeconds).append(" sec.");
-//        if()
-
-        return null;
-    }
 }
+

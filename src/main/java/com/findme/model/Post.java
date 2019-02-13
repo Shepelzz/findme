@@ -1,4 +1,4 @@
-package com.findme.entity;
+package com.findme.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

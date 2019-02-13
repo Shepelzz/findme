@@ -1,7 +1,7 @@
 package com.findme.dao.impl;
 
 import com.findme.dao.PostDAO;
-import com.findme.entity.Post;
+import com.findme.model.Post;
 import com.findme.exception.InternalServerError;
 import org.springframework.stereotype.Repository;
 

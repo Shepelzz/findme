@@ -1,7 +1,7 @@
 package com.findme.utils.validator.params;
 
-import com.findme.entity.Relationship;
-import com.findme.entity.User;
+import com.findme.model.Relationship;
+import com.findme.model.User;
 import com.findme.model.PostInfo;
 import lombok.Builder;
 import lombok.Getter;

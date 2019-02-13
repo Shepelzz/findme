@@ -1,4 +1,4 @@
-package com.findme.entity;
+package com.findme.model;
 
 import com.findme.types.RelationshipStatus;
 import lombok.ToString;

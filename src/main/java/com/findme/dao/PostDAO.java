@@ -1,6 +1,6 @@
 package com.findme.dao;
 
-import com.findme.entity.Post;
+import com.findme.model.Post;
 import com.findme.exception.InternalServerError;
 
 import java.util.List;

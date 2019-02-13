@@ -2,14 +2,11 @@ package com.findme.controller;
 
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
-import com.findme.entity.Relationship;
-import com.findme.entity.User;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.model.PostInfo;
-import com.findme.service.PostService;
-import com.findme.service.RelationshipService;
+import com.findme.model.Relationship;
+import com.findme.model.User;
 import com.findme.service.UserService;
 import com.findme.types.RelationshipStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
@@ -27,16 +26,12 @@ import java.util.Objects;
 public class UserController {
     private UserService userService;
     private RelationshipDAO relationshipDAO;
-    private RelationshipService relationshipService;
-    private PostService postService;
     private PostDAO postDAO;
 
     @Autowired
-    public UserController(UserService userService, RelationshipDAO relationshipDAO, RelationshipService relationshipService, PostService postService, PostDAO postDAO) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO, PostDAO postDAO) {
         this.userService = userService;
         this.relationshipDAO = relationshipDAO;
-        this.relationshipService = relationshipService;
-        this.postService = postService;
         this.postDAO = postDAO;
     }
 
@@ -99,97 +94,6 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute User user){
-        try {
-            userService.save(user);
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (BadRequestException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request){
-        try {
-            User user = userService.login(request.getParameter("email"), request.getParameter("password"));
-            session.setAttribute("loggedUser", user);
-            session.setAttribute("loggedUserId", String.valueOf(user.getId()));
-            session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
-            return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
-        } catch (BadRequestException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(path = "/logout", method = RequestMethod.GET)
-    public String logout(HttpSession session){
-        session.invalidate();
-        return "redirect:/";
-    }
-
-    @RequestMapping(path = "/save-relationship", method = RequestMethod.POST)
-    public ResponseEntity<String> requestSave(HttpSession session, @RequestParam String userId){
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        try {
-            relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (BadRequestException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(path = "/update-relationship", method = RequestMethod.POST)
-    public ResponseEntity<String> requestUpdate(HttpSession session, @RequestParam String userId, String status){
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        try {
-            relationshipService.updateRelationship((String) session.getAttribute("loggedUserId"), userId, status);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (BadRequestException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(path = "/save-post", method = RequestMethod.POST)
-    public ResponseEntity<String> savePost(@ModelAttribute PostInfo postInfo, HttpSession session){
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        postInfo.setUserPostedId((String) session.getAttribute("loggedUserId"));
-        try {
-            postService.save(postInfo);
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (BadRequestException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError | NumberFormatException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.POST)
-    public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-//        try {
-//            postService.delete(Long.valueOf(postId));
-//            return new ResponseEntity<>( HttpStatus.OK);
-//        } catch (InternalServerError | NumberFormatException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-        return null;
-    }
-
 
     private String getButtonsViewProperty(String userToId, Relationship rel) throws BadRequestException{
         Long userToIdL;
