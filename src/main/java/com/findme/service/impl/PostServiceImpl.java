@@ -3,13 +3,10 @@ package com.findme.service.impl;
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
-import com.findme.model.Post;
-import com.findme.model.Relationship;
-import com.findme.model.User;
+import com.findme.model.*;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
-import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
@@ -79,6 +76,11 @@ public class PostServiceImpl implements PostService {
         if(post == null)
             throw new NotFoundException("Post with id "+id+" was not found");
         return post;
+    }
+
+    @Override
+    public List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws InternalServerError {
+        return null;
     }
 
     private void validateIncomingParams(String userFromId, String userToId) throws BadRequestException{

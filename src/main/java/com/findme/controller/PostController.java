@@ -2,18 +2,18 @@ package com.findme.controller;
 
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
+import com.findme.model.FilterPagePosts;
+import com.findme.model.Post;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -38,6 +38,23 @@ public class PostController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @RequestMapping(path = "posts-list", method = RequestMethod.POST)
+    public ResponseEntity<String> getContent1(@ModelAttribute FilterPagePosts filter, @RequestParam String userId, HttpSession session) {
+        if(session.getAttribute("loggedUserId")==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        List<Post> pl;
+
+        try {
+            pl = postService.getPostsByFilter(userId, filter);
+        } catch (InternalServerError | NumberFormatException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        System.out.println(pl.toString());
+        return new ResponseEntity<>(pl.toString(), HttpStatus.OK);
+    }
+
 
 
     @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.POST)
