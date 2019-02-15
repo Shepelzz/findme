@@ -9,5 +9,5 @@ import java.util.List;
 public interface PostDAO extends GeneralDAO<Post>{
 
     List<Post> getPostList(String userId) throws InternalServerError;
-    List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws InternalServerError;
+    List<Post> getPostsByFilter(Long userId, FilterPagePosts filter) throws InternalServerError;
 }

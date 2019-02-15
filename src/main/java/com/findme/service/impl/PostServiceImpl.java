@@ -79,8 +79,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws InternalServerError {
-        return null;
+    public List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws BadRequestException, InternalServerError {
+        try{
+            return postDAO.getPostsByFilter(Long.valueOf(userId), filter);
+        } catch (NumberFormatException e){
+            throw new BadRequestException(e.getMessage());
+        }
     }
 
     private void validateIncomingParams(String userFromId, String userToId) throws BadRequestException{

@@ -16,5 +16,5 @@ public interface PostService{
     void delete(Long id) throws InternalServerError;
     Post findById(Long id) throws InternalServerError, NotFoundException;
 
-    List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws  InternalServerError;
+    List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws BadRequestException, InternalServerError;
 }

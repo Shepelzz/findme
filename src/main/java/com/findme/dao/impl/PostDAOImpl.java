@@ -4,12 +4,11 @@ import com.findme.dao.PostDAO;
 import com.findme.exception.InternalServerError;
 import com.findme.model.FilterPagePosts;
 import com.findme.model.Post;
+import com.findme.model.Post_;
+import com.findme.model.User;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository
@@ -33,27 +32,31 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     }
 
     @Override
-    public List<Post> getPostsByFilter(String userId, FilterPagePosts filter) throws InternalServerError {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Post> criteriaQuery = cb.createQuery(Post.class);
-        Root<Post> postRoot = criteriaQuery.from(Post.class);
+    public List<Post> getPostsByFilter(Long userId, FilterPagePosts filter) throws InternalServerError {
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Post> criteriaQuery = cb.createQuery(Post.class);
+            Root<Post> postRoot = criteriaQuery.from(Post.class);
+            Join<Post, User> userPosted = postRoot.join(Post_.userPosted);
+            Join<Post, User> userPagePosted = postRoot.join(Post_.userPagePosted);
 
-        Predicate criteria = cb.conjunction();
-        //user_id
-        criteria = cb.and (criteria, cb.equal(postRoot.get("userPagePosted"), Long.valueOf(userId)));
-        //ownerPosts
-        if(filter.isOwnerPosts())
-            criteria = cb.and(criteria, cb.equal(postRoot.get("userPosted"), Long.valueOf(userId)));
-        //friendsPosts
-        if(filter.isFriendsPosts())
-//            criteria = cb.and(criteria, cb.equal(postRoot.get("userPosted"), Long.valueOf(userId)));
-        //usersPostedIds
-        if(filter.getUsersPostedIds() != null && filter.getUsersPostedIds().size() > 0)
+            Predicate criteria = cb.conjunction();
+            //user_id
+            criteria = cb.and (criteria, cb.equal(userPagePosted.get("id"), userId));
+            //ownerPosts
+            if(filter.isOwnerPosts())
+                criteria = cb.and(criteria, cb.equal(userPosted.get("id"), userId));
+            //friendsPosts
+            if(filter.isFriendsPosts())
+                criteria = cb.and(criteria, cb.notEqual(userPosted.get("id"), userId));
+            //usersPostedIds
+            if(filter.getUserPostedId() != null)
+                criteria = cb.and(criteria, cb.equal(userPosted.get("id"), filter.getUserPostedId()));
 
-
-
-        criteriaQuery.select(postRoot).where(criteria);
-
-        return null;
+            criteriaQuery.select(postRoot).where(criteria);
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
     }
 }
