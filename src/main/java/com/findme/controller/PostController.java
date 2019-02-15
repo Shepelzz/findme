@@ -41,6 +41,7 @@ public class PostController {
     public ResponseEntity<String> getContent1(@ModelAttribute FilterPagePosts filter, @RequestParam String userId, HttpSession session) {
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter).toString(), HttpStatus.OK);
         } catch (BadRequestException e){
