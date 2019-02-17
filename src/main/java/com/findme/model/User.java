@@ -70,4 +70,13 @@ public class User extends GeneralModel{
 
 //    private String[] interests;
 
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + getId() + '\'' +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

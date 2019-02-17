@@ -37,7 +37,7 @@ public class PostController {
         }
     }
 
-    @RequestMapping(path = "posts-list", method = RequestMethod.POST)
+    @RequestMapping(path = "/posts-list", method = RequestMethod.POST)
     public ResponseEntity<String> getContent1(@ModelAttribute FilterPagePosts filter, @RequestParam String userId, HttpSession session) {
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
