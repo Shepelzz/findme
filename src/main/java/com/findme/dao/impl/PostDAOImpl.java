@@ -14,6 +14,11 @@ import java.util.List;
 @Repository
 public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     private static final String SQL_POST_LIST = "SELECT p FROM Post p WHERE p.userPagePosted.id = :userId ORDER BY p.datePosted DESC";
+    private static final String SQL_NEWS_LIST = "SELECT p" +
+            " FROM Post p" +
+            " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
+            " WHERE p.userPosted.id = :userId OR r.status = 'FRIENDS'" +
+            " ORDER BY p.datePosted DESC";
 
     public PostDAOImpl() {
         setClazz(Post.class);
@@ -55,6 +60,18 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
 
             criteriaQuery.select(postRoot).where(criteria);
             return entityManager.createQuery(criteriaQuery).getResultList();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    @Override
+    public List<Post> getNewsList(Long userId, int maxResults) throws InternalServerError {
+        try {
+            return entityManager.createQuery(SQL_NEWS_LIST, Post.class)
+                    .setParameter("userId", userId)
+                    .setMaxResults(maxResults)
+                    .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }

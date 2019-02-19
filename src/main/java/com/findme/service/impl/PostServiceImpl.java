@@ -87,6 +87,11 @@ public class PostServiceImpl implements PostService {
         }
     }
 
+    @Override
+    public List<Post> getNewsList(Long userId, int maxResults) throws InternalServerError {
+        return postDAO.getNewsList(userId, maxResults);
+    }
+
     private void validateIncomingParams(String userFromId, String userToId) throws BadRequestException{
         try{
             Optional.of(userFromId).map(Long::valueOf);

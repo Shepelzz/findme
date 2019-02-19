@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -57,6 +58,7 @@ public class PostController {
     public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        //TODO
 //        try {
 //            postService.delete(Long.valueOf(postId));
 //            return new ResponseEntity<>( HttpStatus.OK);
@@ -65,4 +67,24 @@ public class PostController {
 //        }
         return null;
     }
+
+    @RequestMapping(path = "/feed", method = RequestMethod.GET)
+    public String newsFeed(Model model, HttpSession session, @RequestParam(value = "maxResult", defaultValue = "10") int maxResult){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/forbidden";
+        }
+
+        try {
+            model.addAttribute("newsList", postService.getNewsList(Long.valueOf(loggedUserId), maxResult));
+        } catch (InternalServerError ise){
+            model.addAttribute("error", ise);
+            return "errors/internalServerError";
+        }
+        return "feed";
+    }
+
+
+
 }
