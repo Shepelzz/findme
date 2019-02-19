@@ -73,14 +73,14 @@
                 data : JSON.stringify(formData),
                 dataType : 'json',
                 success : function(result) {
-                    if(result.status == "Done"){
+                    // if(result.status == "Done"){
                         $("#postResultDiv").html("<p style='background-color:#7FA7B0; color:white; padding:20px 20px 20px 20px'>" +
                             "Post Successfully! <br>" +
                             "---> Customer's Info: FirstName = " +
-                            result.data.firstname + " ,LastName = " + result.data.lastname + "</p>");
-                    }else{
-                        $("#postResultDiv").html("<strong>Error</strong>");
-                    }
+                            result.firstname + " ,LastName = " + result.lastname + "</p>");
+                    // }else{
+                    //     $("#postResultDiv").html("<strong>Error</strong>");
+                    // }
                     console.log(result);
                 },
                 error : function(e) {
@@ -114,22 +114,43 @@
                 type : "GET",
                 url : window.location + "/api/customer/all",
                 success: function(result){
-                    if(result.status == "Done"){
-                        $('#getResultDiv ul').empty();
-                        var custList = "";
-                        $.each(result.data, function(i, customer){
-                            var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
-                            $('#getResultDiv .list-group').append(customer)
-                        });
-                        console.log("Success: ", result);
-                    }else{
-                        $("#getResultDiv").html("<strong>Error</strong>");
-                        console.log("Fail: ", result);
-                    }
+                    // if(result.status == "Done"){
+
+                    alert(JSON.stringify(result));
+                    //
+                    // $.each(result, function (i, customer) {
+                    //     alert(JSON.stringify(customer));
+                    //     var customerInfo = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                    //     alert(customerInfo);
+                    // })
+
+                    // $('#getResultDiv ul').empty();
+                    // var custList = "";
+                    // $.each(result, function(i, post){
+                    //     // var customer1 = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                    //     var postInfo = "<div class='w3-container w3-white w3-margin' style='position: relative'>\n" +
+                    //         "                    <div>" +
+                    //         "                        <br>" +
+                    //         "                        <img src='http://agarioskins.com/submitted/useruploads/Thug%20Cat.png' alt='Avatar' class='w3-left w3-circle w3-margin-right' style='width:60px'>\n" +
+                    //         "                        <span class='w3-right w3-opacity' style='margin-right: 50px'>1</span>\n" +
+                    //         "                        <h4 class=\"inline\">"+post.firstName+" "+post.lastName.substring(0,1)+"</h4>\n" +
+                    //         "                            <p class='inline w3-opacity w3-margin-left'> test</p><br>\n" +
+                    //         "                        <hr class='w3-clear'>\n" +
+                    //         "                        <p>test message</p>\n" +
+                    //         "                    </div>\n" +
+                    //         "                </div>";
+                    //     $('#getResultDiv .list-group').append(postInfo)
+                    // });
+                    // console.log("Success: ", result);
+                    // }else{
+                    //     $("#getResultDiv").html("<strong>Error</strong>");
+                    //     console.log("Fail: ", result);
+                    // }
                 },
                 error : function(e) {
-                    $("#getResultDiv").html("<strong>Error</strong>");
-                    console.log("ERROR: ", e);
+                    alert(JSON.stringify(e));
+                    // $("#getResultDiv").html("<strong>Error</strong>");
+                    // console.log("ERROR: ", e);
                 }
             });
         }
