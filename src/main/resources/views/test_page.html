@@ -16,38 +16,17 @@
 </head>
 
 <body>
-<button id="b1" type="button">Update 1</button>
-<button id="b2"  type="button">Update 2</button>
-<button id="b3"  type="button">Update 3</button>
-<br>
-<div id="replace_div" th:fragment="content1">
-    <p th:text="${text}">c1</p>
-</div>
-<div id="replace_div2" th:fragment="content2">
-    <p th:text="${text}">c2</p>
-</div>
 
-<!--<div th:fragment="content1">-->
-    <!--<p th:text="${text}"></p>-->
-<!--</div>-->
-
-<!--<div th:fragment="content2">-->
-    <!--<p th:text="${text}"></p>-->
-<!--</div>-->
-
-
-<br>
 
 <div class="w3-col m8">
     <div class="w3-row-padding">
         <!--th:if="${userPagePostList != null}"-->
         <div class="w3-col m12">
-            <form id="postFilter" class="w3-white" th:object="${FilterPagePosts}">
+            <form id="postFilter" class="w3-white" th:object="${Filter}">
                 <div class="w3-container w3-padding" style="position: relative">
                     <h6 class="w3-opacity inline">Filters: </h6>
-                    <input id="ownerPosts" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
-                    <input id="friendsPosts" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
-                    <input id="userPostedId" class="w3-border" style="margin-left: 15px" placeholder="User id:" type="text" name="usersPostedIds">
+                    <input id="first" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Filter 1</label>
+                    <input id="second" type="checkbox" class="inline w3-margin-left"><label class="w3-opacity" style="margin-left: 5px">Filter 2</label>
                     <button type="submit">Update</button>
                 </div>
             </form>
@@ -80,52 +59,7 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        loadContent1();
-        loadContent2();
-        loadContent3();
-    });
 
-    $('#b1').click(function () {
-        loadContent1();
-    });
-    $('#b2').click(function () {
-        loadContent2();
-    });
-    $('#b3').click(function () {
-        loadContent3();
-    });
-    $('#postFilter').submit(function () {
-        loadContent3();
-    });
-
-
-    function loadContent1() {
-        $('#replace_div').load(/content/+"content1");
-    }
-
-    function loadContent2() {
-        $('#replace_div2').load(/content/+"content2");
-    }
-
-    function loadContent3() {
-        $.ajax({
-            type: "POST",
-            url: /content/+"content3",
-            dataType: "json",
-            data: $('#postFilter').serialize(),
-            success: function success() {
-
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-
-            }
-        });
-
-
-        $('#replace_div3').load(/content/+"content3");
-    }
 
 
 </script>
