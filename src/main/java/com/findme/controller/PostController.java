@@ -6,7 +6,6 @@ import com.findme.model.FilterPagePosts;
 import com.findme.model.Post;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -50,7 +46,7 @@ public class PostController {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
 
         if(filter.isFriendsPosts())
-            return new ResponseEntity<>("hui", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("br", HttpStatus.BAD_REQUEST);
 
         Post post;
         try {

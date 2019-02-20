@@ -116,7 +116,6 @@
                 success: function(result){
                     // if(result.status == "Done"){
 
-                    alert(JSON.stringify(result));
                     //
                     // $.each(result, function (i, customer) {
                     //     alert(JSON.stringify(customer));
@@ -124,33 +123,34 @@
                     //     alert(customerInfo);
                     // })
 
-                    // $('#getResultDiv ul').empty();
-                    // var custList = "";
-                    // $.each(result, function(i, post){
-                    //     // var customer1 = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
-                    //     var postInfo = "<div class='w3-container w3-white w3-margin' style='position: relative'>\n" +
-                    //         "                    <div>" +
-                    //         "                        <br>" +
-                    //         "                        <img src='http://agarioskins.com/submitted/useruploads/Thug%20Cat.png' alt='Avatar' class='w3-left w3-circle w3-margin-right' style='width:60px'>\n" +
-                    //         "                        <span class='w3-right w3-opacity' style='margin-right: 50px'>1</span>\n" +
-                    //         "                        <h4 class=\"inline\">"+post.firstName+" "+post.lastName.substring(0,1)+"</h4>\n" +
-                    //         "                            <p class='inline w3-opacity w3-margin-left'> test</p><br>\n" +
-                    //         "                        <hr class='w3-clear'>\n" +
-                    //         "                        <p>test message</p>\n" +
-                    //         "                    </div>\n" +
-                    //         "                </div>";
-                    //     $('#getResultDiv .list-group').append(postInfo)
-                    // });
-                    // console.log("Success: ", result);
+                    $('#getResultDiv ul').empty();
+                    $.each(result, function(i, post){
+                        // var customer1 = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                            var postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
+                            "                    <div>\n" +
+                            "                        <br>\n" +
+                            "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
+                            "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+post.getDatePostedString()+"</span>\n" +
+                            "                        <h4 class=\"inline\">"+post.userPosted.firstName+" "+post.userPosted.lastName.substring(0,1)+"</h4>\n" +
+                            "                            <p class=\"inline w3-opacity w3-margin-left\"> "+post.getTaggedUsersAndLocation()+"</p><br>\n" +
+                            "                        <hr class=\"w3-clear\">\n" +
+                            "                        <p>"+post.message+"</p>\n" +
+                            "                    </div>\n" +
+                            "                </div>";
+
+                            alert(postInfo);
+                            $('#getResultDiv .list-group').append(postInfo)
+                    });
+                    console.log("Success: ", result);
                     // }else{
                     //     $("#getResultDiv").html("<strong>Error</strong>");
                     //     console.log("Fail: ", result);
                     // }
                 },
                 error : function(e) {
-                    alert(JSON.stringify(e));
-                    // $("#getResultDiv").html("<strong>Error</strong>");
-                    // console.log("ERROR: ", e);
+                    // alert('error status '+e.status);
+                    $("#getResultDiv").html("<strong>Error</strong>");
+                    console.log("ERROR: ", e);
                 }
             });
         }

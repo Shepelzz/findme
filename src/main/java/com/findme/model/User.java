@@ -3,6 +3,8 @@ package com.findme.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -59,9 +61,11 @@ public class User extends GeneralModel{
     @Column(name = "UNIVERSITY")
     private String university;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "userFrom")
     private List<Message> messagesSent;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "userTo")
     private List<Message> messagesReceived;
 
