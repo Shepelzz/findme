@@ -17,7 +17,7 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     private static final String SQL_NEWS_LIST = "SELECT p" +
             " FROM Post p" +
             " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
-            " WHERE p.userPosted.id = :userId OR r.status = 'FRIENDS'" +
+            " WHERE r.status = 'FRIENDS'" +
             " ORDER BY p.datePosted DESC";
 
     public PostDAOImpl() {
@@ -73,7 +73,6 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
                     .setParameter("userId", userId)
                     .setFirstResult(rowsFrom)
                     .setMaxResults(maxResults)
-
                     .getResultList();
             return list;
         }catch (Exception e){

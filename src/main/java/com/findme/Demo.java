@@ -34,8 +34,8 @@ public class Demo {
         int maxResults = 10;
 
         int rowsfrom, rowsTo;
-        rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults-maxResults+1;
-        rowsTo = rowsfrom+maxResults-1;
+        rowsfrom = currentListPart == 1 ? 0 : currentListPart*maxResults-maxResults;
+        rowsTo = rowsfrom+maxResults;
 
         System.out.println("from: "+rowsfrom+" to: "+rowsTo);
 
