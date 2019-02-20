@@ -32,7 +32,7 @@
                         <!--th:if="${userPagePostList != null}"-->
                         <div class="w3-col m12">
                             <div class="w3-container w3-padding w3-white" style="position: relative">
-                                <form id="newsFilter">
+                                <form id="newsFilterForm">
                                     <label for="results" class="w3-opacity inline">Results: </label>
                                     <select id="results" name="results" style="width: 50px; margin-left: 10px">
                                         <option value="10">10</option>
@@ -44,23 +44,31 @@
                         </div>
                     </div>
 
-                    <div th:if="${newsList != null}">
-                        <div th:each="post : ${newsList}" class="w3-container w3-white w3-margin" style="position: relative">
-                            <!--<i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>-->
-                            <!--<div class="post-menu w3-hide">-->
-                                <!--<div class="post-menu-item w3-opacity">Edit post</div>-->
-                                <!--<div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>-->
+                    <!--<div th:if="${newsList != null}">-->
+                        <!--<div th:each="post : ${newsList}" class="w3-container w3-white w3-margin" style="position: relative">-->
+                            <!--&lt;!&ndash;<i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="post-menu w3-hide">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="post-menu-item w3-opacity">Edit post</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--<div>-->
+                                <!--<br>-->
+                                <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
+                                <!--<span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>-->
+                                <!--<h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>-->
+                                <!--<p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>-->
+                                <!--<hr class="w3-clear">-->
+                                <!--<p th:text="${post.message}">Test message</p>-->
                             <!--</div>-->
-                            <div>
-                                <br>
-                                <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-                                <span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>
-                                <h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>
-                                <p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
-                                <hr class="w3-clear">
-                                <p th:text="${post.message}">Test message</p>
-                            </div>
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!-- News list -->
+                    <div id="getResultDiv">
+                        <div class="list-group">
                         </div>
+                        <br>
+                        <button id="loadMore">More</button>
                     </div>
 
                 </div>
@@ -75,10 +83,62 @@
 </body>
 
 <script>
-    $("#results").on('change', function maxResults() {
-        let url = location.protocol + '//' + location.host + location.pathname;
-        let value = $(this).val();
-        window.location.href = url+'?maxResult='+value;
+    let currentListPart = 1;
+
+    $(document).ready ( function(){
+        ajaxGetNews();
     });
+
+    $("#newsFilterForm").change(function(event) {
+        event.preventDefault();
+        $('#getResultDiv div').empty();
+        currentListPart = 1;
+        ajaxGetNews();
+    });
+
+    $("#loadMore").click(function(event) {
+        currentListPart++;
+        event.preventDefault();
+        ajaxGetNews();
+    });
+
+
+    function ajaxGetNews(){
+        // DO POST
+        $.ajax({
+            type : "POST",
+            url : "/feed",
+            data : {currentListPart: currentListPart, maxResult: 10},
+            success : function(result) {
+                $.each(result, function(i, post){
+                    // var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                    let postInfo = "<div>\n" +
+                        "                <div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
+                        "                    <div>\n" +
+                        "                        <br>\n" +
+                        "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
+                        "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">some time ago</span>\n" +
+                        "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
+                        "                            <p class=\"inline w3-opacity w3-margin-left\">with somebody</p><br>\n" +
+                        "                        <hr class=\"w3-clear\">\n" +
+                        "                        <p>" + post.message + "</p>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "            </div>";
+                    $('#getResultDiv .list-group').append(postInfo)
+                });
+            },
+            error : function(e) {
+                $("#getResultDiv").html("<strong>Error</strong>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
+    // $('#results').on('change', function maxResults() {
+    //     let url = location.protocol + '//' + location.host + location.pathname;
+    //     let value = $(this).val();
+    //     window.location.href = url+'?maxResult='+value;
+    // });
 </script>
 </html>

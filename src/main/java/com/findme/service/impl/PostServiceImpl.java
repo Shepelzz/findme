@@ -89,7 +89,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getNewsList(Long userId, int maxResults, int currentListPart) throws InternalServerError {
-        int rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults+1;
+        int rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults-maxResults+1;
         return postDAO.getNewsListPart(userId, rowsfrom, maxResults);
     }
 

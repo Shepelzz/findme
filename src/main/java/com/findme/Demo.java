@@ -30,11 +30,11 @@ public class Demo {
 //        System.out.println(Arrays.toString(array));
 
 
-        int currentListPart = 2;
+        int currentListPart = 3;
         int maxResults = 10;
 
         int rowsfrom, rowsTo;
-        rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults+1;
+        rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults-maxResults+1;
         rowsTo = rowsfrom+maxResults-1;
 
         System.out.println("from: "+rowsfrom+" to: "+rowsTo);

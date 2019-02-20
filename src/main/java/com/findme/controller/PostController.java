@@ -3,6 +3,7 @@ package com.findme.controller;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.model.FilterPagePosts;
+import com.findme.model.Post;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -85,7 +87,9 @@ public class PostController {
         }
 
         try {
-            return new ResponseEntity<>(postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart), HttpStatus.OK);
+            List<Post> list = postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart);
+            System.out.println(list.toString());
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (InternalServerError ise){
             model.addAttribute("error", ise);
             return new ResponseEntity<>(ise.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
