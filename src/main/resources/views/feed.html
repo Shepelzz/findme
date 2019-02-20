@@ -71,6 +71,9 @@
                         <button id="loadMore">More</button>
                     </div>
 
+
+
+
                 </div>
             </div>
             <br>
@@ -104,11 +107,14 @@
 
 
     function ajaxGetNews(){
-        // DO POST
+        // DO GET
         $.ajax({
-            type : "POST",
-            url : "/feed",
-            data : {currentListPart: currentListPart, maxResult: 10},
+            type : "GET",
+            url : "/get-news",
+            data: {
+                maxResult: 10,
+                currentListPart: currentListPart
+            },
             success : function(result) {
                 $.each(result, function(i, post){
                     // var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";

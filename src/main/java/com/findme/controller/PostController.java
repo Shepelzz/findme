@@ -77,18 +77,16 @@ public class PostController {
         return "feed";
     }
 
-    @RequestMapping(path = "/feed", method = RequestMethod.POST)
+    @RequestMapping(path = "/get-news", method = RequestMethod.GET)
     public ResponseEntity<?> getNewsFeed(Model model, HttpSession session,
-                                         @RequestParam(value = "maxResult", defaultValue = "10") int maxResult,
-                                         @RequestParam(value = "currentListPart", defaultValue = "1") int currentListPart){
+                                         @RequestParam int maxResult,
+                                         @RequestParam int currentListPart){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-
         try {
             List<Post> list = postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart);
-            System.out.println(list.toString());
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (InternalServerError ise){
             model.addAttribute("error", ise);
