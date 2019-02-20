@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
+<script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
 <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
 <div style="display: none" id="loaderGif"></div>
@@ -23,8 +24,9 @@
 <div class="w3-container w3-content" style="margin-top:80px;">
     <!-- The Grid -->
     <div class="w3-row">
-        <!-- Left Column -->
-        <div class="w3-col m12">
+
+        <!-- Right Column -->
+        <div class="w3-col m9">
             <div class="w3-round" style="min-height: 600px;"><!--w3-card-->
                 <div class="w3-container w3-padding" style="height: 1700px">
 
@@ -92,14 +94,14 @@
         ajaxGetNews();
     });
 
-    $("#newsFilterForm").change(function(event) {
+    $('#newsFilterForm').change(function(event) {
         event.preventDefault();
         $('#getResultDiv div').empty();
         currentListPart = 1;
         ajaxGetNews();
     });
 
-    $("#loadMore").click(function(event) {
+    $('#loadMore').click(function(event) {
         currentListPart++;
         event.preventDefault();
         ajaxGetNews();
@@ -117,15 +119,14 @@
             },
             success : function(result) {
                 $.each(result, function(i, post){
-                    // var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
                     let postInfo = "<div>\n" +
                         "                <div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
                         "                    <div>\n" +
                         "                        <br>\n" +
                         "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
-                        "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">some time ago</span>\n" +
+                        "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+parsePostDate(new Date(post.datePosted))+"</span>\n" +
                         "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
-                        "                            <p class=\"inline w3-opacity w3-margin-left\">with somebody</p><br>\n" +
+                        "                            <p class=\"inline w3-opacity w3-margin-left\">"+parsePostTaggedUsersAndLocation(post.usersTagged, post.location)+"</p><br>\n" +
                         "                        <hr class=\"w3-clear\">\n" +
                         "                        <p>" + post.message + "</p>\n" +
                         "                    </div>\n" +
@@ -135,16 +136,12 @@
                 });
             },
             error : function(e) {
-                $("#getResultDiv").html("<strong>Error</strong>");
+                $('#getResultDiv').html("<strong>Error</strong>");
                 console.log("ERROR: "+ e);
             }
         });
     }
 
-    // $('#results').on('change', function maxResults() {
-    //     let url = location.protocol + '//' + location.host + location.pathname;
-    //     let value = $(this).val();
-    //     window.location.href = url+'?maxResult='+value;
-    // });
+
 </script>
 </html>

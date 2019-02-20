@@ -35,6 +35,7 @@ public class PostController {
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
         } catch (InternalServerError | NumberFormatException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
