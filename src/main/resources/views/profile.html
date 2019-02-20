@@ -258,7 +258,7 @@
                 </div>
             </div>
 
-            <!--<div th:if="${userPagePostList != null}">-->
+            <div th:if="${userPagePostList != null}">
                 <!--<div th:each="post : ${userPagePostList}" class="w3-container w3-white w3-margin" style="position: relative">-->
                     <!--<i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>-->
                     <!--<div class="post-menu w3-hide">-->
@@ -275,7 +275,7 @@
                         <!--<p th:text="${post.message}">Test message</p>-->
                     <!--</div>-->
                 <!--</div>-->
-            <!--</div>-->
+            </div>
 
             <div id="postsList">
                 <div class="list-group"></div>
@@ -387,41 +387,39 @@
     // GET REQUEST
     $("#post_filter_form").submit(function(){
 
-        let userId = @Html.Raw(Json.Encode(Model.id));
-        alert(userId);
 
-        // event.preventDefault();
-        // $.ajax({
-        //     type : "POST",
-        //     url : "/posts-list?userId=1",
-        //     data: $('#post_filter_form').serialize(),
-        //     success: function(result){
-        //         // alert(JSON.stringify(result));
-        //         debugger;
-        //         $('#postsList').empty();
-        //         $.each(result, function(i, post){
-        //             // var post = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
-        //             var postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
-        //             "                    <div>\n" +
-        //             "                        <br>\n" +
-        //             "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
-        //             "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+post.getDatePostedString()+"</span>\n" +
-        //             "                        <h4 class=\"inline\">"+post.userPosted.firstName+" "+post.userPosted.lastName.substring(0,1)+"</h4>\n" +
-        //             "                            <p class=\"inline w3-opacity w3-margin-left\"> "+post.getTaggedUsersAndLocation()+"</p><br>\n" +
-        //             "                        <hr class=\"w3-clear\">\n" +
-        //             "                        <p>"+post.message+"</p>\n" +
-        //             "                    </div>\n" +
-        //             "                </div>";
-        //             $('#postsList .list-group').append(postInfo)
-        //         });
-        //         console.log("Success: ", result);
-        //     },
-        //     error : function(e, xhr) {
-        //         alert(xhr.responseText);
-        //         // $("#postsList").html("<strong>Error</strong>");
-        //         // console.log("ERROR: ", e);
-        //     }
-        // });
+        event.preventDefault();
+        $.ajax({
+            type : "POST",
+            url : "/posts-list?userId=1",
+            data: $('#post_filter_form').serialize(),
+            success: function(result){
+                // alert(JSON.stringify(result));
+                debugger;
+                $('#postsList').empty();
+                $.each(result, function(i, post){
+                    // var post = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                    var postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
+                    "                    <div>\n" +
+                    "                        <br>\n" +
+                    "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
+                    "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+post.getDatePostedString()+"</span>\n" +
+                    "                        <h4 class=\"inline\">"+post.userPosted.firstName+" "+post.userPosted.lastName.substring(0,1)+"</h4>\n" +
+                    "                            <p class=\"inline w3-opacity w3-margin-left\"> "+post.getTaggedUsersAndLocation()+"</p><br>\n" +
+                    "                        <hr class=\"w3-clear\">\n" +
+                    "                        <p>"+post.message+"</p>\n" +
+                    "                    </div>\n" +
+                    "                </div>";
+                    $('#postsList .list-group').append(postInfo)
+                });
+                console.log("Success: ", result);
+            },
+            error : function(e, xhr) {
+                alert(xhr.responseText);
+                // $("#postsList").html("<strong>Error</strong>");
+                // console.log("ERROR: ", e);
+            }
+        });
     });
 
 
