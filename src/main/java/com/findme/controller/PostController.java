@@ -64,6 +64,17 @@ public class PostController {
         return null;
     }
 
+    @RequestMapping(path = "/feed", method = RequestMethod.GET)
+    public String profile(HttpSession session, Model model){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/forbidden";
+        }
+        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
+        return "feed";
+    }
+
     @RequestMapping(path = "/feed", method = RequestMethod.POST)
     public ResponseEntity<?> getNewsFeed(Model model, HttpSession session,
                                          @RequestParam(value = "maxResult", defaultValue = "10") int maxResult,
@@ -80,7 +91,4 @@ public class PostController {
             return new ResponseEntity<>(ise.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }
