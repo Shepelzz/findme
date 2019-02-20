@@ -21,7 +21,7 @@
 
 <div class="container">
 
-    <h3 style="color:blue">POST-GET AJAX Example</h3>
+    <h3 style="color:blue">Hui</h3>
 
     <div>
         <form class="form-inline" style="margin:20px 20px 20px 20px" id="customerForm" th:object="${Customer}">
@@ -38,6 +38,21 @@
     </div>
 
     <div class="col-sm-7" id="postResultDiv">
+    </div>
+
+    <div class="w3-row-padding">
+        <!--th:if="${userPagePostList != null}"-->
+        <div class="w3-col m7">
+            <form id="post_filter_form" class="w3-white" th:object="${FilterPagePosts}">
+                <div class="w3-container w3-padding" style="position: relative">
+                    <h6 class="w3-opacity inline">Filters: </h6>
+                    <input id="ownerPosts" type="checkbox" class="inline w3-margin-left" name="ownerPosts"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
+                    <input id="friendsPosts" type="checkbox" class="inline w3-margin-left" name="friendsPosts"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
+                    <input id="userPostedId" class="w3-border" style="margin-left: 15px" placeholder="User id:" type="text" name="userPostedId">
+                    <button type="submit" class="fa fa-filter w3-button w3-text-theme w3-padding-large" style="position: absolute; margin-top: -5px; right: 0"></button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="col-sm-7" style="margin:20px 0px 20px 0px">
@@ -62,6 +77,13 @@
             // Prevent the form from submitting via the browser.
             event.preventDefault();
             ajaxPost();
+        });
+
+        // FILTER FORM
+        $("#post_filter_form").submit(function(event) {
+            // Prevent the form from submitting via the browser.
+            event.preventDefault();
+            ajaxFilterPost();
         });
 
 
@@ -93,6 +115,41 @@
         function resetData(){
             $("#firstname").val("");
             $("#lastname").val("");
+        }
+
+        function ajaxFilterPost(){
+            // DO POST
+            $.ajax({
+                type : "POST",
+                url : window.location + "/get-filtered-posts",
+                data : $('#post_filter_form').serialize(),
+                success : function(result) {
+                    $('#getResultDiv ul').empty();
+                    $.each(result, function(i, post){
+                        // var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                        var postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
+                            "                    <div>\n" +
+                            "                        <br>\n" +
+                            "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
+                            "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">some time ago</span>\n" +
+                            "                        <h4 class=\"inline\">"+post.userPosted.firstName+" "+post.userPosted.lastName.substring(0,1)+".</h4>\n" +
+                            "                            <p class=\"inline w3-opacity w3-margin-left\">with somebody</p><br>\n" +
+                            "                        <hr class=\"w3-clear\">\n" +
+                            "                        <p>"+post.message+"</p>\n" +
+                            "                    </div>\n" +
+                            "                </div>";
+                        $('#getResultDiv .list-group').append(postInfo)
+                    });
+                },
+                error : function(e) {
+                    alert("Error!")
+                    console.log("ERROR: "+ e);
+                }
+            });
+
+            // Reset FormData after Posting
+            resetData();
+
         }
     })
 

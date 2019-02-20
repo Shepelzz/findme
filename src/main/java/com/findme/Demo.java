@@ -1,12 +1,10 @@
 package com.findme;
 
-import java.util.Arrays;
-
 public class Demo {
     public static void main(String[] args) throws Exception {
 
         int[] array = {1,34,2,5,87,32,5,9,0};
-        System.out.println(Arrays.toString(array));
+//        System.out.println(Arrays.toString(array));
 
         for(int i = 0; i < array.length; i++){
             for(int j = i+1; j < array.length; j++){
@@ -17,7 +15,7 @@ public class Demo {
                 }
             }
         }
-        System.out.println(Arrays.toString(array));
+//        System.out.println(Arrays.toString(array));
 
 
         for(int i = array.length-1; i >= 0; i--){
@@ -29,7 +27,17 @@ public class Demo {
                 }
             }
         }
-        System.out.println(Arrays.toString(array));
+//        System.out.println(Arrays.toString(array));
+
+
+        int currentListPart = 2;
+        int maxResults = 10;
+
+        int rowsfrom, rowsTo;
+        rowsfrom = currentListPart == 1 ? 1 : currentListPart*maxResults+1;
+        rowsTo = rowsfrom+maxResults-1;
+
+        System.out.println("from: "+rowsfrom+" to: "+rowsTo);
 
     }
 

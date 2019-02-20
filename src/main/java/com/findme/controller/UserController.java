@@ -66,7 +66,7 @@ public class UserController {
             return "errors/notFound";
         }
         model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
-        return "profile";
+        return "profile_new";
     }
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.POST)

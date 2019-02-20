@@ -221,7 +221,7 @@
                             <form id="save_post_form" th:object="${PostInfo}">
                                   <!--method="post" th:object="${PostInfo}" th:action="@{'/save-post/' + ${user.getId()}}">-->
                                 <h6 class="w3-opacity">Create new post here: </h6>
-                                <input class="w3-hide" id="userPagePostedId" type="text" name="userPagePostedId" th:value="${user.getId()}">
+                                <label for="userPagePostedId"></label><input class="w3-hide" id="userPagePostedId" type="text" name="userPagePostedId" th:value="${user.getId()}">
                                 <input class="w3-border w3-padding" style="width: 100%; margin-bottom: 10px" id="message" placeholder="Enter your message" type="text" name="message">
 
                                 <div id="locationInput" class="w3-padding-small w3-hide">
@@ -236,21 +236,18 @@
                                 <i onclick="dropDownMenu('locationInput',false)" class="inline w3-padding-small fa fa-map-marker-alt fa-fw w3-margin-right w3-text-theme w3-hover-opacity" style="margin-left: 20px"></i>
                                 <i onclick="dropDownMenu('taggedUsers',false)" class="inline w3-padding-small fa fa-user-tag fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
                             </form>
-
                         </div>
-
                     </div>
                 </div>
             </div>
 
             <div class="w3-row-padding">
-                <!--th:if="${userPagePostList != null}"-->
                 <div class="w3-col m12">
                     <form id="post_filter_form" class="w3-white" th:object="${FilterPagePosts}">
                         <div class="w3-container w3-padding" style="position: relative">
                             <h6 class="w3-opacity inline">Filters: </h6>
-                            <input id="ownerPosts" type="checkbox" class="inline w3-margin-left" name="ownerPosts"><label class="w3-opacity" style="margin-left: 5px">Owner posts</label>
-                            <input id="friendsPosts" type="checkbox" class="inline w3-margin-left" name="friendsPosts"><label class="w3-opacity" style="margin-left: 5px">Friends posts</label>
+                            <input id="ownerPosts" type="checkbox" class="inline w3-margin-left" name="ownerPosts"><label for="ownerPosts" class="w3-opacity" style="margin-left: 5px">Owner posts</label>
+                            <input id="friendsPosts" type="checkbox" class="inline w3-margin-left" name="friendsPosts"><label for="friendsPosts" class="w3-opacity" style="margin-left: 5px">Friends posts</label>
                             <input id="userPostedId" class="w3-border" style="margin-left: 15px" placeholder="User id:" type="text" name="userPostedId">
                             <button type="submit" class="fa fa-filter w3-button w3-text-theme w3-padding-large" style="position: absolute; margin-top: -5px; right: 0"></button>
                         </div>
@@ -258,27 +255,30 @@
                 </div>
             </div>
 
-            <div th:if="${userPagePostList != null}">
-                <!--<div th:each="post : ${userPagePostList}" class="w3-container w3-white w3-margin" style="position: relative">-->
-                    <!--<i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>-->
-                    <!--<div class="post-menu w3-hide">-->
-                        <!--<div class="post-menu-item w3-opacity">Edit post</div>-->
-                        <!--<div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--<br>-->
-                        <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
-                        <!--<span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>-->
-                        <!--<h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>-->
-                            <!--<p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>-->
-                        <!--<hr class="w3-clear">-->
-                        <!--<p th:text="${post.message}">Test message</p>-->
-                    <!--</div>-->
-                <!--</div>-->
+            <div class="col-sm-7" style="margin:20px 0px 20px 0px">
+                <div id="getResultDiv" style="padding:20px 10px 20px 50px">
+                    <ul class="list-group">
+                    </ul>
+                </div>
             </div>
 
-            <div id="postsList">
-                <div class="list-group"></div>
+            <div th:if="${userPagePostList != null}">
+                <div th:each="post : ${userPagePostList}" class="w3-container w3-white w3-margin" style="position: relative">
+                    <i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>
+                    <div class="post-menu w3-hide">
+                        <div class="post-menu-item w3-opacity">Edit post</div>
+                        <div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>
+                    </div>
+                    <div>
+                        <br>
+                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+                        <span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>
+                        <h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>
+                            <p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>
+                        <hr class="w3-clear">
+                        <p th:text="${post.message}">Test message</p>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -287,11 +287,6 @@
     <!-- End Page Container -->
     <!-- Footer -->
     <footer th:replace="common/footer.html :: footer"></footer>
-</div>
-
-<div th:if="${loggedUser.getId() == user.id}" style="margin-top: -50px">
-    <!-- Edit form MODAL -->
-    <div th:replace="forms/userEditForm.html :: editModalForm"></div>
 </div>
 </body>
 
@@ -384,43 +379,43 @@
     });
 
 
-    // GET REQUEST
-    $("#post_filter_form").submit(function(){
-
-
+    // FILTER FORM
+    $("#post_filter_form").submit(function(event) {
+        // Prevent the form submitting via the browser.
         event.preventDefault();
+        ajaxFilterPost();
+    });
+
+    function ajaxFilterPost(){
+        // DO POST
         $.ajax({
             type : "POST",
-            url : "/posts-list?userId=1",
-            data: $('#post_filter_form').serialize(),
-            success: function(result){
-                // alert(JSON.stringify(result));
-                debugger;
-                $('#postsList').empty();
+            url : "/get-filtered-posts",
+            data : $('#post_filter_form').serialize(),
+            success : function(result) {
+                $('#getResultDiv ul').empty();
                 $.each(result, function(i, post){
-                    // var post = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
-                    var postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
-                    "                    <div>\n" +
-                    "                        <br>\n" +
-                    "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
-                    "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+post.getDatePostedString()+"</span>\n" +
-                    "                        <h4 class=\"inline\">"+post.userPosted.firstName+" "+post.userPosted.lastName.substring(0,1)+"</h4>\n" +
-                    "                            <p class=\"inline w3-opacity w3-margin-left\"> "+post.getTaggedUsersAndLocation()+"</p><br>\n" +
-                    "                        <hr class=\"w3-clear\">\n" +
-                    "                        <p>"+post.message+"</p>\n" +
-                    "                    </div>\n" +
-                    "                </div>";
-                    $('#postsList .list-group').append(postInfo)
+                    // var customer = "- Customer with Id = " + i + ", firstname = " + customer.firstname + ", lastName = " + customer.lastname + "<br>";
+                    let postInfo = "<div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
+                        "                    <div>\n" +
+                        "                        <br>\n" +
+                        "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
+                        "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">some time ago</span>\n" +
+                        "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
+                        "                            <p class=\"inline w3-opacity w3-margin-left\">with somebody</p><br>\n" +
+                        "                        <hr class=\"w3-clear\">\n" +
+                        "                        <p>" + post.message + "</p>\n" +
+                        "                    </div>\n" +
+                        "                </div>";
+                    $('#getResultDiv .list-group').append(postInfo)
                 });
-                console.log("Success: ", result);
             },
-            error : function(e, xhr) {
-                alert(xhr.responseText);
-                // $("#postsList").html("<strong>Error</strong>");
-                // console.log("ERROR: ", e);
+            error : function(e) {
+                alert("Error!");
+                console.log("ERROR: "+ e);
             }
         });
-    });
+    }
 
 
 

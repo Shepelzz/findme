@@ -11,5 +11,5 @@ public interface PostDAO extends GeneralDAO<Post>{
     List<Post> getPostList(String userId) throws InternalServerError;
     List<Post> getPostsByFilter(Long userId, FilterPagePosts filter) throws InternalServerError;
 
-    List<Post> getNewsList(Long userId, int maxResults) throws InternalServerError;
+    List<Post> getNewsListPart(Long userId, int rowsFrom, int maxResults) throws InternalServerError;
 }

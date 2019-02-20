@@ -3,7 +3,6 @@ package com.findme.controller;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.model.FilterPagePosts;
-import com.findme.model.Post;
 import com.findme.model.PostInfo;
 import com.findme.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,37 +38,17 @@ public class PostController {
         }
     }
 
-    //TODO
-    @RequestMapping(path = "/posts-list", method = RequestMethod.POST)
-    public ResponseEntity<?> getContent1(@ModelAttribute FilterPagePosts filter, @RequestParam String userId, HttpSession session) {
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
 
-        if(filter.isFriendsPosts())
-            return new ResponseEntity<>("br", HttpStatus.BAD_REQUEST);
-
-        Post post;
+    @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.POST)
+    public ResponseEntity<?> postCustomer(@ModelAttribute FilterPagePosts filter, @RequestParam String userId) {
         try {
-//            list = postService.getPostsByFilter(userId, filter);
-            post = postService.findById(1L);
-        } catch (Exception e){
-            return new ResponseEntity<>("errorororor", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
+        } catch (BadRequestException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (InternalServerError e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
-        return new ResponseEntity<>(post, HttpStatus.OK);
-
-
-//        try {
-//            return new ResponseEntity<>(postService.getPostsByFilter(userId, filter).toString(), HttpStatus.OK);
-//        } catch (BadRequestException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        } catch (InternalServerError e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
     }
-
-
 
     @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.POST)
     public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
@@ -85,21 +64,21 @@ public class PostController {
         return null;
     }
 
-    @RequestMapping(path = "/feed", method = RequestMethod.GET)
-    public String newsFeed(Model model, HttpSession session, @RequestParam(value = "maxResult", defaultValue = "10") int maxResult){
+    @RequestMapping(path = "/feed", method = RequestMethod.POST)
+    public ResponseEntity<?> getNewsFeed(Model model, HttpSession session,
+                                         @RequestParam(value = "maxResult", defaultValue = "10") int maxResult,
+                                         @RequestParam(value = "currentListPart", defaultValue = "1") int currentListPart){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
 
         try {
-            model.addAttribute("newsList", postService.getNewsList(Long.valueOf(loggedUserId), maxResult));
+            return new ResponseEntity<>(postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart), HttpStatus.OK);
         } catch (InternalServerError ise){
             model.addAttribute("error", ise);
-            return "errors/internalServerError";
+            return new ResponseEntity<>(ise.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return "feed";
     }
 
 
