@@ -43,9 +43,9 @@ public class RestWebController {
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/get-filtered-posts")
+    @PostMapping(value = "/get-filtered-posts1")
     public ResponseEntity<?> postCustomer(@ModelAttribute FilterPagePosts filter) {
-        String userId = "1";
+        Long userId = 1L;
 
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);

@@ -42,7 +42,7 @@ public class PostController {
 
 
     @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.POST)
-    public ResponseEntity<?> postCustomer(@ModelAttribute FilterPagePosts filter, @RequestParam String userId) {
+    public ResponseEntity<?> postCustomer(@ModelAttribute FilterPagePosts filter, @RequestParam Long userId) {
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
         } catch (BadRequestException e){
