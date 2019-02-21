@@ -219,7 +219,6 @@
                     <div class="w3-white"><!--w3-card-->
                         <div class="w3-container w3-padding">
                             <form id="save_post_form" th:object="${PostInfo}">
-                                  <!--method="post" th:object="${PostInfo}" th:action="@{'/save-post/' + ${user.getId()}}">-->
                                 <h6 class="w3-opacity">Create new post here: </h6>
                                 <label for="userPagePostedId"></label><input class="w3-hide" id="userPagePostedId" type="text" name="userPagePostedId" th:value="${user.getId()}">
                                 <input class="w3-border w3-padding" style="width: 100%; margin-bottom: 10px" id="message" placeholder="Enter your message" type="text" name="message">
@@ -349,7 +348,7 @@
 
     function requestUpdate(userId, status) {
         $.ajax({
-            type: "POST",
+            type: "PUT",
             url: "/update-relationship",
             dataType: "text",
             data: {"userId": userId, "status": status},

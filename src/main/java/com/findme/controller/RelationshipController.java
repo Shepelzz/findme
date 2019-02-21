@@ -36,7 +36,7 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(path = "/update-relationship", method = RequestMethod.POST)
+    @RequestMapping(path = "/update-relationship", method = RequestMethod.PUT)
     public ResponseEntity<String> requestUpdate(HttpSession session, @RequestParam String userId, String status){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
