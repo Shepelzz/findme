@@ -42,8 +42,12 @@ public class PostController {
     }
 
 
-    @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.POST)
-    public ResponseEntity<?> postCustomer(@ModelAttribute FilterPagePosts filter, @RequestParam Long userId) {
+    @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.GET)
+    public ResponseEntity<?> postCustomer(@RequestParam Long userId,
+                                          @RequestParam Boolean ownerPosts,
+                                          @RequestParam Boolean friendsPosts,
+                                          @RequestParam Long userPostedId) {
+        FilterPagePosts filter = FilterPagePosts.builder().ownerPosts(ownerPosts).friendsPosts(friendsPosts).userPostedId(userPostedId).build();
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
         } catch (BadRequestException e){
@@ -53,7 +57,7 @@ public class PostController {
         }
     }
 
-    @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
