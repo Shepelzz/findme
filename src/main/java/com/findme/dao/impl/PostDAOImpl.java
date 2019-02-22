@@ -59,6 +59,7 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
                 criteria = cb.and(criteria, cb.equal(userPosted.get("id"), filter.getUserPostedId()));
 
             criteriaQuery.select(postRoot).where(criteria);
+            criteriaQuery.orderBy(cb.desc(postRoot.get("datePosted")));
             return entityManager.createQuery(criteriaQuery).getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
