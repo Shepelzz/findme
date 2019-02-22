@@ -43,10 +43,7 @@ public class PostController {
 
 
     @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.GET)
-    public ResponseEntity<?> postCustomer(@RequestParam Long userId,
-                                          @RequestParam Boolean ownerPosts,
-                                          @RequestParam Boolean friendsPosts,
-                                          @RequestParam Long userPostedId) {
+    public ResponseEntity<?> postCustomer(@RequestParam Long userId, Boolean ownerPosts, Boolean friendsPosts, Long userPostedId) {
         FilterPagePosts filter = FilterPagePosts.builder().ownerPosts(ownerPosts).friendsPosts(friendsPosts).userPostedId(userPostedId).build();
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);

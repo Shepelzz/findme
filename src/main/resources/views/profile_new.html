@@ -285,7 +285,9 @@
     });
 
     function requestSave(userId) {
+        debugger;
         $.ajax({
+
             type: "POST",
             url: "/save-relationship",
             dataType: "text",
@@ -301,6 +303,7 @@
     }
 
     function requestUpdate(userId, status) {
+        debugger;
         $.ajax({
             type: "PUT",
             url: "/update-relationship",
