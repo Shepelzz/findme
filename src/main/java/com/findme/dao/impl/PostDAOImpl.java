@@ -70,12 +70,11 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     public List<Post> getNewsListPart(Long userId, int rowsFrom, int maxResults) throws InternalServerError {
         try {
 
-            List<Post> list = entityManager.createQuery(SQL_NEWS_LIST, Post.class)
+            return entityManager.createQuery(SQL_NEWS_LIST, Post.class)
                     .setParameter("userId", userId)
                     .setFirstResult(rowsFrom)
                     .setMaxResults(maxResults)
                     .getResultList();
-            return list;
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
