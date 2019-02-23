@@ -20,7 +20,31 @@
 <body>
 
 <header th:replace="common/header.html :: header"></header>
-
+<div class="w3-top">
+    <div class="w3-theme-d2 w3-left-align w3-large" style="height: 51px;">
+        <a href="/" th:href="@{/}" class="main-logo w3-bar-item w3-left w3-padding-large">
+            Find me
+        </a>
+        <span th:if="${session.loggedUserId!=null}">
+                <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="Messages">
+                    <i class="fa fa-envelope"></i><span class="w3-badge w3-right w3-small w3-green">3</span>
+                </a>
+                <a href="/" th:href="@{/feed}" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="News">
+                    <i class="fa fa-rss-square"></i>
+                </a>
+                <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-right w3-padding-large w3-hover-white" title="My Account">
+                    <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+                </a>
+                <span class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</span>
+                <a href="#" th:href="@{/logout}" class="w3-bar-item w3-right w3-padding-large w3-hover-white" title="Logout">
+                    <i class="fa fa-sign-out-alt"></i>
+                </a>
+            </span>
+        <a th:if="${session.loggedUserId==null}" href="#" th:href="@{/}" class="w3-bar-item w3-right w3-padding-large w3-hover-white" title="Login">
+            <i class="fa fa-sign-in-alt"></i>
+        </a>
+    </div>
+</div>
 
 <div class="w3-container w3-content" style="margin-top:80px">
     <!-- The Grid -->
