@@ -16,7 +16,7 @@ function ajaxFilterPost(){
     // DO GET
     $.ajax({
         type : "GET",
-        url : "/get-filtered-posts",  //?userId="+userId,
+        url : "/get-filtered-posts",
         data : {
             ownerPosts : $('#ownerPosts').prop('checked'),
             friendsPosts: $('#friendsPosts').prop('checked'),
@@ -50,6 +50,51 @@ function ajaxFilterPost(){
         error : function(e) {
             $("#getResultDiv").html("<strong>Error</strong>");
             console.log("ERROR: "+ e);
+        }
+    });
+}
+
+function ajaxSavePost() {
+    $.ajax({
+        type: "POST",
+        url: "/save-post",
+        data: $('#save_post_form').serialize(),
+        success:function success() {
+            window.location.reload(true);
+        },
+        error: function(xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+function requestSave(userId) {
+    debugger;
+    $.ajax({
+
+        type: "POST",
+        url: "/save-relationship",
+        data: {"userId": userId},
+        success: function success() {
+            window.location.reload(true);
+        },
+        error: function(xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+
+function requestUpdate(userId, status) {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: "/update-relationship",
+        data: {"userId": userId, "status": status},
+        success: function success() {
+            window.location.reload(true);
+        },
+        error: function(xhr) {
+            alert(xhr.responseText);
         }
     });
 }

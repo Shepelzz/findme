@@ -77,13 +77,13 @@
 
             <!--Friends features block-->
             <div id="relationship-status">
-                <div th:if="${loggedUser.getId() == user.id}" class="w3-round w3-white"><!--w3-card-->
+                <div th:if="${loggedUser.getId() == user.id}" class="w3-round w3-white">
                     <!--Incoming Friend Request-->
                     <button th:if="${incomingRequests.size() > 0}" onclick="dropDownMenu('incomingReq',true)" class="w3-button w3-block w3-theme-l1 w3-left-align">
                         <i class="fa fa-arrow-left fa-fw w3-margin-right"></i>Incoming requests
                         <span class="w3-right" th:text="${incomingRequests.size()}">5</span>
                     </button>
-                    <ul id="incomingReq" class="w3-hide w3-ul"><!--w3-card-->
+                    <ul id="incomingReq" class="w3-hide w3-ul">
                         <li class="w3-bar" th:each="usr : ${incomingRequests}" th:id="'incomingReq-' + ${usr.getId()}">
                             <button class="w3-bar-item w3-button w3-white w3-right w3-padding-8" th:onclick="|requestUpdate('${usr.getId()}','REJECTED')|">
                                 <i class="fa fa-times w3-text-theme"></i>
@@ -243,15 +243,21 @@
 <script th:inline="javascript">
     let userId = [[${user.id}]];
 
+    //LOAD WALL
     $(document).ready ( function(){
         ajaxFilterPost();
     });
 
     // FILTER FORM CHANGE
     $("#post_filter_form").change(function(event) {
-        // Prevent the form from submitting via the browser.
         event.preventDefault();
         ajaxFilterPost();
+    });
+
+    //SAVE POST
+    $("#save_post_form").submit(function(event) {
+        event.preventDefault();
+        savePost();
     });
 
 
@@ -284,55 +290,6 @@
         });
     });
 
-    function requestSave(userId) {
-        debugger;
-        $.ajax({
-
-            type: "POST",
-            url: "/save-relationship",
-            dataType: "text",
-            data: {"userId": userId},
-            success: function success() {
-                window.location.reload(true);
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-                window.location.reload(true);
-            }
-        });
-    }
-
-    function requestUpdate(userId, status) {
-        debugger;
-        $.ajax({
-            type: "PUT",
-            url: "/update-relationship",
-            dataType: "text",
-            data: {"userId": userId, "status": status},
-            success: function success() {
-                window.location.reload(true);
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-                window.location.reload(true);
-            }
-        });
-    }
-
-    $("#save_post_form").submit(function register() {
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/save-post",
-            data: $('#save_post_form').serialize(),
-            success:function success() {
-                window.location.reload(true);
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-            }
-        });
-    });
 
 </script>
 

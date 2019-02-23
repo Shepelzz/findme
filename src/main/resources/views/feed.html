@@ -17,73 +17,59 @@
 <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
 <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
-<div style="display: none" id="loaderGif"></div>
 <header th:replace="common/header.html :: header"></header>
 
-<!-- Page Container -->
-<div class="w3-container w3-content" style="margin-top:80px;">
+<div class="w3-container w3-content" style="margin-top:80px">
     <!-- The Grid -->
     <div class="w3-row">
-
-        <!-- Right Column -->
-        <div class="w3-col m9">
-            <div class="w3-round" style="min-height: 600px;"><!--w3-card-->
-                <div class="w3-container w3-padding" style="height: 1700px">
-
-                    <div class="w3-row-padding">
-                        <!--th:if="${userPagePostList != null}"-->
-                        <div class="w3-col m12">
-                            <div class="w3-container w3-padding w3-white" style="position: relative">
-                                <form id="newsFilterForm">
-                                    <label for="results" class="w3-opacity inline">Results: </label>
-                                    <select id="results" name="results" style="width: 50px; margin-left: 10px">
-                                        <option value="10">10</option>
-                                        <option value="20">20</option>
-                                        <option value="30">30</option>
-                                    </select>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--<div th:if="${newsList != null}">-->
-                        <!--<div th:each="post : ${newsList}" class="w3-container w3-white w3-margin" style="position: relative">-->
-                            <!--&lt;!&ndash;<i class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div class="post-menu w3-hide">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<div class="post-menu-item w3-opacity">Edit post</div>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<div th:onclick="|postDelete('${post.getId()}')|" class="post-menu-item w3-opacity">Delete post</div>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--<div>-->
-                                <!--<br>-->
-                                <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
-                                <!--<span class="w3-right w3-opacity" th:text="${post.getDatePostedString()}" style="margin-right: 50px">1 min</span>-->
-                                <!--<h4 class="inline" th:text="${post.userPosted.firstName}+' '+${post.userPosted.lastName.substring(0,1)}+'.'">Test User</h4>-->
-                                <!--<p th:text="${post.getTaggedUsersAndLocation()}" class="inline w3-opacity w3-margin-left"> with UserList in Location TODO</p><br>-->
-                                <!--<hr class="w3-clear">-->
-                                <!--<p th:text="${post.message}">Test message</p>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-                    <!-- News list -->
-                    <div id="getResultDiv">
-                        <div class="list-group">
-                        </div>
-                        <br>
-                        <button id="loadMore">More</button>
-                    </div>
-
-
-
-
-                </div>
+        <!-- Left Column -->
+        <div class="w3-col m3">
+            <!--Menu-->
+            <div class="w3-round w3-white">
+                <a class="w3-button w3-block w3-theme-l1 w3-left-align" th:href="@{'/user/' + ${loggedUser.getId()}}">
+                    <i class="fa fa-user-alt fa-fw w3-margin-right"></i>Profile
+                </a>
+            </div>
+            <div class="w3-round w3-white">
+                <a class="w3-button w3-block w3-theme-l1 w3-left-align">
+                    <i class="fa fa-users fa-fw w3-margin-right"></i>Friends
+                </a>
             </div>
             <br>
-            <!-- End Left Column -->
-            <!-- Footer -->
-            <footer th:replace="common/footer.html :: footer"></footer>
         </div>
+
+        <!-- Middle Column -->
+        <div class="w3-col m9">
+            <div class="w3-row-padding w3-margin-bottom">
+                <div class="w3-col m12">
+                    <div class="w3-container w3-padding w3-white">
+                        <form id="newsFilterForm">
+                            <label for="resultsOnPage" class="w3-opacity inline">Results: </label>
+                            <select id="resultsOnPage" name="results" style="width: 50px; margin-left: 10px">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Post list -->
+            <div id="getResultDiv">
+                <div class="list-group">
+                </div>
+                <br>
+                <button id="loadMore">More</button>
+            </div>
+
+        </div>
+        <!-- End Grid -->
     </div>
+    <!-- End Page Container -->
+
+    <!-- Footer -->
+    <footer th:replace="common/footer.html :: footer"></footer>
 </div>
 </body>
 
@@ -114,7 +100,7 @@
             type : "GET",
             url : "/get-news",
             data: {
-                maxResult: 10,
+                maxResult: $("#resultsOnPage option:selected").text(),
                 currentListPart: currentListPart
             },
             success : function(result) {
@@ -136,7 +122,7 @@
                 });
             },
             error : function(e) {
-                $('#getResultDiv').html("<strong>Error</strong>");
+                $('#getResultDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
                 console.log("ERROR: "+ e);
             }
         });

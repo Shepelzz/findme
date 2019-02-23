@@ -23,7 +23,8 @@ public class RelationshipController {
     }
 
     @RequestMapping(path = "/save-relationship", method = RequestMethod.POST)
-    public ResponseEntity<String> requestSave(HttpSession session, @RequestParam String userId){
+    public ResponseEntity<String> requestSave(HttpSession session,
+                                              @RequestParam(required=false,name="userId") String userId){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
@@ -36,8 +37,10 @@ public class RelationshipController {
         }
     }
 
-    @RequestMapping(path = "/update-relationship", method = RequestMethod.PUT)
-    public ResponseEntity<String> requestUpdate(HttpSession session, @RequestParam String userId, String status){
+    @RequestMapping(path = "/update-relationship", method = RequestMethod.POST)
+    public ResponseEntity<String> requestUpdate(HttpSession session,
+                                                @RequestParam(required=false,name="userId") String userId,
+                                                @RequestParam(required=false,name="status") String status){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
