@@ -13,38 +13,12 @@
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="../static/js/userProfile.js" th:src="@{/js/userProfile.js}"></script>
 <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
 <script type="text/javascript" src="../static/js/profile.js" th:src="@{/js/profile.js}"></script>
 <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
 
 <header th:replace="common/header.html :: header"></header>
-<div class="w3-top">
-    <div class="w3-theme-d2 w3-left-align w3-large" style="height: 51px;">
-        <a href="/" th:href="@{/}" class="main-logo w3-bar-item w3-left w3-padding-large">
-            Find me
-        </a>
-        <span th:if="${session.loggedUserId!=null}">
-                <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="Messages">
-                    <i class="fa fa-envelope"></i><span class="w3-badge w3-right w3-small w3-green">3</span>
-                </a>
-                <a href="/" th:href="@{/feed}" class="w3-bar-item w3-button w3-padding-large w3-hover-white" title="News">
-                    <i class="fa fa-rss-square"></i>
-                </a>
-                <a href="/" th:href="@{/}" class="w3-bar-item w3-button w3-right w3-padding-large w3-hover-white" title="My Account">
-                    <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
-                </a>
-                <span class="w3-bar-item w3-hide-small w3-right w3-padding-large" th:text="${session.loggedUserId != null ? session.loggedUserName : ''}">User Name</span>
-                <a href="#" th:href="@{/logout}" class="w3-bar-item w3-right w3-padding-large w3-hover-white" title="Logout">
-                    <i class="fa fa-sign-out-alt"></i>
-                </a>
-            </span>
-        <a th:if="${session.loggedUserId==null}" href="#" th:href="@{/}" class="w3-bar-item w3-right w3-padding-large w3-hover-white" title="Login">
-            <i class="fa fa-sign-in-alt"></i>
-        </a>
-    </div>
-</div>
 
 <div class="w3-container w3-content" style="margin-top:80px">
     <!-- The Grid -->
@@ -52,10 +26,12 @@
         <!-- Left Column -->
         <div class="w3-col l4">
             <!-- Profile -->
-            <div class="w3-round w3-white w3-container"><!--w3-card-->
+            <div class="w3-round w3-white w3-container">
                 <h4 class="clear-inline w3-padding-small w3-center">
                     <p class="inline w3-center" th:text="${user.firstName}+' '+${user.lastName}">User Name</p>
-                    <i th:if="${loggedUser.getId() == user.id}" onclick="$('#editModalForm').show()" class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+                    <a href="/" th:href="@{/settings}" th:if="${loggedUser.getId() == user.id}" style="text-decoration: none">
+                        <i class="inline w3-padding-small fa fa-edit fa-fw w3-margin-right w3-text-theme w3-hover-opacity"></i>
+                    </a>
                 </h4>
                 <div class="w3-center">
                     <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" class="w3-circle" style="width:200px" alt="Avatar">
@@ -254,6 +230,25 @@
                 </div>
             </div>
 
+            <!--<div>-->
+                <!--<div class="w3-container w3-white w3-margin" style="position: relative">-->
+                    <!--<i onclick="dropDownMenu('postMenu1',false)" class="fa fa-bars w3-button w3-text-theme w3-padding-large" style="position: absolute; right: 0"></i>-->
+                    <!--<div id='postMenu1' class="post-menu w3-hide exit-on-keyDown">-->
+                        <!--<button class="w3-button w3-block w3-theme-l5 w3-left-align">Edit</button>-->
+                        <!--<button class="w3-button w3-block w3-theme-l5 w3-left-align" onclick="postDelete(0)">Remove</button>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--<br>-->
+                        <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">-->
+                        <!--<span class="w3-right w3-opacity" style="margin-right: 50px">"+parsePostDate(new Date(post.datePosted))+"</span>-->
+                        <!--<h4 class="inline"> post.userPosted.firstName + "  post.userPosted.lastName.substring(0, 1) + ".</h4>-->
+                        <!--<p class="inline w3-opacity w3-margin-left">"+parsePostTaggedUsersAndLocation(post.usersTagged, post.location)+"</p><br>-->
+                        <!--<hr class="w3-clear">-->
+                        <!--<p> post.message + "</p>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
         </div>
         <!-- End Grid -->
     </div>
@@ -266,6 +261,7 @@
 
 <script th:inline="javascript">
     let userId = [[${user.id}]];
+    let userLoggedId = [[${loggedUser.id}]];
 
     //LOAD WALL
     $(document).ready ( function(){
@@ -281,9 +277,8 @@
     //SAVE POST
     $("#save_post_form").submit(function(event) {
         event.preventDefault();
-        savePost();
+        postSave();
     });
-
 
 
     let modal = document.getElementById('editModalForm');
@@ -313,7 +308,6 @@
             }
         });
     });
-
 
 </script>
 

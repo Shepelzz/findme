@@ -1,16 +1,23 @@
+
+
 function dropDownMenu(id, activeTheme) {
     let x = document.getElementById(id);
     if (x.className.indexOf("w3-show") === -1) {
         x.className += " w3-show";
         if(activeTheme)
             x.previousElementSibling.className += " w3-theme-d1";
+        openedMenu = id;
     } else {
         x.className = x.className.replace("w3-show", "");
         x.previousElementSibling.className =
             x.previousElementSibling.className.replace(" w3-theme-d1", "");
+        openedMenu = null;
     }
 }
 
+// $(document).mouseup(function(e) {
+//
+// });
 
 function ajaxFilterPost(){
     // DO GET
@@ -26,13 +33,18 @@ function ajaxFilterPost(){
         success : function(result) {
             $('#getResultDiv div').empty();
             $.each(result, function(i, post){
+                let postMenu =
+                    "<i id='postMenuButton' onclick=\"dropDownMenu('postMenu"+post.id+"',false)\" class=\"fa fa-bars w3-button w3-text-theme w3-padding-large\" style=\"position: absolute; right: 0\"></i>\n" +
+                    "<div id='postMenu"+post.id+"' class=\"post-menu w3-hide exit-on-keyDown\">\n" +
+                    "   <button class=\"w3-button w3-block w3-theme-l5 w3-left-align\" onclick=\"alert("+post.id+")\">Show id</button>\n";
+                postMenu += (post.userPosted.id !== userLoggedId && post.userPagePosted.id !== userLoggedId) ? "<button class=\"w3-button w3-block w3-theme-l5 w3-left-align\" onclick=\"alert('repost')\">Repost</button>\n" : "";
+                postMenu += (post.userPosted.id === userLoggedId || post.userPagePosted.id === userLoggedId) ? "<button class=\"w3-button w3-block w3-theme-l5 w3-left-align\" onclick=\"postDelete("+post.id+")\">Remove</button>\n" : "";
+                postMenu +="</div>";
+
+                debugger;
                 let postInfo = "<div>\n" +
                     "                <div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
-                    "                    <i class=\"fa fa-bars w3-button w3-text-theme w3-padding-large\" style=\"position: absolute; right: 0\"></i>\n" +
-                    "                    <div class=\"post-menu w3-hide\">\n" +
-                    "                        <div class=\"post-menu-item w3-opacity\">Edit post</div>\n" +
-                    "                        <div th:onclick=\"|postDelete('${post.getId()}')|\" class=\"post-menu-item w3-opacity\">Delete post</div>\n" +
-                    "                    </div>\n" +
+                                postMenu +
                     "                    <div>\n" +
                     "                        <br>\n" +
                     "                        <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"w3-left w3-circle w3-margin-right\" style=\"width:60px\">\n" +
@@ -54,7 +66,7 @@ function ajaxFilterPost(){
     });
 }
 
-function ajaxSavePost() {
+function postSave() {
     $.ajax({
         type: "POST",
         url: "/save-post",
@@ -66,6 +78,21 @@ function ajaxSavePost() {
             alert(xhr.responseText);
         }
     });
+}
+
+function postDelete(postId){
+    if (confirm("Do you want delete this post?")) {
+        $.ajax({
+            type: "DELETE",
+            url: "/delete-post?postId="+postId,
+            success: function success() {
+                window.location.reload(true);
+            },
+            error: function(xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    }
 }
 
 function requestSave(userId) {

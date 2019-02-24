@@ -66,7 +66,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(Long id) throws InternalServerError {
+    public void delete(Long id, Long userId) throws InternalServerError, BadRequestException {
+        Post post = postDAO.findById(id);
+        if(post == null)
+            throw new BadRequestException("Wrong post id.");
+        if(!post.getUserPosted().getId().equals(userId))
+            throw new BadRequestException("You can not remove this post.");
+
         postDAO.delete(id);
     }
 

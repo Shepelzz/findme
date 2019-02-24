@@ -69,6 +69,14 @@ public class UserController {
         return "profile";
     }
 
+    @RequestMapping(path = "/edit-user", method = RequestMethod.GET)
+    public ResponseEntity<?> editUser(HttpSession session){
+        User loggedUser = (User) session.getAttribute("loggedUser");
+        if(loggedUser.getId()==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(loggedUser, HttpStatus.OK);
+    }
+
     @RequestMapping(path = "/edit-user", method = RequestMethod.POST)
     public ResponseEntity<String> editUserSubmit(HttpSession session, @ModelAttribute User user){
         if(session.getAttribute("loggedUserId")==null)
@@ -83,17 +91,6 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/remove-user/{userId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteUser(HttpSession session, @PathVariable String userId){
-        if(session.getAttribute("loggedUserId")==null)
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        try {
-            userService.delete(Long.valueOf(userId));
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InternalServerError e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     private String getButtonsViewProperty(String userToId, Relationship rel) throws BadRequestException{
         Long userToIdL;

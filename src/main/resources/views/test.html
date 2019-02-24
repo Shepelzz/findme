@@ -6,6 +6,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.5.1/croppie.min.js"></script>
     <title>Demo Croppie</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script type="text/javascript" src="../static/js/profile.js"></script>
     <style>
         #my-image, #use {
             display: none;
@@ -59,6 +60,18 @@
             readURL(this);
         });
         }
+
+
+
+        $(document).click(function() {
+            let x = document.getElementById('r');
+
+            if (x.className.indexOf("w3-show") !== -1) {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        });
     </script>
     <script src="../static/js/croppie.min.js"></script>
     <link rel="stylesheet" href="../static/css/croppie.min.css">
@@ -76,6 +89,20 @@
 <div class="res">
     <img id="result" src="">
 </div>
+
+
+<br>
+<br>
+<br>
+<br>
+<button onclick="dropDownMenu('r',false)">click</button>
+<div id="r" style="width: 200px; height: 100px; background-color: #0c6394" class="w3-hide">
+    trtrtrtrtr
+</div>
+
 </body>
+
+
+
 
 </html>

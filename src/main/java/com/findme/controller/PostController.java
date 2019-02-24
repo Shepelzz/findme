@@ -43,7 +43,11 @@ public class PostController {
 
 
     @RequestMapping(path = "/get-filtered-posts", method = RequestMethod.GET)
-    public ResponseEntity<?> postCustomer(@RequestParam Long userId, Boolean ownerPosts, Boolean friendsPosts, Long userPostedId) {
+    public ResponseEntity<?> postCustomer(@RequestParam Long userId, Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, HttpSession session) {
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null)
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+
         FilterPagePosts filter = FilterPagePosts.builder().ownerPosts(ownerPosts).friendsPosts(friendsPosts).userPostedId(userPostedId).build();
         try {
             return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
@@ -54,18 +58,19 @@ public class PostController {
         }
     }
 
-    @RequestMapping(path = "/delete-post/{postId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deletePost(@PathVariable String postId, HttpSession session){
-        if(session.getAttribute("loggedUserId")==null)
+    @RequestMapping(path = "/delete-post", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deletePost(@RequestParam String postId, HttpSession session){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        //TODO
-//        try {
-//            postService.delete(Long.valueOf(postId));
-//            return new ResponseEntity<>( HttpStatus.OK);
-//        } catch (InternalServerError | NumberFormatException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-        return null;
+        try {
+            postService.delete(Long.valueOf(postId), Long.valueOf(loggedUserId));
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (InternalServerError | NumberFormatException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (BadRequestException be){
+            return new ResponseEntity<>(be.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(path = "/feed", method = RequestMethod.GET)

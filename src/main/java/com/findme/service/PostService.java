@@ -13,7 +13,7 @@ public interface PostService{
 
     Post save(PostInfo postInfo) throws InternalServerError, BadRequestException;
     Post update(Post post) throws InternalServerError, BadRequestException;
-    void delete(Long id) throws InternalServerError;
+    void delete(Long id, Long userId) throws InternalServerError, BadRequestException;
     Post findById(Long id) throws InternalServerError, NotFoundException;
 
     List<Post> getPostsByFilter(Long userId, FilterPagePosts filter) throws BadRequestException, InternalServerError;

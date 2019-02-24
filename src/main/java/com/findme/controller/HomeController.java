@@ -67,5 +67,15 @@ public class HomeController {
         return "redirect:/";
     }
 
+    @RequestMapping(path = "/settings", method = RequestMethod.GET)
+    public String settings(Model model, HttpSession session){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/forbidden";
+        }
+        return "settings";
+    }
+
 
 }

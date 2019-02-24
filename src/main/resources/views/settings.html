@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<title>Home</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+<link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
+<link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
+<link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
+<link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
+<script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
+<!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
+<body>
+<header th:replace="common/header.html :: header"></header>
+
+<div class="w3-container w3-content" style="margin-top:80px">
+    <!-- The Grid -->
+    <div class="w3-row">
+        <!-- Left Column -->
+        <div class="w3-col m3">
+            <!--Menu-->
+            <div class="w3-round w3-white">
+                <a class="w3-button w3-block w3-theme-l1 w3-left-align">
+                    <i class="fa fa-user-alt fa-fw w3-margin-right"></i>Personal info
+                </a>
+            </div>
+            <div class="w3-round w3-white">
+                <a class="w3-button w3-block w3-theme-l1 w3-left-align">
+                    <i class="fa fa-users fa-fw w3-margin-right"></i>Else...
+                </a>
+            </div>
+            <br>
+        </div>
+
+        <!-- Middle Column -->
+        <div class="w3-col m9">
+            <div class="w3-row-padding w3-margin-bottom">
+                <div class="w3-col m12">
+                    <div class="w3-container w3-padding w3-white">
+                        <div id="personal">
+                            <form id="user-edit-form" class="input-form">
+                                <div class="w3-container w3-margin">
+
+                                    <h4 class="w3-opacity">Edit profile
+                                        <i onclick="document.getElementById('editModalForm').style.display='none'"
+                                           class="fa fa-times w3-button w3-display-topright w3-padding-large w3-text-theme"></i>
+                                    </h4>
+                                    <hr>
+                                    <p class="w3-opacity">Main information</p>
+                                    <input class="w3-hide" id="id" type="text" name="id">
+
+                                    <!--<input type="file" id="photoFile" name="photoFile">-->
+
+                                    <div class="w3-padding-small">
+                                        <label for="first_name" class="w3-margin-right w3-text-theme">First name: </label>
+                                        <input class="w3-border w3-padding" id="first_name" type="text" name="firstName">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="last_name" class="w3-margin-right w3-text-theme">Last name: </label>
+                                        <input class="w3-border w3-padding" id="last_name" type="text" name="lastName">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="phone" class="w3-margin-right w3-text-theme">Phone: </label>
+                                        <input class="w3-border w3-padding" id="phone" type="text" name="phone">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="email" class="w3-margin-right w3-text-theme">Email: </label>
+                                        <input class="w3-border w3-padding" id="email" type="text" name="email">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="password" class="w3-margin-right w3-text-theme">Password: </label>
+                                        <input class="w3-border w3-padding" id="password" type="password" name="password">
+                                    </div>
+                                    <hr>
+                                    <p class="w3-opacity">Additional information</p>
+                                    <div class="w3-padding-small">
+                                        <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
+                                        <input class="w3-border w3-padding" id="country" type="text" name="country">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="city" class="w3-margin-right w3-text-theme">City: </label>
+                                        <input class="w3-border w3-padding" id="city" type="text" name="city">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="age" class="w3-margin-right w3-text-theme">Age: </label>
+                                        <input class="w3-border w3-padding" id="age" type="text" name="age">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="relationshipStatus" class="w3-margin-right w3-text-theme">Relationship status: </label>
+                                        <input class="w3-border w3-padding" id="relationshipStatus"type="text" name="relationshipStatus">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="religion" class="w3-margin-right w3-text-theme">Religion: </label>
+                                        <input class="w3-border w3-padding" id="religion" type="text" name="religion">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="school" class="w3-margin-right w3-text-theme">School: </label>
+                                        <input class="w3-border w3-padding" id="school" type="text" name="school">
+                                    </div>
+                                    <div class="w3-padding-small">
+                                        <label for="university" class="w3-margin-right w3-text-theme">University: </label>
+                                        <input class="w3-border w3-padding" id="university" type="text" name="university">
+                                    </div>
+                                    <hr>
+                                    <div class="w3-padding-small">
+                                        <label id="loading" class="w3-margin-right w3-text-theme"><p style="display:none">waiting... </p></label>
+                                        <button type="submit" class="w3-button w3-theme">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- End Grid -->
+    </div>
+    <!-- End Page Container -->
+
+    <!-- Footer -->
+    <footer th:replace="common/footer.html :: footer"></footer>
+</div>
+</body>
+
+<script>
+    $(document).ready ( function(){
+        ajaxGetUserInfo();
+    });
+
+
+    function ajaxGetUserInfo(){
+        // DO GET
+        $.ajax({
+            type : "GET",
+            url : "/edit-user",
+            success : function(user) {
+                debugger;
+                $('#id').val(user.id;
+                $('#first_name').val(user.firstName);
+                $('#last_name').val(user.lastName);
+                $('#phone').val(user.phone);
+                $('#email').val(user.email);
+                $('#password').val(user.password);
+                $('#country').val(user.country);
+                $('#city').val(user.city);
+                $('#age').val(user.age);
+                $('#relationshipStatus').val(user.relationshipStatus);
+                $('#religion').val(user.religion);
+                $('#school').val(user.school);
+                $('#university').val(user.university);
+            },
+            error : function(e) {
+                $('#personal').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
+
+</script>
+</html>
