@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 
-
-<title>Home</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
-<link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
-<link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
-<link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
-<link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
-<script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
-<!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
+<head>
+    <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="../static/css/theme.css" type="text/css" th:href="@{/css/theme.css}"/>
+    <link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
+    <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
+    <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
+    <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
+</head>
 <body>
 <header th:replace="common/header.html :: header"></header>
 
@@ -38,13 +39,17 @@
             <br>
         </div>
 
+
+
+
+
         <!-- Middle Column -->
         <div class="w3-col m9">
             <div class="w3-row-padding w3-margin-bottom">
                 <div class="w3-col m12">
                     <div class="w3-container w3-padding w3-white">
                         <div id="personal">
-                            <form id="user-edit-form" class="input-form">
+                            <form id="userEditForm" class="input-form">
                                 <div class="w3-container w3-margin">
 
                                     <h4 class="w3-opacity">Edit profile
@@ -73,16 +78,37 @@
                                         <label for="email" class="w3-margin-right w3-text-theme">Email: </label>
                                         <input class="w3-border w3-padding" id="email" type="text" name="email">
                                     </div>
-                                    <div class="w3-padding-small">
-                                        <label for="password" class="w3-margin-right w3-text-theme">Password: </label>
-                                        <input class="w3-border w3-padding" id="password" type="password" name="password">
-                                    </div>
+                                    <!--<div class="w3-padding-small">-->
+                                        <!--<label for="password" class="w3-margin-right w3-text-theme">Password: </label>-->
+                                        <!--<input class="w3-border w3-padding" id="password" type="password" name="password">-->
+                                    <!--</div>-->
                                     <hr>
                                     <p class="w3-opacity">Additional information</p>
                                     <div class="w3-padding-small">
                                         <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
                                         <input class="w3-border w3-padding" id="country" type="text" name="country">
                                     </div>
+
+                                    <div class="w3-padding-small">
+                                        <label for="countryRef" class="inline w3-margin-right w3-text-theme">Country: </label>
+                                        <input class="w3-border w3-padding" id="countryRef" type="text" name="countryRef" onkeyup="ajaxGetCountries()" autocomplete="off">
+                                            <div id="countriesList">
+                                                <div class="list-group">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="w3-padding-small">-->
+                                        <!--<label for="countryList" class="w3-margin-right w3-text-theme">Country: </label>-->
+                                        <!--<input class="w3-border w3-padding" id="countryList" type="text" name="countryRef">-->
+                                        <!--<select>-->
+                                            <!--<option value="Ukraine">Ukraine</option>-->
+                                            <!--<option value="Moldova">Moldova</option>-->
+                                            <!--<option value="Poland">Poland</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+
                                     <div class="w3-padding-small">
                                         <label for="city" class="w3-margin-right w3-text-theme">City: </label>
                                         <input class="w3-border w3-padding" id="city" type="text" name="city">
@@ -130,9 +156,22 @@
 </body>
 
 <script>
+    let id,first_name,last_name,phone,email,password,country,countryRef,city,age,relationshipStatus,religion,school,university;
+
     $(document).ready ( function(){
         ajaxGetUserInfo();
     });
+
+    // $("#countryRef").onkeyup(function(event) {
+    //     event.preventDefault();
+    //     ajaxGetCountries();
+    // });
+    // $("#countryRef").click(function(event) {
+    //     event.preventDefault();
+    //     ajaxGetCountries();
+    // });
+
+
 
 
     function ajaxGetUserInfo(){
@@ -162,6 +201,72 @@
             }
         });
     }
+
+    function ajaxGetCountries(){
+        $.ajax({
+            type : "GET",
+            url : "/get-countries-small-list",
+            data : {
+                searchWord : $("#countryRef").val()
+            },
+            success : function(result) {
+                $('#countriesList div').empty();
+                $.each(result, function(i, counrty){
+                    let country = "<div class=\"dropdown w3-theme-l4 w3-hover-theme\" onclick=\"submitCountry('"+counrty.id+"','"+counrty.name+"')\">"+counrty.name+"</div>";
+                    $('#countriesList .list-group').append(country)
+                });
+            },
+            error : function(e) {
+                $("#countriesList").html("<strong>Error</strong>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
+    function submitCountry(id, name) {
+        $('#countryRef').val(name);
+        countryRef = {
+            id: id,
+            name: name
+        };
+        $('#countriesList div').empty();
+    }
+
+    $('#userEditForm').submit(function () {
+        let jsonUser = {
+            // id: $('#id').val(),
+            firstName: $('#first_name').val(),
+            lastName: $('#last_name').val(),
+            phone: $('#phone').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            country: $('#country').val(),
+            countryRef: countryRef,
+            city: $('#city').val(),
+            age: $('#age').val(),
+            relationshipStatus: $('#relationshipStatus').val(),
+            religion: $('#religion').val(),
+            school: $('#school').val(),
+            university: $('#university').val()
+        };
+
+        event.preventDefault();
+        $.ajax({
+            type: "PUT",
+            url: "/edit-user",
+            contentType: "application/json",
+            data: jsonUser,
+            success:function success() {
+                alert('User data edited');
+            },
+            error: function(xhr) {
+                alert(xhr.responseText);
+            }
+        });
+
+    })
+
+
 
 
 </script>

@@ -7,9 +7,11 @@ import com.findme.exception.NotFoundException;
 import com.findme.model.Country;
 import com.findme.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CountryServiceImpl implements CountryService {
     private CountryDAO countryDAO;
 

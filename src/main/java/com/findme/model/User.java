@@ -36,8 +36,8 @@ public class User extends GeneralModel{
     private String country;
 
     @ManyToOne
-    @JoinColumn(name="COUNTRY_ID", nullable = true)
-    private Country country_ref;
+    @JoinColumn(name="COUNTRY_ID")
+    private Country countryRef;
 
     @Column(name = "CITY")
     private String city;

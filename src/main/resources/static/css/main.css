@@ -43,7 +43,7 @@ body{
     width: 100%;
     height: 100%;
     position: fixed;
-    top: 0px;
+    top: 0;
     display: none;
     z-index: 9999;
     background: url(https://t.76.my/res/img/ajax-loader.gif?180321) no-repeat right 10px top 60px rgba(180,180,180,0.25);
@@ -51,6 +51,18 @@ body{
 .w3-content{max-width:1200px}
 .exit-on-keyDown{
     width: 150px;
+}
+
+.dropdown {
+    border: solid 1px silver;
+    height: 35px;
+    width: 210px;
+    margin-left: 365px;
+    background-color: rgba(240,240,240,0.57);
+    padding: 5px 5px 5px 10px;
+}
+.dropdown:hover {
+    background-color: rgba(190, 201, 221, 0.57)
 }
 
 
