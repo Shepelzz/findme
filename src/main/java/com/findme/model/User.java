@@ -32,12 +32,12 @@ public class User extends GeneralModel{
     private String password;
 
     //TODO from existed data
-    @Column(name = "COUNTRY")
-    private String country;
+//    @Column(name = "COUNTRY")
+//    private String country;
 
     @ManyToOne
     @JoinColumn(name="COUNTRY_ID")
-    private Country countryRef;
+    private Country country;
 
     @Column(name = "CITY")
     private String city;

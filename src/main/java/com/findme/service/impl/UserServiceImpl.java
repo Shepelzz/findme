@@ -26,23 +26,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) throws InternalServerError, BadRequestException {
-        validateUserMainData(user);
+        validateUserMainData(user, true);
         user.setDateRegistered(new Date());
         return userDAO.save(user);
     }
 
     @Override
-    public User update(User user) throws InternalServerError{
-        //check non important fields
-        user.setCountry(Optional.ofNullable(user.getCountry()).filter(x -> !x.trim().isEmpty()).orElse(null));
-        user.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(null));
-        user.setAge(Optional.ofNullable(user.getAge()).filter(x -> x > 0).orElse(null));
-        user.setRelationshipStatus(Optional.ofNullable(user.getRelationshipStatus()).filter(x -> !x.trim().isEmpty()).orElse(null));
-        user.setReligion(Optional.ofNullable(user.getReligion()).filter(x -> !x.trim().isEmpty()).orElse(null));
-        user.setSchool(Optional.ofNullable(user.getSchool()).filter(x -> !x.trim().isEmpty()).orElse(null));
-        user.setUniversity(Optional.ofNullable(user.getUniversity()).filter(x -> !x.trim().isEmpty()).orElse(null));
+    public User update(User user) throws InternalServerError, BadRequestException{
+        User currentUser = userDAO.findById(user.getId());
 
-        return userDAO.update(user);
+        //check important fields
+        currentUser.setLastName(Optional.ofNullable(user.getLastName()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getLastName()));
+        currentUser.setFirstName(Optional.ofNullable(user.getFirstName()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getFirstName()));
+        currentUser.setPhone(Optional.ofNullable(user.getPhone()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getPhone()));
+        currentUser.setEmail(Optional.ofNullable(user.getEmail()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getEmail()));
+        currentUser.setPassword(Optional.ofNullable(user.getPassword()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getPassword()));
+        validateUserMainData(currentUser, false);
+
+        //check other fields
+        currentUser.setCountry(Optional.ofNullable(user.getCountry()).orElse(currentUser.getCountry()));
+        currentUser.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getCity()));
+        currentUser.setAge(Optional.ofNullable(user.getAge()).filter(x -> x > 0).orElse(currentUser.getAge()));
+        currentUser.setRelationshipStatus(Optional.ofNullable(user.getRelationshipStatus()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getRelationshipStatus()));
+        currentUser.setReligion(Optional.ofNullable(user.getReligion()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getReligion()));
+        currentUser.setSchool(Optional.ofNullable(user.getSchool()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getSchool()));
+        currentUser.setUniversity(Optional.ofNullable(user.getUniversity()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getUniversity()));
+
+        return userDAO.update(currentUser);
     }
 
     @Override
@@ -70,7 +80,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private void validateUserMainData(User user) throws BadRequestException, InternalServerError{
+    private void validateUserMainData(User user, boolean isNew) throws BadRequestException, InternalServerError{
 
         AbstractUserValidator nameValidator = new NameValidator();
         AbstractUserValidator emailValidator = new EmailValidator();
@@ -89,7 +99,8 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .build());
 
-        if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
-            throw new BadRequestException("There is already registered user with this email or phone.");
+        if(isNew)
+            if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
+                throw new BadRequestException("There is already registered user with this email or phone.");
     }
 }

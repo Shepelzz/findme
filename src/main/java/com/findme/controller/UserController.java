@@ -1,6 +1,5 @@
 package com.findme.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
 import com.findme.exception.BadRequestException;
@@ -15,13 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.Objects;
 
 @Controller
@@ -73,26 +68,28 @@ public class UserController {
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.GET)
     public ResponseEntity<?> editUser(HttpSession session){
-        User loggedUser = (User) session.getAttribute("loggedUser");
-        if(loggedUser.getId()==null)
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        return new ResponseEntity<>(loggedUser, HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(userService.findById(Long.valueOf(loggedUserId)), HttpStatus.OK);
+        } catch (NotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (InternalServerError | NumberFormatException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody String jsonUser){
+    public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody User user){
         if(session.getAttribute("loggedUserId")==null)
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         try {
-
-            System.out.println(jsonUser);
-            ObjectMapper objectMapper = new ObjectMapper();
-            User user = objectMapper.readValue(jsonUser, User.class);
-            userService.update(null);
+            userService.update(user);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError | NumberFormatException | IOException e){
+        } catch (InternalServerError | NumberFormatException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

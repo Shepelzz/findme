@@ -84,30 +84,19 @@
                                     <!--</div>-->
                                     <hr>
                                     <p class="w3-opacity">Additional information</p>
-                                    <div class="w3-padding-small">
-                                        <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
-                                        <input class="w3-border w3-padding" id="country" type="text" name="country">
-                                    </div>
-
-                                    <div class="w3-padding-small">
-                                        <label for="countryRef" class="inline w3-margin-right w3-text-theme">Country: </label>
-                                        <input class="w3-border w3-padding" id="countryRef" type="text" name="countryRef" onkeyup="ajaxGetCountries()" autocomplete="off">
-                                            <div id="countriesList">
-                                                <div class="list-group">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <!--<div class="w3-padding-small">-->
-                                        <!--<label for="countryList" class="w3-margin-right w3-text-theme">Country: </label>-->
-                                        <!--<input class="w3-border w3-padding" id="countryList" type="text" name="countryRef">-->
-                                        <!--<select>-->
-                                            <!--<option value="Ukraine">Ukraine</option>-->
-                                            <!--<option value="Moldova">Moldova</option>-->
-                                            <!--<option value="Poland">Poland</option>-->
-                                        <!--</select>-->
+                                        <!--<label for="country" class="w3-margin-right w3-text-theme">Country: </label>-->
+                                        <!--<input class="w3-border w3-padding" id="country" type="text" name="country">-->
                                     <!--</div>-->
+
+                                    <div class="w3-padding-small" style="position: relative">
+                                        <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
+                                        <input class="w3-border w3-padding" id="country" type="text" name="country" onkeyup="ajaxGetCountries()" onclick="ajaxGetCountries()">
+                                            <div id="countriesList" style="position: absolute;">
+                                                <div class="list-group"></div>
+                                            </div>
+                                    </div>
+
 
                                     <div class="w3-padding-small">
                                         <label for="city" class="w3-margin-right w3-text-theme">City: </label>
@@ -156,7 +145,7 @@
 </body>
 
 <script>
-    let id,first_name,last_name,phone,email,password,country,countryRef,city,age,relationshipStatus,religion,school,university;
+    let country;
 
     $(document).ready ( function(){
         ajaxGetUserInfo();
@@ -172,28 +161,28 @@
     // });
 
 
-
-
     function ajaxGetUserInfo(){
         // DO GET
         $.ajax({
             type : "GET",
             url : "/edit-user",
             success : function(user) {
-                debugger;
                 $('#id').val(user.id);
                 $('#first_name').val(user.firstName);
                 $('#last_name').val(user.lastName);
                 $('#phone').val(user.phone);
                 $('#email').val(user.email);
                 $('#password').val(user.password);
-                $('#country').val(user.country);
                 $('#city').val(user.city);
                 $('#age').val(user.age);
                 $('#relationshipStatus').val(user.relationshipStatus);
                 $('#religion').val(user.religion);
                 $('#school').val(user.school);
                 $('#university').val(user.university);
+
+                if(user.country != null) {
+                    submitCountry(user.country.id, user.country.name);
+                }
             },
             error : function(e) {
                 $('#personal').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
@@ -207,12 +196,12 @@
             type : "GET",
             url : "/get-countries-small-list",
             data : {
-                searchWord : $("#countryRef").val()
+                searchWord : $("#country").val()
             },
             success : function(result) {
                 $('#countriesList div').empty();
                 $.each(result, function(i, counrty){
-                    let country = "<div class=\"dropdown w3-theme-l4 w3-hover-theme\" onclick=\"submitCountry('"+counrty.id+"','"+counrty.name+"')\">"+counrty.name+"</div>";
+                    let country = "<div class=\"dropdown w3-theme-l5 w3-hover-theme\" onclick=\"submitCountry('"+counrty.id+"','"+counrty.name+"')\">"+counrty.name+"</div>";
                     $('#countriesList .list-group').append(country)
                 });
             },
@@ -224,8 +213,8 @@
     }
 
     function submitCountry(id, name) {
-        $('#countryRef').val(name);
-        countryRef = {
+        $('#country').val(name);
+        country = {
             id: id,
             name: name
         };
@@ -234,14 +223,13 @@
 
     $('#userEditForm').submit(function () {
         let jsonUser = {
-            // id: $('#id').val(),
+            id: $('#id').val(),
             firstName: $('#first_name').val(),
             lastName: $('#last_name').val(),
             phone: $('#phone').val(),
             email: $('#email').val(),
             password: $('#password').val(),
-            country: $('#country').val(),
-            countryRef: countryRef,
+            country: country,
             city: $('#city').val(),
             age: $('#age').val(),
             relationshipStatus: $('#relationshipStatus').val(),
@@ -255,7 +243,7 @@
             type: "PUT",
             url: "/edit-user",
             contentType: "application/json",
-            data: jsonUser,
+            data: JSON.stringify(jsonUser),
             success:function success() {
                 alert('User data edited');
             },

@@ -38,9 +38,9 @@
                 </div>
                 <hr>
 
-                <div class="clear-inline w3-padding-small" th:style="${user.country !=null && user.city != null ? 'display:block' : 'display:none'}">
+                <div th:if="${user.country !=null && user.city != null}" class="clear-inline w3-padding-small">
                     <i class="inline fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
-                    <div class="inline" th:text="${user.country}+', '+${user.city}">Ukraine, Kiev</div>
+                    <div class="inline" th:text="${user.country.name}+', '+${user.city}">Ukraine, Kiev</div>
                 </div>
 
                 <div class="w3-padding-small" th:style="${user.phone !=null ? 'display:block' : 'display:none'}">
