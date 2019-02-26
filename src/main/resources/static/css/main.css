@@ -54,7 +54,9 @@ body{
 }
 
 .dropdown {
-    border: solid 1px silver;
+    border-bottom: solid 1px silver;
+    border-right: solid 1px silver;
+    border-left: solid 1px silver;
     height: 35px;
     width: 210px;
     margin-left: 166px;

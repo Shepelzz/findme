@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         validateUserMainData(currentUser, false);
 
         //check other fields
+        //TODO save new country
         currentUser.setCountry(Optional.ofNullable(user.getCountry()).orElse(currentUser.getCountry()));
         currentUser.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getCity()));
         currentUser.setAge(Optional.ofNullable(user.getAge()).filter(x -> x > 0).orElse(currentUser.getAge()));

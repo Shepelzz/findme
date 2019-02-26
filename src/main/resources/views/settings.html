@@ -20,6 +20,7 @@
 <body>
 <header th:replace="common/header.html :: header"></header>
 
+
 <div class="w3-container w3-content" style="margin-top:80px">
     <!-- The Grid -->
     <div class="w3-row">
@@ -38,10 +39,6 @@
             </div>
             <br>
         </div>
-
-
-
-
 
         <!-- Middle Column -->
         <div class="w3-col m9">
@@ -84,14 +81,14 @@
                                     <!--</div>-->
                                     <hr>
                                     <p class="w3-opacity">Additional information</p>
-                                    <!--<div class="w3-padding-small">-->
-                                        <!--<label for="country" class="w3-margin-right w3-text-theme">Country: </label>-->
-                                        <!--<input class="w3-border w3-padding" id="country" type="text" name="country">-->
-                                    <!--</div>-->
+
+                                    <!--TODO -->
+                                    <!--https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_filter-->
+
 
                                     <div class="w3-padding-small" style="position: relative">
                                         <label for="country" class="w3-margin-right w3-text-theme">Country: </label>
-                                        <input class="w3-border w3-padding" id="country" type="text" name="country" onkeyup="ajaxGetCountries()" onclick="ajaxGetCountries()">
+                                        <input class="w3-border w3-padding" id="country" type="text" name="country" onkeyup="ajaxGetCountries()" onclick="ajaxGetCountries()" AUTOCOMPLETE="off">
                                             <div id="countriesList" style="position: absolute;">
                                                 <div class="list-group"></div>
                                             </div>
@@ -148,6 +145,7 @@
     let country;
 
     $(document).ready ( function(){
+        event.preventDefault();
         ajaxGetUserInfo();
     });
 
@@ -222,6 +220,7 @@
     }
 
     $('#userEditForm').submit(function () {
+        event.preventDefault();
         let jsonUser = {
             id: $('#id').val(),
             firstName: $('#first_name').val(),
@@ -238,7 +237,6 @@
             university: $('#university').val()
         };
 
-        event.preventDefault();
         $.ajax({
             type: "PUT",
             url: "/edit-user",
@@ -253,9 +251,5 @@
         });
 
     })
-
-
-
-
 </script>
 </html>
