@@ -32,11 +32,9 @@ public class CountryDAOImpl extends GeneralDAOImpl<Country> implements CountryDA
 
             criteriaQuery.select(countryRoot).where(criteria);
             criteriaQuery.orderBy(cb.desc(countryRoot.get("name")));
-            return entityManager.createQuery(criteriaQuery).getResultList();
-//            return entityManager.createQuery(SQL_GET_COUNTRIES_BY_WORD, Country.class)
-//                    .setParameter("searchWord", "%"+ searchWord+"%")
-//                    .setMaxResults(10)
-//                    .getResultList();
+            return entityManager.createQuery(criteriaQuery)
+                    .setMaxResults(10)
+                    .getResultList();
         }catch (Exception e){
             throw new InternalServerError(e.getMessage(), e.getCause());
         }

@@ -4,6 +4,7 @@ import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.model.User;
 import com.findme.service.UserService;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Log4j
 @Controller
 public class HomeController {
     private UserService userService;
@@ -53,10 +55,14 @@ public class HomeController {
             session.setAttribute("loggedUser", user);
             session.setAttribute("loggedUserId", String.valueOf(user.getId()));
             session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
+            log.info("User with id:"+user.getId()+" was logged.");
+
             return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
         } catch (BadRequestException e){
+            log.error("Login error: "+e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError e){
+            log.error("Login error: "+e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

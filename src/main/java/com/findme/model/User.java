@@ -31,10 +31,6 @@ public class User extends GeneralModel{
     @Column(name = "PASSWORD")
     private String password;
 
-    //TODO from existed data
-//    @Column(name = "COUNTRY")
-//    private String country;
-
     @ManyToOne
     @JoinColumn(name="COUNTRY_ID")
     private Country country;

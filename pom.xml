@@ -20,6 +20,7 @@
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
         <fasterxml.jackson-databind.version>2.9.4</fasterxml.jackson-databind.version>
         <project.lombok.version>1.18.4</project.lombok.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
@@ -118,6 +119,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
             <version>${springframework.boot.version}</version>
+        </dependency>
+
+        <!--Log4j-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
     </dependencies>
 
