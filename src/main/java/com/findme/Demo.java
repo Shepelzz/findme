@@ -1,7 +1,9 @@
 package com.findme;
 
+import org.apache.log4j.Logger;
+
 public class Demo {
-//    private static Logger log = Logger.getLogger(Demo.class.getName());
+    private static Logger log = Logger.getLogger(Demo.class.getName());
 
 
     public static void main(String[] args) throws Exception {
@@ -44,6 +46,19 @@ public class Demo {
 
 
 
+            log.info("start...");
+        myMethod();
+
+    }
+
+    private static void myMethod(){
+        try {
+            String eee = "34eee";
+            Long i = Long.valueOf(eee);
+
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+        }
     }
 
 }

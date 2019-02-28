@@ -5,6 +5,7 @@ import com.findme.exception.InternalServerError;
 import com.findme.model.Relationship;
 import com.findme.model.User;
 import com.findme.types.RelationshipStatus;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
 
+@Log4j
 @Repository
 public class  RelationshipDAOImpl implements RelationshipDAO{
 //TODO check
@@ -31,13 +33,18 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
 
     private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = 'FRIENDS' AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
     private static final String SQL_GET_OUTGOING_REQ_COUNT = "SELECT COUNT(r) FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userFrom.id = :userId";
-
+    private static final String SQL_GET_FRIENDS_LIST_BY_IDS = "SELECT u" +
+            " FROM User u, Relationship r" +
+            " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))" +
+            " AND u.id IN (:friendsIdList)";
+    private static final String SQL_GET_VALID_USERS_COUNT_BY_IDS = "SELECT COUNT(u) FROM User u WHERE u.id IN (:userIdList)";
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
+        log.info("Save new relationship from user "+userFromId+" to user "+userToId);
         try {
             int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
                     .setParameter("userFromId", userFromId)
@@ -47,12 +54,14 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .executeUpdate();
 
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
 
     @Override
         public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
+        log.info("Update relationship from user "+userFromId_old+"->"+userFromId_new+" to user "+userToId_old+"->"+userToId_new+" with status ["+status+"]");
         try {
             int res = entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
                     .setParameter("userFromId_old", userFromId_old)
@@ -63,6 +72,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("dateModified", new Date())
                     .executeUpdate();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -79,6 +89,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                 result = resultList.get(0);
             return result;
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -90,6 +101,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -101,6 +113,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -112,6 +125,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -124,6 +138,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setMaxResults(6)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -135,6 +150,7 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -146,34 +162,32 @@ public class  RelationshipDAOImpl implements RelationshipDAO{
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
 
     @Override
     public int getValidFriendsCountByIdList(List<Long> ids) throws InternalServerError {
-        String SQL_GET_VALID_USERS_COUNT_BY_IDS = "SELECT COUNT(u) FROM User u WHERE u.id IN (:userIdList)";
         try {
             return entityManager.createQuery(SQL_GET_VALID_USERS_COUNT_BY_IDS, Long.class)
                     .setParameter("userIdList", ids)
                     .getSingleResult().intValue();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
 
     @Override
     public List<User> getFriendsByIdList(Long userId, List<Long> friendsIds) throws InternalServerError {
-        String SQL_GET_FRIENDS_LIST_BY_IDS = "SELECT u" +
-                " FROM User u, Relationship r" +
-                " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))" +
-                " AND u.id IN (:friendsIdList)";
         try {
             return entityManager.createQuery(SQL_GET_FRIENDS_LIST_BY_IDS, User.class)
                     .setParameter("userId", userId)
                     .setParameter("friendsIdList", friendsIds)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }

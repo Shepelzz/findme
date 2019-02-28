@@ -9,6 +9,7 @@ import com.findme.model.Relationship;
 import com.findme.model.User;
 import com.findme.service.UserService;
 import com.findme.types.RelationshipStatus;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
+@Log4j
 @Controller
 public class UserController {
     private UserService userService;
@@ -36,6 +38,7 @@ public class UserController {
     public String profile(HttpSession session, Model model, @PathVariable String userId){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
+            log.warn("User is not authorized");
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
         }
@@ -53,13 +56,16 @@ public class UserController {
             }
             model.addAttribute("userPagePostList", postDAO.getPostList(userId));
         } catch (BadRequestException e){
+            log.warn(e.getMessage());
             model.addAttribute("error", e);
             return "errors/badRequest";
-        } catch (InternalServerError ise){
-            model.addAttribute("error", ise);
+        } catch (InternalServerError e){
+            log.error(e.getMessage(), e);
+            model.addAttribute("error", e);
             return "errors/internalServerError";
-        } catch (NotFoundException nofe){
-            model.addAttribute("error", nofe);
+        } catch (NotFoundException e){
+            log.warn(e.getMessage());
+            model.addAttribute("error", e);
             return "errors/notFound";
         }
         model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
@@ -69,27 +75,35 @@ public class UserController {
     @RequestMapping(path = "/edit-user", method = RequestMethod.GET)
     public ResponseEntity<?> editUser(HttpSession session){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null)
+        if(loggedUserId==null) {
+            log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        }
         try{
             return new ResponseEntity<>(userService.findById(Long.valueOf(loggedUserId)), HttpStatus.OK);
         } catch (NotFoundException e){
+            log.warn(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError | NumberFormatException e){
+            log.error(e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody User user){
-        if(session.getAttribute("loggedUserId")==null)
+        if(session.getAttribute("loggedUserId")==null) {
+            log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        }
         try {
             userService.update(user);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
+            log.warn(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError | NumberFormatException e){
+            log.error(e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

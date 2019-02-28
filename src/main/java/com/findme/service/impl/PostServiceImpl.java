@@ -10,6 +10,7 @@ import com.findme.exception.NotFoundException;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j
 @Service
 public class PostServiceImpl implements PostService {
     private PostDAO postDAO;
@@ -68,19 +70,27 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(Long id, Long userId) throws InternalServerError, BadRequestException {
         Post post = postDAO.findById(id);
-        if(post == null)
-            throw new BadRequestException("Wrong post id.");
-        if(!post.getUserPosted().getId().equals(userId))
-            throw new BadRequestException("You can not remove this post.");
-
+        if(post == null) {
+            String msg = "Wrong post id";
+            log.warn(msg);
+            throw new BadRequestException(msg);
+        }
+        if(!post.getUserPosted().getId().equals(userId)) {
+            String msg = "You can not remove this post";
+            log.warn(msg);
+            throw new BadRequestException(msg);
+        }
         postDAO.delete(id);
     }
 
     @Override
     public Post findById(Long id) throws InternalServerError, NotFoundException {
         Post post = postDAO.findById(id);
-        if(post == null)
-            throw new NotFoundException("Post with id "+id+" was not found");
+        if(post == null) {
+            String msg = "Post with id " + id + " was not found";
+            log.warn(msg);
+            throw new NotFoundException(msg);
+        }
         return post;
     }
 
@@ -89,6 +99,7 @@ public class PostServiceImpl implements PostService {
         try{
             return postDAO.getPostsByFilter(userId, filter);
         } catch (NumberFormatException e){
+            log.warn(e.getMessage());
             throw new BadRequestException(e.getMessage());
         }
     }
@@ -104,6 +115,7 @@ public class PostServiceImpl implements PostService {
             Optional.of(userFromId).map(Long::valueOf);
             Optional.of(userToId).map(Long::valueOf);
         } catch (IllegalArgumentException e){
+            log.warn(e.getMessage());
             throw new BadRequestException(e.getMessage());
         }
     }

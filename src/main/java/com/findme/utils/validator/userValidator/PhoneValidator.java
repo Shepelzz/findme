@@ -2,15 +2,21 @@ package com.findme.utils.validator.userValidator;
 
 import com.findme.exception.BadRequestException;
 import com.findme.utils.validator.params.UserValidatorParams;
+import lombok.extern.log4j.Log4j;
 
 import java.util.regex.Pattern;
 
+@Log4j
 public class PhoneValidator extends AbstractUserValidator {
     private static final Pattern phonePattern = Pattern.compile("^\\+\\d{12}$");
     @Override
     protected void checkParam(UserValidatorParams params) throws BadRequestException {
-        if(!phonePattern.matcher(params.getPhone()).matches())
-            throw new BadRequestException("Phone is not valid.");
-        System.out.println("Phone is ok.");
+        log.info("User phone validation");
+
+        if(!phonePattern.matcher(params.getPhone()).matches()){
+            String msg = "Phone is not valid";
+            log.warn(msg);
+            throw new BadRequestException(msg);
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.findme.model.User;
 import com.findme.service.UserService;
 import com.findme.utils.validator.params.UserValidatorParams;
 import com.findme.utils.validator.userValidator.*;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
+@Log4j
 @Service
 public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
@@ -44,7 +46,6 @@ public class UserServiceImpl implements UserService {
         validateUserMainData(currentUser, false);
 
         //check other fields
-        //TODO save new country
         currentUser.setCountry(Optional.ofNullable(user.getCountry()).orElse(currentUser.getCountry()));
         currentUser.setCity(Optional.ofNullable(user.getCity()).filter(x -> !x.trim().isEmpty()).orElse(currentUser.getCity()));
         currentUser.setAge(Optional.ofNullable(user.getAge()).filter(x -> x > 0).orElse(currentUser.getAge()));
@@ -65,8 +66,11 @@ public class UserServiceImpl implements UserService {
     public User findById(Long id) throws InternalServerError, NotFoundException {
 
         User user = userDAO.findById(id);
-        if(user == null)
-            throw new NotFoundException("User with id "+id+" was not found");
+        if(user == null) {
+            String msg = "User with id " + id + " was not found";
+            log.warn(msg);
+            throw new NotFoundException(msg);
+        }
         return user;
     }
 
@@ -74,8 +78,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User login(String email, String password) throws InternalServerError, BadRequestException {
         User user = userDAO.getUserByAuthorization(email, password);
-        if(user == null)
-            throw new BadRequestException("Username or password is incorrect.");
+        if(user == null) {
+            String msg = "Username or password is incorrect";
+            log.warn(msg);
+            throw new BadRequestException(msg);
+        }
         user.setDateLastActive(new Date());
         userDAO.update(user);
         return user;
@@ -101,7 +108,10 @@ public class UserServiceImpl implements UserService {
                 .build());
 
         if(isNew)
-            if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null)
-                throw new BadRequestException("There is already registered user with this email or phone.");
+            if(userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null) {
+                String msg = "There is already registered user with this email or phone";
+                log.warn(msg);
+                throw new BadRequestException(msg);
+            }
     }
 }

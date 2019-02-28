@@ -3,10 +3,12 @@ package com.findme.dao.impl;
 import com.findme.dao.UserDAO;
 import com.findme.exception.InternalServerError;
 import com.findme.model.User;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Log4j
 @Repository
 public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
     private static final String SQL_TOP_USERS = "SELECT u FROM User u ORDER BY dateRegistered DESC";
@@ -24,6 +26,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
                     .setMaxResults(10)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -40,6 +43,7 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
                 result = userList.get(0);
             return result;
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -56,10 +60,8 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
                 result = userList.get(0);
             return result;
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
-
-
-
 }

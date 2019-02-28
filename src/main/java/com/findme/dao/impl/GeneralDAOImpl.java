@@ -3,12 +3,14 @@ package com.findme.dao.impl;
 import com.findme.dao.GeneralDAO;
 import com.findme.exception.InternalServerError;
 import com.findme.model.GeneralModel;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+@Log4j
 @Repository
 public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     private Class<T> clazz;
@@ -27,8 +29,11 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     public T save(T t) throws InternalServerError {
         try {
             entityManager.persist(t);
+            log.info("New "+t.getClass().getName()+" saved with id "+t.getId());
+
             return t;
         } catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -38,8 +43,11 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     public T update(T t) throws InternalServerError {
         try {
             entityManager.merge(t);
+            log.info("Entity "+t.getClass().getName()+" with id "+t.getId()+" was updated");
+
             return t;
         } catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -47,9 +55,19 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     @Override
     @Transactional
     public void delete(Long id) throws InternalServerError{
-        int res = entityManager.createQuery(SQL_DELETE_BY_ID).setParameter("id", id).executeUpdate();
-        if(res == 0)
-            throw new InternalServerError(clazz.getSimpleName()+" with id: "+id+" was not deleted");
+        int res;
+        try {
+            res = entityManager.createQuery(SQL_DELETE_BY_ID).setParameter("id", id).executeUpdate();
+            if (res == 0) {
+                String errorMessage = "Entity "+clazz.getSimpleName() + " with id: " + id + " was not deleted";
+                log.warn(errorMessage);
+                throw new InternalServerError(errorMessage);
+            } else
+                log.info("Entity "+clazz.getSimpleName() + " with id: " + id + " was deleted");
+        } catch (Exception e){
+            log.error(e.getMessage(), e);
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
     }
 
 
@@ -58,6 +76,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
         try {
             return entityManager.find(clazz, id);
         } catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }

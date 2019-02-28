@@ -6,11 +6,13 @@ import com.findme.model.FilterPagePosts;
 import com.findme.model.Post;
 import com.findme.model.Post_;
 import com.findme.model.User;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
 import java.util.List;
 
+@Log4j
 @Repository
 public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     private static final String SQL_POST_LIST = "SELECT p FROM Post p WHERE p.userPagePosted.id = :userId ORDER BY p.datePosted DESC";
@@ -32,6 +34,7 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
                     .setMaxResults(10)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -64,6 +67,7 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
                     .setMaxResults(10)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -71,13 +75,13 @@ public class PostDAOImpl extends GeneralDAOImpl<Post> implements PostDAO {
     @Override
     public List<Post> getNewsListPart(Long userId, int rowsFrom, int maxResults) throws InternalServerError {
         try {
-
             return entityManager.createQuery(SQL_NEWS_LIST, Post.class)
                     .setParameter("userId", userId)
                     .setFirstResult(rowsFrom)
                     .setMaxResults(maxResults)
                     .getResultList();
         }catch (Exception e){
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }

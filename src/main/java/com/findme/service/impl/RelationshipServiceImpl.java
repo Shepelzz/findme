@@ -10,13 +10,14 @@ import com.findme.service.RelationshipService;
 import com.findme.types.RelationshipStatus;
 import com.findme.utils.validator.params.RelationshipValidatorParams;
 import com.findme.utils.validator.relationshipValidator.*;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-
+@Log4j
 @Service
 public class RelationshipServiceImpl implements RelationshipService {
 
@@ -102,6 +103,7 @@ public class RelationshipServiceImpl implements RelationshipService {
             Optional.of(userToId).map(Long::valueOf);
             Optional.ofNullable(status).map(RelationshipStatus::valueOf);
         } catch (IllegalArgumentException e){
+            log.error(e.getMessage(), e);
             throw new BadRequestException(e.getMessage());
         }
     }
