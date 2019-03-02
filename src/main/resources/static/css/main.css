@@ -27,13 +27,22 @@ a {
     color: rgba(255, 255, 255, 0.72);
 }
 
-.small-avatar {
-    border: rgba(255, 255, 255, 0) 3px solid;
-    width:63px
+.avatar {border: rgba(255, 255, 255, 0) 2px solid;}
+.avatar-s1 {
+    width:62px;
+    margin-top: -15px;
 }
-.small-avatar:hover {
-    border-color: #d8d8d8;
+.avatar-s2{
+    width:45px;
 }
+.avatar-s3{
+    height:23px;
+    width:23px
+}
+.avatar:hover {
+    border-color: #0c6394;
+}
+
 
 .input-form label{
     text-align: right;

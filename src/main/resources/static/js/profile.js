@@ -48,7 +48,7 @@ function ajaxFilterPost(){
                     "                    <div>\n" +
                     "                        <br>\n" +
                     "                        <a href=\"/user/"+post.userPosted.id+"\">\n" +
-                    "                            <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"small-avatar w3-left w3-circle w3-margin-right\">\n" +
+                    "                            <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s1 w3-left w3-circle w3-margin-right\">\n" +
                     "                        </a>" +
                     "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+parsePostDate(new Date(post.datePosted))+"</span>\n" +
                     "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
