@@ -14,14 +14,12 @@ public class EmailValidator extends AbstractUserValidator {
         log.info("User email validation");
 
         if(params.getEmail().length()>=50) {
-            String msg = "Email larger is larger than 50";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Email larger is larger than 50");
+            throw new BadRequestException("Email larger is larger than 50");
         }
         if(!emailPattern.matcher(params.getEmail()).matches()) {
-            String msg = "Email is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Email is not valid");
+            throw new BadRequestException("Email is not valid");
         }
     }
 }

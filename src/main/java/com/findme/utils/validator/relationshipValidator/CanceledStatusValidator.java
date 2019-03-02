@@ -16,9 +16,8 @@ public class CanceledStatusValidator extends AbstractRelationshipValidator {
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                String msgStatusCheck = "[CANCELED] Request can not be processed";
-                log.warn(msgStatusCheck);
-                throw new BadRequestException(msgStatusCheck);
+                log.warn("[CANCELED] Request can not be processed");
+                throw new BadRequestException("[CANCELED] Request can not be processed");
             }
         }
     }

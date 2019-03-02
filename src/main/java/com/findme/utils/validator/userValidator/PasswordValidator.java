@@ -14,9 +14,8 @@ public class PasswordValidator extends AbstractUserValidator {
         log.info("User password validation");
 
         if(!passwordPattern.matcher(params.getPassword()).matches()) {
-            String msg = "Password is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Password is not valid");
+            throw new BadRequestException("Password is not valid");
         }
     }
 }

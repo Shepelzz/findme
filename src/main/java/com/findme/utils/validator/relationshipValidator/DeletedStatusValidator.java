@@ -19,14 +19,12 @@ public class DeletedStatusValidator extends AbstractRelationshipValidator {
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                String msgStatusCheck = "[DELETED] Request can not be processed";
-                log.warn(msgStatusCheck);
-                throw new BadRequestException(msgStatusCheck);
+                log.warn("[DELETED] Request can not be processed");
+                throw new BadRequestException("[DELETED] Request can not be processed");
             }
             if(TimeUnit.DAYS.convert(new Date().getTime() - params.getRelationshipDateModified().getTime(), TimeUnit.MILLISECONDS) <= 3) {
-                String msgDateCheck = "3 days have not passed since the beginning of the friendship";
-                log.warn(msgDateCheck);
-                throw new BadRequestException(msgDateCheck);
+                log.warn("3 days have not passed since the beginning of the friendship");
+                throw new BadRequestException("3 days have not passed since the beginning of the friendship");
             }
         }
     }

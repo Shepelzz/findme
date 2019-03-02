@@ -19,19 +19,16 @@ public class RequestedStatusValidator extends AbstractRelationshipValidator {
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(Arrays.stream(CURRENT_STATUS).noneMatch(params.getOldStatus()::equals)) {
-                String msgStatusCheck = "[CANCELED] Request can not be processed";
-                log.warn(msgStatusCheck);
-                throw new BadRequestException(msgStatusCheck);
+                log.warn("[CANCELED] Request can not be processed");
+                throw new BadRequestException("[CANCELED] Request can not be processed");
             }
             if(params.getFriendsCnt() >= 100) {
-                String msgFriendsCntCheck = "Action cannot be performed. You have exceeded the limit on the number of friends";
-                log.warn(msgFriendsCntCheck);
-                throw new BadRequestException(msgFriendsCntCheck);
+                log.warn("Action cannot be performed. You have exceeded the limit on the number of friends");
+                throw new BadRequestException("Action cannot be performed. You have exceeded the limit on the number of friends");
             }
             if(params.getOutgoingReqCnt() >= 10) {
-                String msgOutReqCntCheck = "Action cannot be performed. You have exceeded the limit on the number of outgoing requests";
-                log.warn(msgOutReqCntCheck);
-                throw new BadRequestException(msgOutReqCntCheck);
+                log.warn("Action cannot be performed. You have exceeded the limit on the number of outgoing requests");
+                throw new BadRequestException("Action cannot be performed. You have exceeded the limit on the number of outgoing requests");
             }
         }
     }

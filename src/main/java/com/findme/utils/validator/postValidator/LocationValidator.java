@@ -14,9 +14,8 @@ public class LocationValidator extends AbstractPostValidator{
     protected void checkParam(PostValidatorParams params) throws BadRequestException {
         log.info("Post location validation");
         if(!params.getPostInfo().getLocation().equals("") && !locationNamePattern.matcher(params.getPostInfo().getLocation()).matches()) {
-            String msg = "Location is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Location is not valid");
+            throw new BadRequestException("Location is not valid");
         }
     }
 }

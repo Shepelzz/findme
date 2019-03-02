@@ -7,6 +7,7 @@ import com.findme.model.*;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
+import com.findme.service.GeneralService;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
@@ -20,16 +21,19 @@ import java.util.Optional;
 
 @Log4j
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl extends GeneralServiceImpl<Post> implements PostService {
     private PostDAO postDAO;
     private UserDAO userDAO;
     private RelationshipDAO relationshipDAO;
 
     @Autowired
     public PostServiceImpl(PostDAO postDAO, UserDAO userDAO, RelationshipDAO relationshipDAO) {
+        super(postDAO);
+        setClazz(Post.class);
         this.postDAO = postDAO;
         this.userDAO = userDAO;
         this.relationshipDAO = relationshipDAO;
+
     }
 
     @Override
@@ -71,27 +75,14 @@ public class PostServiceImpl implements PostService {
     public void delete(Long id, Long userId) throws InternalServerError, BadRequestException {
         Post post = postDAO.findById(id);
         if(post == null) {
-            String msg = "Wrong post id";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Wrong post id");
+            throw new BadRequestException("Wrong post id");
         }
         if(!post.getUserPosted().getId().equals(userId)) {
-            String msg = "You can not remove this post";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("You can not remove this post");
+            throw new BadRequestException("You can not remove this post");
         }
         postDAO.delete(id);
-    }
-
-    @Override
-    public Post findById(Long id) throws InternalServerError, NotFoundException {
-        Post post = postDAO.findById(id);
-        if(post == null) {
-            String msg = "Post with id " + id + " was not found";
-            log.warn(msg);
-            throw new NotFoundException(msg);
-        }
-        return post;
     }
 
     @Override

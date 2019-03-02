@@ -15,17 +15,15 @@ public class MessageValidator extends AbstractPostValidator{
         log.info("Post message validation");
 
         if(params.getPostInfo().getMessage().length() > 200) {
-            String msg = "Message can not be more than 200 symbols";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Message can not be more than 200 symbols");
+            throw new BadRequestException("Message can not be more than 200 symbols");
         }
 
         if(!params.getPostInfo().getMessage().equals("")){
             for(String word : params.getPostInfo().getMessage().split(" "))
                 if(word.contains("http") || urlPattern.matcher(word).matches()) {
-                    String msg = "Message can not contain URLs";
-                    log.warn(msg);
-                    throw new BadRequestException(msg);
+                    log.warn("Message can not contain URLs");
+                    throw new BadRequestException("Message can not contain URLs");
                 }
         }
     }

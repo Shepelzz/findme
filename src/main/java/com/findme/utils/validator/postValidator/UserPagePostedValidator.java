@@ -14,9 +14,8 @@ public class UserPagePostedValidator extends AbstractPostValidator {
 
         if(!params.getPostInfo().getUserPostedId().equals(params.getPostInfo().getUserPagePostedId()))
             if (params.getRelBtwAuthorAndPagePostedUser() == null || !params.getRelBtwAuthorAndPagePostedUser().getStatus().equals(RelationshipStatus.FRIENDS)) {
-                String msg = "Post can be posted only on your own or friends page";
-                log.warn(msg);
-                throw new BadRequestException(msg);
+                log.warn("Post can be posted only on your own or friends page");
+                throw new BadRequestException("Post can be posted only on your own or friends page");
             }
     }
 }

@@ -2,6 +2,7 @@ package com.findme.dao.impl;
 
 import com.findme.dao.GeneralDAO;
 import com.findme.exception.InternalServerError;
+import com.findme.exception.NotFoundException;
 import com.findme.model.GeneralModel;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
@@ -12,7 +13,7 @@ import javax.transaction.Transactional;
 
 @Log4j
 @Repository
-public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
+public abstract class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     private Class<T> clazz;
     private String SQL_DELETE_BY_ID;
 
@@ -29,7 +30,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     public T save(T t) throws InternalServerError {
         try {
             entityManager.persist(t);
-            log.info("New "+t.getClass().getName()+" saved with id "+t.getId());
+            log.info("New "+clazz.getSimpleName()+" saved with id "+t.getId());
 
             return t;
         } catch (Exception e){
@@ -43,7 +44,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     public T update(T t) throws InternalServerError {
         try {
             entityManager.merge(t);
-            log.info("Entity "+t.getClass().getName()+" with id "+t.getId()+" was updated");
+            log.info("Entity "+clazz.getSimpleName()+" with id "+t.getId()+" was updated");
 
             return t;
         } catch (Exception e){
@@ -74,7 +75,7 @@ public class GeneralDAOImpl<T extends GeneralModel> implements GeneralDAO<T> {
     @Override
     public T findById(Long id) throws InternalServerError{
         try {
-            return entityManager.find(clazz, id);
+           return entityManager.find(clazz, id);
         } catch (Exception e){
             log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());

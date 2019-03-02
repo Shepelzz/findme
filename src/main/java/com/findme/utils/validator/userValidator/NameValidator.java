@@ -14,14 +14,12 @@ public class NameValidator extends AbstractUserValidator {
         log.info("User name validation");
 
         if(!namePattern.matcher(params.getFirstName()).matches()) {
-            String msg = "First name is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("First name is not valid");
+            throw new BadRequestException("First name is not valid");
         }
         if(!namePattern.matcher(params.getLastName()).matches()) {
-            String msg = "Last name is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Last name is not valid");
+            throw new BadRequestException("Last name is not valid");
         }
     }
 }

@@ -56,15 +56,12 @@ public class UserController {
             }
             model.addAttribute("userPagePostList", postDAO.getPostList(userId));
         } catch (BadRequestException e){
-            log.warn(e.getMessage());
             model.addAttribute("error", e);
             return "errors/badRequest";
         } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
             model.addAttribute("error", e);
             return "errors/internalServerError";
         } catch (NotFoundException e){
-            log.warn(e.getMessage());
             model.addAttribute("error", e);
             return "errors/notFound";
         }
@@ -82,10 +79,8 @@ public class UserController {
         try{
             return new ResponseEntity<>(userService.findById(Long.valueOf(loggedUserId)), HttpStatus.OK);
         } catch (NotFoundException e){
-            log.warn(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (InternalServerError | NumberFormatException e){
-            log.error(e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -100,11 +95,11 @@ public class UserController {
             userService.update(user);
             return new ResponseEntity<>( HttpStatus.OK);
         } catch (BadRequestException e){
-            log.warn(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (InternalServerError | NumberFormatException e){
-            log.error(e.getMessage(), e);
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (NotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

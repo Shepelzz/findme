@@ -16,9 +16,8 @@ public class FriendsStatusValidator extends AbstractRelationshipValidator {
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                String msgStatusCheck = "[FRIENDS] Request can not be processed";
-                log.warn(msgStatusCheck);
-                throw new BadRequestException(msgStatusCheck);
+                log.warn("[FRIENDS] Request can not be processed");
+                throw new BadRequestException("[FRIENDS] Request can not be processed");
             }
         }
     }

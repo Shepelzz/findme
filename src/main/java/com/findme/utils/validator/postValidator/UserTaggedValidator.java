@@ -12,9 +12,8 @@ public class UserTaggedValidator extends AbstractPostValidator {
         log.info("Post tagged users validation");
 
         if(params.getUsersTagged() != null && params.getUsersTagged().size()!=params.getPostInfo().getUsersTaggedIds().size()) {
-            String msg = "Tagged users data is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Tagged users data is not valid");
+            throw new BadRequestException("Tagged users data is not valid");
         }
     }
 }

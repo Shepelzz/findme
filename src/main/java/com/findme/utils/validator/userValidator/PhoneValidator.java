@@ -14,9 +14,8 @@ public class PhoneValidator extends AbstractUserValidator {
         log.info("User phone validation");
 
         if(!phonePattern.matcher(params.getPhone()).matches()){
-            String msg = "Phone is not valid";
-            log.warn(msg);
-            throw new BadRequestException(msg);
+            log.warn("Phone is not valid");
+            throw new BadRequestException("Phone is not valid");
         }
     }
 }

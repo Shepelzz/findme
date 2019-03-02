@@ -15,7 +15,6 @@ public class UserDAOImpl extends GeneralDAOImpl<User> implements UserDAO {
     private static final String SQL_GET_USER_BY_EMAIL_OR_PHONE = "SELECT u FROM User u WHERE email = :email OR phone = :phone";
     private static final String SQL_GET_USER_BY_AUTH = "SELECT u FROM User u WHERE email = :email AND password = :password";
 
-
     public UserDAOImpl() {
         setClazz(User.class);
     }

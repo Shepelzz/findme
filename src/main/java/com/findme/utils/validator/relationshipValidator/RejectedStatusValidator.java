@@ -16,9 +16,8 @@ public class RejectedStatusValidator extends AbstractRelationshipValidator {
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS) {
-                String msgStatusCheck = "[REJECTED] Request can not be processed";
-                log.warn(msgStatusCheck);
-                throw new BadRequestException(msgStatusCheck);
+                log.warn("[REJECTED] Request can not be processed");
+                throw new BadRequestException("[REJECTED] Request can not be processed");
             }
         }
     }
