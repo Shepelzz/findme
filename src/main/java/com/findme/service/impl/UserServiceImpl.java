@@ -81,6 +81,7 @@ public class UserServiceImpl extends GeneralServiceImpl<User> implements UserSer
     }
 
     private void validateUserMainData(User user) throws BadRequestException{
+        log.info("Start user main data validation");
 
         AbstractUserValidator nameValidator = new NameValidator();
         AbstractUserValidator emailValidator = new EmailValidator();
@@ -101,6 +102,7 @@ public class UserServiceImpl extends GeneralServiceImpl<User> implements UserSer
     }
 
     private void validateEmailAndPhone(String email, String phone) throws BadRequestException, InternalServerError {
+        log.info("Start checking email or phone for existing in db");
         if(userDAO.getUserByEmailOrPhone(email, phone) != null) {
             log.warn("There is already registered user with this email or phone");
             throw new BadRequestException("There is already registered user with this email or phone");

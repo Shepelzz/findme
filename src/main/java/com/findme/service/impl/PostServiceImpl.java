@@ -112,6 +112,8 @@ public class PostServiceImpl extends GeneralServiceImpl<Post> implements PostSer
     }
 
     private void validatePostInfo(PostValidatorParams params) throws BadRequestException{
+        log.info("Start post validation");
+
         AbstractPostValidator usersValidator = new UserPagePostedValidator();
         AbstractPostValidator messageValidator = new MessageValidator();
         AbstractPostValidator locationValidator = new LocationValidator();
