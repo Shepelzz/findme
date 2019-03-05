@@ -12,12 +12,12 @@ public class CanceledStatusValidator extends AbstractRelationshipValidator {
 
     @Override
     void checkParam(RelationshipValidatorParams params) throws BadRequestException{
-        log.info("Relationship [CANCELED] status validation");
+        log.info("Relationship [CANCELED] from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] status validation");
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                log.warn("[CANCELED] Request can not be processed");
-                throw new BadRequestException("[CANCELED] Request can not be processed");
+                log.warn("Relationship validation fail. [CANCELED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
+                throw new BadRequestException("Relationship validation fail. [CANCELED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
             }
         }
     }

@@ -3,11 +3,9 @@ package com.findme.service.impl;
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
-import com.findme.model.*;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
-import com.findme.exception.NotFoundException;
-import com.findme.service.GeneralService;
+import com.findme.model.*;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
@@ -75,11 +73,11 @@ public class PostServiceImpl extends GeneralServiceImpl<Post> implements PostSer
     public void delete(Long id, Long userId) throws InternalServerError, BadRequestException {
         Post post = postDAO.findById(id);
         if(post == null) {
-            log.warn("Wrong post id");
+            log.warn("Post delete fail. Wrong post id ["+id+"]");
             throw new BadRequestException("Wrong post id");
         }
         if(!post.getUserPosted().getId().equals(userId)) {
-            log.warn("You can not remove this post");
+            log.warn("Post delete fail. User ["+userId+"] can not remove post ["+id+"]");
             throw new BadRequestException("You can not remove this post");
         }
         postDAO.delete(id);

@@ -12,12 +12,12 @@ public class FriendsStatusValidator extends AbstractRelationshipValidator {
 
     @Override
     protected void checkParam(RelationshipValidatorParams params) throws BadRequestException{
-        log.info("Relationship [FRIENDS] status validation");
+        log.info("Relationship [FRIENDS] from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] status validation");
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                log.warn("[FRIENDS] Request can not be processed");
-                throw new BadRequestException("[FRIENDS] Request can not be processed");
+                log.warn("Relationship validation fail. [FRIENDS] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
+                throw new BadRequestException("Relationship validation fail. [FRIENDS] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
             }
         }
     }

@@ -60,7 +60,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         User userTo = userDAO.findById(Long.valueOf(userToId));
         if(userTo == null || currentRelationship == null)
-            throw new BadRequestException("Relationship save - failed. Wrong data.");
+            throw new BadRequestException("Relationship from user ["+userFromId+"] to user ["+userToId+"] save - failed. Wrong data.");
 
         AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
         AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
@@ -79,6 +79,8 @@ public class RelationshipServiceImpl implements RelationshipService {
                 .relationshipDateModified(currentRelationship.getDateModified())
                 .friendsCnt(relationshipDAO.getFriendsCount(userFromId))
                 .outgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+                .userFromId(userFromId)
+                .userToId(userToId)
                 .build());
     }
 
@@ -86,7 +88,7 @@ public class RelationshipServiceImpl implements RelationshipService {
         validateIncomingParams(userFromId, userToId, null);
 
         if(relationshipDAO.getRelationship(userFromId, userToId) != null)
-            throw new BadRequestException("Relationship save - failed. There is an active relationship");
+            throw new BadRequestException("Relationship from user ["+userFromId+"] to user ["+userToId+"] save - failed. There is an active relationship");
 
         AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
         requestedVal.check(RelationshipValidatorParams.builder()
@@ -94,6 +96,8 @@ public class RelationshipServiceImpl implements RelationshipService {
                 .newStatus(RelationshipStatus.REQUESTED)
                 .friendsCnt(relationshipDAO.getFriendsCount(userFromId))
                 .outgoingReqCnt(relationshipDAO.getOutgoingRequestsCount(userFromId))
+                .userFromId(userFromId)
+                .userToId(userToId)
                 .build());
     }
 

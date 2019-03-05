@@ -12,18 +12,18 @@ public class MessageValidator extends AbstractPostValidator{
 
     @Override
     protected void checkParam(PostValidatorParams params) throws BadRequestException {
-        log.info("Post message validation");
+        log.info("Post message ["+params.getPostInfo().getMessage()+"] validation");
 
         if(params.getPostInfo().getMessage().length() > 200) {
-            log.warn("Message can not be more than 200 symbols");
-            throw new BadRequestException("Message can not be more than 200 symbols");
+            log.warn("Post message validation fail. Message ["+params.getPostInfo().getMessage()+"] is more than 200 symbols");
+            throw new BadRequestException("Post message validation fail. Message ["+params.getPostInfo().getMessage()+"] is be more than 200 symbols");
         }
 
         if(!params.getPostInfo().getMessage().equals("")){
             for(String word : params.getPostInfo().getMessage().split(" "))
                 if(word.contains("http") || urlPattern.matcher(word).matches()) {
-                    log.warn("Message can not contain URLs");
-                    throw new BadRequestException("Message can not contain URLs");
+                    log.warn("Post message validation fail. Message ["+params.getPostInfo().getMessage()+"] contains URL");
+                    throw new BadRequestException("Post message validation fail. Message ["+params.getPostInfo().getMessage()+"] contains URL");
                 }
         }
     }

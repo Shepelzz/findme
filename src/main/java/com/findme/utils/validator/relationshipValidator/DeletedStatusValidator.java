@@ -15,16 +15,16 @@ public class DeletedStatusValidator extends AbstractRelationshipValidator {
 
     @Override
     protected void checkParam(RelationshipValidatorParams params) throws BadRequestException{
-        log.info("Relationship [DELETED] status validation");
+        log.info("Relationship [DELETED] from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] status validation");
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS){
-                log.warn("[DELETED] Request can not be processed");
-                throw new BadRequestException("[DELETED] Request can not be processed");
+                log.warn("Relationship validation fail. [DELETED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
+                throw new BadRequestException("Relationship validation fail. [DELETED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
             }
             if(TimeUnit.DAYS.convert(new Date().getTime() - params.getRelationshipDateModified().getTime(), TimeUnit.MILLISECONDS) <= 3) {
-                log.warn("3 days have not passed since the beginning of the friendship");
-                throw new BadRequestException("3 days have not passed since the beginning of the friendship");
+                log.warn("Relationship validation fail. Relationship from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] is < 3 days");
+                throw new BadRequestException("Relationship validation fail. Relationship from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] is < 3 days");
             }
         }
     }

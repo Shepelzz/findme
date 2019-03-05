@@ -12,6 +12,8 @@ import java.util.Date;
 @Builder
 public class RelationshipValidatorParams {
 
+    private String userFromId;
+    private String userToId;
     private RelationshipStatus oldStatus;
     private RelationshipStatus newStatus;
     private Date relationshipDateModified;

@@ -3,9 +3,7 @@ package com.findme.service.impl;
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
-import com.findme.exception.NotFoundException;
 import com.findme.model.User;
-import com.findme.service.GeneralService;
 import com.findme.service.UserService;
 import com.findme.utils.validator.params.UserValidatorParams;
 import com.findme.utils.validator.userValidator.*;
@@ -13,10 +11,8 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.Date;
-import java.util.Optional;
 
 @Log4j
 @Service
@@ -72,7 +68,7 @@ public class UserServiceImpl extends GeneralServiceImpl<User> implements UserSer
     public User login(String email, String password) throws InternalServerError, BadRequestException {
         User user = userDAO.getUserByAuthorization(email, password);
         if(user == null) {
-            log.warn("Username or password is incorrect");
+            log.warn("Login fail for email "+email);
             throw new BadRequestException("Username or password is incorrect");
         }
         user.setDateLastActive(new Date());
@@ -104,7 +100,7 @@ public class UserServiceImpl extends GeneralServiceImpl<User> implements UserSer
     private void validateEmailAndPhone(String email, String phone) throws BadRequestException, InternalServerError {
         log.info("Start checking email or phone for existing in db");
         if(userDAO.getUserByEmailOrPhone(email, phone) != null) {
-            log.warn("There is already registered user with this email or phone");
+            log.warn("There is already registered user with email ["+email+"] or phone ["+phone+"]");
             throw new BadRequestException("There is already registered user with this email or phone");
         }
     }

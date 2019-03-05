@@ -12,12 +12,12 @@ public class RejectedStatusValidator extends AbstractRelationshipValidator {
 
     @Override
     protected void checkParam(RelationshipValidatorParams params) throws BadRequestException{
-        log.info("Relationship [REJECTED] status validation");
+        log.info("Relationship [REJECTED] from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"] status validation");
 
         if(params.getNewStatus().equals(NEW_STATUS)) {
             if(params.getOldStatus() != CURRENT_STATUS) {
-                log.warn("[REJECTED] Request can not be processed");
-                throw new BadRequestException("[REJECTED] Request can not be processed");
+                log.warn("Relationship validation fail. [REJECTED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
+                throw new BadRequestException("Relationship validation fail. [REJECTED] Request can not be processed from user ["+params.getUserFromId()+"] to user ["+params.getUserToId()+"]");
             }
         }
     }
