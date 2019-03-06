@@ -3,20 +3,18 @@ package com.findme.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Bad Request")
-public class BadRequestException extends Exception{
-    private final Integer code = 400;
-    private final String description = "Bad request exception";
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Bad Request")
+public class BadRequestException extends RuntimeException{
 
     public BadRequestException(String message) {
         super(message);
     }
 
     public Integer getCode() {
-        return code;
+        return 400;
     }
 
     public String getDescription() {
-        return description;
+        return "Bad request exception";
     }
 }

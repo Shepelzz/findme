@@ -3,11 +3,8 @@ package com.findme.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Internal Server Error")
-public class InternalServerError extends Exception{
-
-    private final Integer code = 500;
-    private final String description = "Internal Server Error";
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Internal Server Error")
+public class InternalServerError extends RuntimeException{
 
     public InternalServerError(String message, Throwable cause) {
         super(message, cause);
@@ -18,10 +15,10 @@ public class InternalServerError extends Exception{
     }
 
     public Integer getCode() {
-        return code;
+        return 500;
     }
 
     public String getDescription() {
-        return description;
+        return "Internal Server Error";
     }
 }
