@@ -1,16 +1,16 @@
 package com.findme.api;
 
+import com.findme.exception.BadRequestException;
+import com.findme.exception.InternalServerError;
 import com.findme.model.User;
 import com.findme.service.UserService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RestController
@@ -42,6 +42,26 @@ public class UserRestController {
         }
         userService.update(user);
         return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
+    public ResponseEntity<String> registerUser(@ModelAttribute User user){
+        User createdUser = userService.save(user);
+        log.info("User with id:"+createdUser.getId()+" was registered.");
+
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request){
+        User user = userService.login(request.getParameter("email"), request.getParameter("password"));
+        log.info("User with id:"+user.getId()+" logged in");
+
+        session.setAttribute("loggedUser", user);
+        session.setAttribute("loggedUserId", String.valueOf(user.getId()));
+        session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
+
+        return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
     }
 
 }

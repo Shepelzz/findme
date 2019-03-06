@@ -30,12 +30,7 @@ public class CountryRestController {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        try {
-            return new ResponseEntity<>(countryService.getCountriesByWord(searchWord), HttpStatus.OK);
-        } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(countryService.getCountriesByWord(searchWord), HttpStatus.OK);
     }
 
 }

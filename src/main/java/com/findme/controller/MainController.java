@@ -19,11 +19,11 @@ import javax.servlet.http.HttpSession;
 
 @Log4j
 @Controller
-public class HomeController {
+public class MainController {
     private UserService userService;
 
     @Autowired
-    public HomeController(UserService userService) {
+    public MainController(UserService userService) {
         this.userService = userService;
     }
 
@@ -36,48 +36,24 @@ public class HomeController {
             return "index";
     }
 
-    @RequestMapping(path = "/register-user", method = RequestMethod.POST)
-    public ResponseEntity<String> registerUser(@ModelAttribute User user){
-        try {
-            User createdUser = userService.save(user);
-            log.info("User with id:"+createdUser.getId()+" was registered.");
-
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (BadRequestException e){
-            log.warn(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request){
-        try {
-            User user = userService.login(request.getParameter("email"), request.getParameter("password"));
-            log.info("User with id:"+user.getId()+" logged in");
-
-            session.setAttribute("loggedUser", user);
-            session.setAttribute("loggedUserId", String.valueOf(user.getId()));
-            session.setAttribute("loggedUserName", user.getFirstName()+" "+user.getLastName());
-
-            return new ResponseEntity<>("redirect:/user/"+user.getId(), HttpStatus.OK);
-        } catch (BadRequestException e){
-            log.warn(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @RequestMapping(path = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session){
         log.info("User with id:"+session.getAttribute("loggedUserId")+" logged out");
         session.invalidate();
 
         return "redirect:/";
+    }
+
+    @RequestMapping(path = "/feed", method = RequestMethod.GET)
+    public String profile(HttpSession session, Model model){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            log.warn("User is not authorized");
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/forbidden";
+        }
+        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
+        return "feed";
     }
 
     @RequestMapping(path = "/settings", method = RequestMethod.GET)
@@ -91,5 +67,14 @@ public class HomeController {
         return "settings";
     }
 
-
+    @RequestMapping(path = "/messages", method = RequestMethod.GET)
+    public String messages(HttpSession session, Model model){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            log.warn("User is not authorized");
+            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+            return "errors/forbidden";
+        }
+        return "messages";
+    }
 }

@@ -32,18 +32,9 @@ public class PostRestController {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-
         postInfo.setUserPostedId((String) session.getAttribute("loggedUserId"));
-        try {
-            postService.save(postInfo);
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (BadRequestException e){
-            log.warn(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError | NumberFormatException e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        postService.save(postInfo);
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
 
@@ -56,15 +47,7 @@ public class PostRestController {
         }
 
         FilterPagePosts filter = FilterPagePosts.builder().ownerPosts(ownerPosts).friendsPosts(friendsPosts).userPostedId(userPostedId).build();
-        try {
-            return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
-        } catch (BadRequestException e){
-            log.warn(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity<>(postService.getPostsByFilter(userId, filter), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/delete-post", method = RequestMethod.DELETE)
@@ -74,29 +57,8 @@ public class PostRestController {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-
-        try {
-            postService.delete(Long.valueOf(postId), Long.valueOf(loggedUserId));
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (InternalServerError | NumberFormatException e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (BadRequestException e){
-            log.warn(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(path = "/feed", method = RequestMethod.GET)
-    public String profile(HttpSession session, Model model){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
-            log.warn("User is not authorized");
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
-        }
-        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
-        return "feed";
+        postService.delete(Long.valueOf(postId), Long.valueOf(loggedUserId));
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @RequestMapping(path = "/get-news", method = RequestMethod.GET)
@@ -108,12 +70,7 @@ public class PostRestController {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        try {
-            List<Post> list = postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart);
-            return new ResponseEntity<>(list, HttpStatus.OK);
-        } catch (InternalServerError e){
-            log.error(e.getMessage(), e);
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Post> list = postService.getNewsList(Long.valueOf(loggedUserId), maxResult, currentListPart);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
