@@ -15,13 +15,23 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @Log4j
-public class TestController {
+public class UserRestController {
 
     private UserService userService;
 
     @Autowired
-    public TestController(UserService userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
+    }
+
+    @RequestMapping(path = "/edit-user", method = RequestMethod.GET)
+    public ResponseEntity<?> editUser(HttpSession session){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            log.warn("User is not authorized");
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(userService.findById(Long.valueOf(loggedUserId)), HttpStatus.OK);
     }
 
     @RequestMapping(path = "/edit-user", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
@@ -30,16 +40,8 @@ public class TestController {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-//        try {
         userService.update(user);
         return new ResponseEntity<>( HttpStatus.OK);
-//        } catch (BadRequestException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        } catch (InternalServerError | NumberFormatException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        } catch (NotFoundException e){
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-//        }
     }
 
 }

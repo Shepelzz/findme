@@ -1,4 +1,4 @@
-package com.findme.controller;
+package com.findme.api;
 
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
@@ -10,7 +10,6 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,12 +17,12 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Log4j
-@Controller
-public class PostController {
+@RestController
+public class PostRestController {
     private PostService postService;
 
     @Autowired
-    public PostController(PostService postService) {
+    public PostRestController(PostService postService) {
         this.postService = postService;
     }
 
