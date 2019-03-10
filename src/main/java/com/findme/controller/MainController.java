@@ -44,17 +44,6 @@ public class MainController {
         return "redirect:/";
     }
 
-    @RequestMapping(path = "/feed", method = RequestMethod.GET)
-    public String profile(HttpSession session, Model model){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
-            log.warn("User is not authorized");
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
-        }
-        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
-        return "feed";
-    }
 
     @RequestMapping(path = "/settings", method = RequestMethod.GET)
     public String settings(Model model, HttpSession session){
@@ -65,16 +54,5 @@ public class MainController {
             return "errors/forbidden";
         }
         return "settings";
-    }
-
-    @RequestMapping(path = "/messages", method = RequestMethod.GET)
-    public String messages(HttpSession session, Model model){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
-            log.warn("User is not authorized");
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
-        }
-        return "messages";
     }
 }
