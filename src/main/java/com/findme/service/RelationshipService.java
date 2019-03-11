@@ -10,6 +10,4 @@ public interface RelationshipService {
     void saveRelationship(String userFromId, String userToId) throws InternalServerError, BadRequestException;
     void updateRelationship(String userFromId, String userToId, String status) throws InternalServerError, BadRequestException;
 
-//    void relationshipSave(String userFromId, String userToId) throws InternalServerError;
-//    void relationshipUpdate(String userFromId, String userToId, String status) throws InternalServerError;
 }

@@ -5,6 +5,7 @@ import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
+import com.findme.exception.NotFoundException;
 import com.findme.model.*;
 import com.findme.service.PostService;
 import com.findme.utils.validator.params.PostValidatorParams;
@@ -19,15 +20,13 @@ import java.util.Optional;
 
 @Log4j
 @Service
-public class PostServiceImpl extends GeneralServiceImpl<Post> implements PostService {
+public class PostServiceImpl implements PostService {
     private PostDAO postDAO;
     private UserDAO userDAO;
     private RelationshipDAO relationshipDAO;
 
     @Autowired
     public PostServiceImpl(PostDAO postDAO, UserDAO userDAO, RelationshipDAO relationshipDAO) {
-        super(postDAO);
-        setClazz(Post.class);
         this.postDAO = postDAO;
         this.userDAO = userDAO;
         this.relationshipDAO = relationshipDAO;
@@ -81,6 +80,11 @@ public class PostServiceImpl extends GeneralServiceImpl<Post> implements PostSer
             throw new BadRequestException("You can not remove this post");
         }
         postDAO.delete(id);
+    }
+
+    @Override
+    public Post findById(Long id) throws InternalServerError, NotFoundException {
+        return postDAO.findById(id);
     }
 
     @Override

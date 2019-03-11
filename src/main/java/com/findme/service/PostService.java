@@ -9,11 +9,12 @@ import com.findme.model.PostInfo;
 
 import java.util.List;
 
-public interface PostService extends GeneralService<Post>{
+public interface PostService{
 
     Post save(PostInfo postInfo) throws InternalServerError, BadRequestException;
     Post update(Post post) throws InternalServerError, BadRequestException;
     void delete(Long id, Long userId) throws InternalServerError, BadRequestException;
+    Post findById(Long id) throws InternalServerError, NotFoundException;
 
     List<Post> getPostsByFilter(Long userId, FilterPagePosts filter) throws BadRequestException, InternalServerError;
     List<Post> getNewsList(Long userId, int maxResults, int currentListPart) throws InternalServerError;

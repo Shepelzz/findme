@@ -6,7 +6,6 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.Country;
 import com.findme.service.CountryService;
-import com.findme.service.GeneralService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +14,11 @@ import java.util.List;
 
 @Log4j
 @Service
-public class CountryServiceImpl extends GeneralServiceImpl<Country> implements CountryService {
+public class CountryServiceImpl implements CountryService {
     private CountryDAO countryDAO;
 
     @Autowired
     public CountryServiceImpl(CountryDAO countryDAO) {
-        super(countryDAO);
-        setClazz(Country.class);
         this.countryDAO = countryDAO;
     }
 
@@ -38,6 +35,11 @@ public class CountryServiceImpl extends GeneralServiceImpl<Country> implements C
     @Override
     public void delete(Long id) throws InternalServerError, BadRequestException {
         countryDAO.delete(id);
+    }
+
+    @Override
+    public Country findById(Long id) throws InternalServerError, NotFoundException {
+        return countryDAO.findById(id);
     }
 
 

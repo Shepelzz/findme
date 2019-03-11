@@ -59,26 +59,31 @@ public abstract class GeneralDAOImpl<T extends GeneralModel> implements GeneralD
         int res;
         try {
             res = entityManager.createQuery(SQL_DELETE_BY_ID).setParameter("id", id).executeUpdate();
-            if (res == 0) {
-                String errorMessage = "Entity "+clazz.getSimpleName() + " with id: " + id + " was not deleted";
-                log.warn(errorMessage);
-                throw new InternalServerError(errorMessage);
-            } else
-                log.info("Entity "+clazz.getSimpleName() + " with id: " + id + " was deleted");
         } catch (Exception e){
             log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
+        if (res == 0) {
+            log.warn("Entity "+clazz.getSimpleName() + " with id: " + id + " was not deleted");
+            throw new InternalServerError("Entity "+clazz.getSimpleName() + " with id: " + id + " was not deleted");
+        } else
+            log.info("Entity "+clazz.getSimpleName() + " with id: " + id + " was deleted");
     }
 
 
     @Override
     public T findById(Long id) throws InternalServerError{
+        T t = null;
         try {
-           return entityManager.find(clazz, id);
+           t = entityManager.find(clazz, id);
         } catch (Exception e){
             log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
+        if(t == null) {
+            log.warn("Entity "+clazz.getSimpleName()+" with id " + id + " was not found");
+            throw new NotFoundException("Entity "+clazz.getSimpleName()+" with id " + id + " was not found");
+        }
+        return t;
     }
 }

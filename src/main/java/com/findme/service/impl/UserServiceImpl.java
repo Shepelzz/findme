@@ -3,6 +3,7 @@ package com.findme.service.impl;
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
+import com.findme.exception.NotFoundException;
 import com.findme.model.User;
 import com.findme.service.UserService;
 import com.findme.utils.validator.params.UserValidatorParams;
@@ -16,13 +17,11 @@ import java.util.Date;
 
 @Log4j
 @Service
-public class UserServiceImpl extends GeneralServiceImpl<User> implements UserService {
+public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Autowired
     public UserServiceImpl(UserDAO userDAO) {
-        super(userDAO);
-        setClazz(User.class);
         this.userDAO = userDAO;
     }
 
@@ -61,6 +60,11 @@ public class UserServiceImpl extends GeneralServiceImpl<User> implements UserSer
     @Override
     public void delete(Long id) throws InternalServerError {
         userDAO.delete(id);
+    }
+
+    @Override
+    public User findById(Long id) throws InternalServerError, NotFoundException {
+        return userDAO.findById(id);
     }
 
     @Override
