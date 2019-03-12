@@ -26,46 +26,17 @@
         <!-- Left Column -->
         <div class="w3-col m3">
             <!--Menu-->
-            <div class="w3-bar w3-white" style="padding: 5px 5px 5px 5px; margin-bottom: 10px">
-                <label for="search">Search: </label>
-                <input type="search" id="search" style="border: #dddddd 1px solid;">
-            </div>
-            <div>
-                <div class="w3-ul w3-white">
-                    <div class="w3-bar w3-button">
-                        <a>
-                            <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
-                        </a>
+            <div class="w3-ul w3-white">
+                <div th:each="user : ${friendsList}">
+                    <div id="rrr" th:id="${user.id}" class="w3-bar w3-button" style="" onclick="fuck(this)">
+                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
                         <div class="w3-bar-item dropdown-menu-label">
-                            <span class="w3-large">Mike Dod</span><br>
-                        </div>
-                    </div>
-                    <div class="w3-bar w3-button">
-                        <a>
-                            <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
-                        </a>
-                        <div class="w3-bar-item dropdown-menu-label">
-                            <span class="w3-large">Ronald hu</span><br>
-                        </div>
-                    </div>
-                    <div class="w3-bar w3-button">
-                        <a>
-                            <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
-                        </a>
-                        <div class="w3-bar-item dropdown-menu-label">
-                            <span class="w3-large">Luntik the cat</span><br>
-                        </div>
-                    </div>
-                    <div class="w3-bar w3-button">
-                        <a>
-                            <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
-                        </a>
-                        <div class="w3-bar-item dropdown-menu-label">
-                            <span class="w3-large">Rrrrrrrrrrrrr</span><br>
+                            <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}">Mike Dod</span><br>
                         </div>
                     </div>
                 </div>
             </div>
+
             <br>
         </div>
 
@@ -74,10 +45,12 @@
             <div class="w3-row-padding w3-margin-bottom">
                 <div class="w3-col m12">
                     <div class="w3-container w3-padding w3-white">
-                        <div style="height: 600px"></div>
-                        <form>
+                        <div style="height: 600px">
+
+                        </div>
+                        <form id="messageSendFrom">
                             <label>
-                                <textarea rows="4" cols="50" name="comment" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical"></textarea>
+                                <textarea rows="4" cols="50" name="message" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
                             </label>
                             <div style="height: 50px">
                                 <button class="w3-button w3-right w3-theme-d1" style="left: 0; margin-top: 5px; width: 80px">Send</button>
@@ -97,6 +70,17 @@
 </body>
 
 <script>
+    let currentChatUser = null;
 
+    function fuck(e) {
+        // if(currentChatUserId != null){
+        //     $("#currentChatUserId").attr("class","active-element");
+        // }
+        currentChatUser = e;
+        // alert(currentChatUser.getAttribute('id'));
+        if(!$(currentChatUser).hasClass('active-element'))
+            $(currentChatUser).addClass('active-element');
+
+    }
 </script>
 </html>

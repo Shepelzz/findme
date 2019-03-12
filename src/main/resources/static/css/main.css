@@ -87,6 +87,10 @@ a {
 .dropdown:hover {
     background-color: rgba(190, 201, 221, 0.57)
 }
+.active-element {
+    background-color: rgba(81, 131, 183, 0.3)
+}
+
 
 
 /*html {*/

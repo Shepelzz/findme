@@ -10,20 +10,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "MESSAGE")
-@Getter
-@Setter
-@ToString
+@Getter @Setter @ToString
 @EqualsAndHashCode(callSuper = true)
 public class Message extends GeneralModel{
-
-    @Column(name = "TEXT")
-    private String text;
-
-    @Column(name = "DATE_SENT")
-    private Date dateSent;
-
-    @Column(name = "DATE_READ")
-    private Date dateRead;
 
     @ManyToOne
     @JoinColumn(name="USER_FROM_ID", nullable = false)
@@ -32,5 +21,20 @@ public class Message extends GeneralModel{
     @ManyToOne
     @JoinColumn(name="USER_TO_ID", nullable = false)
     private User userTo;
+
+    @Column(name = "DATE_SENT")
+    private Date dateSent;
+
+    @Column(name = "DATE_EDITED")
+    private Date dateEdited;
+
+    @Column(name = "DATE_DELETED")
+    private Date dateDeleted;
+
+    @Column(name = "DATE_READ")
+    private Date dateRead;
+
+    @Column(name = "TEXT")
+    private String text;
 
 }
