@@ -262,33 +262,33 @@
     });
 
 
-    let modal = document.getElementById('editModalForm');
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    $(document).keydown(function(e) {
-        let code = e.keyCode || e.which;
-        if (code === 27) $(".w3-modal").hide();
-    });
-
-    $("#user-edit-form").submit(function userEditSubmit() {
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/edit-user",
-            data: $('#user-edit-form').serialize(),
-            success:function success() {
-                alert('User data edited');
-                $('#editModalForm').hide()
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-            }
-        });
-    });
+    // let modal = document.getElementById('editModalForm');
+    // window.onclick = function(event) {
+    //     if (event.target === modal) {
+    //         modal.style.display = "none";
+    //     }
+    // };
+    //
+    // $(document).keydown(function(e) {
+    //     let code = e.keyCode || e.which;
+    //     if (code === 27) $(".w3-modal").hide();
+    // });
+    //
+    // $("#user-edit-form").submit(function userEditSubmit() {
+    //     event.preventDefault();
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/edit-user",
+    //         data: $('#user-edit-form').serialize(),
+    //         success:function success() {
+    //             alert('User data edited');
+    //             $('#editModalForm').hide()
+    //         },
+    //         error: function(xhr) {
+    //             alert(xhr.responseText);
+    //         }
+    //     });
+    // });
 
 </script>
 
