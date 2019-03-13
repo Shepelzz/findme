@@ -28,12 +28,12 @@
             <!--Menu-->
             <div class="w3-ul w3-white" style="max-height: 600px; overflow-y:scroll">
                 <div th:each="user : ${friendsList}">
-                    <div th:id="${user.id}" class="w3-bar w3-button" style="" onclick="fuck(this)">
-                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle w3-margin-right">
+                    <button th:id="${user.id}" class="w3-bar w3-button" onclick="fuck(this)">
+                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle">
                         <div class="w3-bar-item dropdown-menu-label">
                             <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}">Mike Dod</span><br>
                         </div>
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -46,17 +46,25 @@
                 <div class="w3-col m12">
                     <div class="w3-container w3-padding w3-white">
                         <div style="height: 600px; overflow-y:scroll">
-                            <p>text</p>
-                            <p>text dsfsdfsdsdfsdfsdfsd</p>
-                            <p>text deee  eeeee eeewdddddddddsddddddddddddddddddddddddddddddd dddddddddddddddddddddddddddd dddddddddddddddddddddd</p>
-                            <p>textdd  dddrrrrrrrrrrrrrrrr</p>
-                            <p>textrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</p>
-                            <p>text r</p>
-                            <p>text3333333333333333333333 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>
+                            <!--<div id="getMessagesDiv">-->
+                                <!--<div class="messages-list-group">-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<p>text</p>-->
+                            <!--<p>text dsfsdfsdsdfsdfsdfsd</p>-->
+                            <!--<p>text deee  eeeee eeewdddddddddsddddddddddddddddddddddddddddddd dddddddddddddddddddddddddddd dddddddddddddddddddddd</p>-->
+                            <!--<p>textdd  dddrrrrrrrrrrrrrrrr</p>-->
+                            <!--<p>textrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</p>-->
+                            <!--<p>text r</p>-->
+                            <!--<p>text3333333333333333333333 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>-->
                         </div>
                         <form id="messageSendFrom">
-                            <label>
-                                <textarea rows="4" cols="50" name="message" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
+                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="" id="userFromId" type="text" name="userFromId">
+                            <label for="userToId"></label><input class="" id="userToId" type="text" name="userToId">
+                            <!--<label for="text"></label><input class="" id="text" type="text" name="userToId">-->
+                            <label for="text">
+                                <textarea rows="4" cols="50" id="text" name="text" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
                             </label>
                             <div style="height: 50px">
                                 <button class="w3-button w3-right w3-theme-d1" style="left: 0; margin-top: 5px; width: 80px">Send</button>
@@ -76,32 +84,57 @@
 </body>
 
 <script>
-    let activeChat = null;
+    let recipientDiv = null;
+
+    // $(document).ready ( function(){
+    //     // ajaxGetMessages();
+    // });
 
     function fuck(e) {
-        if(activeChat != null)
-            $(activeChat).removeClass('active-element');
+        if(recipientDiv != null)
+            $(recipientDiv).removeClass('active-element');
 
-        activeChat = e;
-        $(activeChat).addClass('active-element');
-        // alert(currentChatUser.getAttribute('id'));
+        recipientDiv = e;
+        $(recipientDiv).addClass('active-element');
+        $('#userToId').val(recipientDiv.getAttribute('id'));
+        ajaxGetMessages();
     }
 
-    $("#messageSendFrom").submit(function userEditSubmit() {
+    $("#messageSendFrom").submit(function messageSend() {
         event.preventDefault();
         $.ajax({
             type: "POST",
             url: "/send-message",
             data: $('#messageSendFrom').serialize(),
             success:function success() {
-                alert('User data edited');
-                $('#editModalForm').hide()
+                // ajaxGetMessages();
             },
             error: function(xhr) {
                 alert(xhr.responseText);
             }
         });
     });
+
+    // function ajaxGetMessages(){
+    //     // DO GET
+    //     $.ajax({
+    //         type : "GET",
+    //         url : "/get-messages",
+    //         data: {
+    //             userToId: recipientDiv.getAttribute('id')
+    //         },
+    //         success : function(result) {
+    //             $.each(result, function(i, message){
+    //                 let messageInfo = "";
+    //                 $('#getMessagesDiv .messages-list-group').append(messageInfo)
+    //             });
+    //         },
+    //         error : function(e) {
+    //             $('#getMessagesDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
+    //             console.log("ERROR: "+ e);
+    //         }
+    //     });
+    // }
 
 </script>
 </html>

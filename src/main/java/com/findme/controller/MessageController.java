@@ -30,6 +30,7 @@ public class MessageController {
             return "errors/forbidden";
         }
         model.addAttribute("friendsList", relationshipDAO.getFriendsList(loggedUserId));
+        model.addAttribute("loggedUserId", loggedUserId);
 
         return "messages";
     }
