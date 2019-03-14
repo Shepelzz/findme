@@ -1,7 +1,7 @@
 package com.findme.utils.validator.relationshipValidator;
 
 import com.findme.exception.BadRequestException;
-import com.findme.utils.validator.params.RelationshipValidatorParams;
+import com.findme.utils.params.RelationshipValidatorParams;
 
 public abstract class AbstractRelationshipValidator {
     private AbstractRelationshipValidator nextChainValidator;

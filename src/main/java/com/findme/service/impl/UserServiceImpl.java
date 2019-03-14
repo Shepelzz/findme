@@ -6,7 +6,7 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.User;
 import com.findme.service.UserService;
-import com.findme.utils.validator.params.UserValidatorParams;
+import com.findme.utils.params.UserValidatorParams;
 import com.findme.utils.validator.userValidator.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;

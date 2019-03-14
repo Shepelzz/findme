@@ -1,7 +1,7 @@
 package com.findme.utils.validator.postValidator;
 
 import com.findme.exception.BadRequestException;
-import com.findme.utils.validator.params.PostValidatorParams;
+import com.findme.utils.params.PostValidatorParams;
 
 public abstract class AbstractPostValidator {
     private AbstractPostValidator nextChainValidator;

@@ -1,4 +1,4 @@
-package com.findme.utils.validator.params;
+package com.findme.utils.params;
 
 import com.findme.model.Relationship;
 import com.findme.model.User;

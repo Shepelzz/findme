@@ -1,4 +1,4 @@
-package com.findme.utils.validator.params;
+package com.findme.utils.params;
 
 import lombok.Builder;
 import lombok.Getter;

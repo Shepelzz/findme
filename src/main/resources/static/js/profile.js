@@ -41,7 +41,7 @@ function ajaxFilterPost(){
                 postMenu += (post.userPosted.id === userLoggedId || post.userPagePosted.id === userLoggedId) ? "<button class=\"w3-button w3-block w3-theme-l5 w3-left-align\" onclick=\"postDelete("+post.id+")\">Remove</button>\n" : "";
                 postMenu +="</div>";
 
-                debugger;
+                // debugger;
                 let postInfo = "<div>\n" +
                     "                <div class=\"w3-container w3-white w3-margin\" style=\"position: relative\">\n" +
                                 postMenu +

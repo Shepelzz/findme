@@ -2,7 +2,7 @@ package com.findme.utils.validator.relationshipValidator;
 
 import com.findme.exception.BadRequestException;
 import com.findme.types.RelationshipStatus;
-import com.findme.utils.validator.params.RelationshipValidatorParams;
+import com.findme.utils.params.RelationshipValidatorParams;
 import lombok.extern.log4j.Log4j;
 
 import java.util.Date;

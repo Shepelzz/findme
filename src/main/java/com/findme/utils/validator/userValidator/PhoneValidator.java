@@ -1,7 +1,7 @@
 package com.findme.utils.validator.userValidator;
 
 import com.findme.exception.BadRequestException;
-import com.findme.utils.validator.params.UserValidatorParams;
+import com.findme.utils.params.UserValidatorParams;
 import lombok.extern.log4j.Log4j;
 
 import java.util.regex.Pattern;

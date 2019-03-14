@@ -9,6 +9,10 @@ import com.findme.model.Message;
 import com.findme.model.MessageInfo;
 import com.findme.model.User;
 import com.findme.service.MessageService;
+import com.findme.utils.params.MessageValidatorParams;
+import com.findme.utils.validator.messageValidator.AbstractMessageValidator;
+import com.findme.utils.validator.messageValidator.MessageValidator;
+import com.findme.utils.validator.messageValidator.RecipientValidator;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +35,6 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public Message save(MessageInfo messageInfo) throws InternalServerError, BadRequestException {
-
         validateIncomingParams(messageInfo.getUserFromId(), messageInfo.getUserToId());
 
         User useFrom = userDAO.findById(Long.valueOf(messageInfo.getUserFromId()));
@@ -75,5 +78,16 @@ public class MessageServiceImpl implements MessageService {
             log.warn(e.getMessage());
             throw new BadRequestException(e.getMessage());
         }
+    }
+
+    private void validatePostInfo(MessageValidatorParams messageValidatorParams) throws BadRequestException{
+        log.info("Start post validation");
+
+        AbstractMessageValidator recipientValidator = new RecipientValidator();
+        AbstractMessageValidator messageValidator = new MessageValidator();
+
+        recipientValidator.setNextAbstractChainValidator(messageValidator);
+
+        recipientValidator.check(messageValidatorParams);
     }
 }

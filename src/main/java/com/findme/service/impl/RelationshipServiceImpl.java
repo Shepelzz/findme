@@ -8,7 +8,7 @@ import com.findme.model.Relationship;
 import com.findme.model.User;
 import com.findme.service.RelationshipService;
 import com.findme.types.RelationshipStatus;
-import com.findme.utils.validator.params.RelationshipValidatorParams;
+import com.findme.utils.params.RelationshipValidatorParams;
 import com.findme.utils.validator.relationshipValidator.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;

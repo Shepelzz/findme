@@ -28,7 +28,7 @@
             <!--Menu-->
             <div class="w3-ul w3-white" style="max-height: 600px; overflow-y:scroll">
                 <div th:each="user : ${friendsList}">
-                    <button th:id="${user.id}" class="w3-bar w3-button" onclick="fuck(this)">
+                    <button th:id="'user'+${user.id}" class="w3-bar w3-button" th:onclick="|changeRecipient(${user.id})|">
                         <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle">
                         <div class="w3-bar-item dropdown-menu-label">
                             <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}">Mike Dod</span><br>
@@ -46,10 +46,13 @@
                 <div class="w3-col m12">
                     <div class="w3-container w3-padding w3-white">
                         <div style="height: 600px; overflow-y:scroll">
-                            <!--<div id="getMessagesDiv">-->
-                                <!--<div class="messages-list-group">-->
-                                <!--</div>-->
-                            <!--</div>-->
+                            <div id="getMessagesDiv">
+                                <div class="messages-list-group">
+
+                                    <!--<div class="w3-text-theme w3-margin">from Kot: hello <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>-->
+                                    <!--<div class="w3-text-theme w3-margin">from Me: fu <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>-->
+                                </div>
+                            </div>
 
                             <!--<p>text</p>-->
                             <!--<p>text dsfsdfsdsdfsdfsdfsd</p>-->
@@ -60,8 +63,8 @@
                             <!--<p>text3333333333333333333333 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>-->
                         </div>
                         <form id="messageSendFrom">
-                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="" id="userFromId" type="text" name="userFromId">
-                            <label for="userToId"></label><input class="" id="userToId" type="text" name="userToId">
+                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="w3-hide" id="userFromId" type="text" name="userFromId">
+                            <label for="userToId"></label><input class="w3-hide" id="userToId" type="text" name="userToId">
                             <!--<label for="text"></label><input class="" id="text" type="text" name="userToId">-->
                             <label for="text">
                                 <textarea rows="4" cols="50" id="text" name="text" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
@@ -81,33 +84,52 @@
     <!-- Footer -->
     <footer th:replace="common/footer.html :: footer"></footer>
 </div>
+
+<input value="iiiii" id="user1">
+<button onclick="fff()">ttttt</button>
+
 </body>
 
 <script>
-    let recipientDiv = null;
+    let recipientDiv;
+    let recipientId;
 
-    // $(document).ready ( function(){
-    //     // ajaxGetMessages();
-    // });
+    $(document).ready ( function(){
+        alert(localStorage['recipientId']);
+        changeRecipient(localStorage['recipientId']);
+    });
 
-    function fuck(e) {
-        if(recipientDiv != null)
-            $(recipientDiv).removeClass('active-element');
-
-        recipientDiv = e;
-        $(recipientDiv).addClass('active-element');
-        $('#userToId').val(recipientDiv.getAttribute('id'));
-        ajaxGetMessages();
+    function setRecipient(id){
+        let localRecipientId = id;
+        if(localRecipientId !== null){
+            recipientId = localRecipientId;
+            recipientDiv = $('#user'+recipientId);
+        }
     }
 
-    $("#messageSendFrom").submit(function messageSend() {
+    function changeRecipient(id) {
+        if(localStorage['recipientId'] !== id){
+            if($(recipientDiv).hasClass('active-element'))
+                $(recipientDiv).removeClass('active-element');
+
+            setRecipient(id);
+
+            $(recipientDiv).addClass('active-element');
+            $('#userToId').val(recipientId);
+
+            ajaxGetMessages();
+        }
+    }
+
+    $("#messageSendFrom").submit(function messageSend(){
         event.preventDefault();
         $.ajax({
             type: "POST",
             url: "/send-message",
             data: $('#messageSendFrom').serialize(),
             success:function success() {
-                // ajaxGetMessages();
+                $('#text').val('');
+                ajaxGetMessages();
             },
             error: function(xhr) {
                 alert(xhr.responseText);
@@ -115,26 +137,29 @@
         });
     });
 
-    // function ajaxGetMessages(){
-    //     // DO GET
-    //     $.ajax({
-    //         type : "GET",
-    //         url : "/get-messages",
-    //         data: {
-    //             userToId: recipientDiv.getAttribute('id')
-    //         },
-    //         success : function(result) {
-    //             $.each(result, function(i, message){
-    //                 let messageInfo = "";
-    //                 $('#getMessagesDiv .messages-list-group').append(messageInfo)
-    //             });
-    //         },
-    //         error : function(e) {
-    //             $('#getMessagesDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
-    //             console.log("ERROR: "+ e);
-    //         }
-    //     });
-    // }
+    function ajaxGetMessages(){
+        // DO GET
+        $.ajax({
+            type : "GET",
+            url : "/get-messages",
+            data: {
+                userToId: recipientId
+            },
+            success : function(result) {
+                $('#getMessagesDiv div').empty();
+                $.each(result, function(i, message){
+                    let messageInfo =
+                        "<div class=\"w3-text-theme w3-margin\">from "+message.userFrom.lastName+": "+message.text+" <a class=\"w3-right w3-margin-right w3-theme-l0\">delete</a><a class=\"w3-right w3-margin-right w3-theme-l0\">edit</a></div>";
+                    $('#getMessagesDiv .messages-list-group').append(messageInfo)
+                });
+            },
+            error : function(e) {
+                $('#getMessagesDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
 
 </script>
 </html>

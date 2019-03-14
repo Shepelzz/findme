@@ -1,5 +1,6 @@
 package com.findme.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -62,10 +63,12 @@ public class User extends GeneralModel{
     private String university;
 
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "userFrom")
     private List<Message> messagesSent;
 
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "userTo")
     private List<Message> messagesReceived;
 

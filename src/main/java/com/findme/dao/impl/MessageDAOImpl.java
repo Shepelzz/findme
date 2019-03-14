@@ -13,7 +13,7 @@ import java.util.List;
 public class MessageDAOImpl extends GeneralDAOImpl<Message> implements MessageDAO {
     private static final String SQL_MESSAGE_LIST = "SELECT msg" +
             " FROM Message msg" +
-            " WHERE (msg.userFrom.id = :userFromId AND msg.userTo.id = :userToId) OR (msg.userFrom.id = :userFromId AND msg.userTo.id = :userToId)" +
+            " WHERE (msg.userFrom.id = :userFromId AND msg.userTo.id = :userToId) OR (msg.userFrom.id = :userToId AND msg.userTo.id = :userFromId)" +
             " ORDER BY msg.dateSent";
 
     public MessageDAOImpl() {

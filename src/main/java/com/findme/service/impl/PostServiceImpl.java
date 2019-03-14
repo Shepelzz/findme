@@ -8,7 +8,7 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.*;
 import com.findme.service.PostService;
-import com.findme.utils.validator.params.PostValidatorParams;
+import com.findme.utils.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
