@@ -1,0 +1,34 @@
+.friends-user-info {
+    padding: 0 5px;
+    float: left;
+    /*width: auto;*/
+    border: none;
+    display: block;
+    /*outline: 0;*/
+}
+
+.m-block {
+    margin: 10px 0 0 0;
+    font-size: 15px!important;
+}
+
+.s-block {
+    margin: 5px 0;
+    font-size: 12px!important;
+}
+
+.time-block {
+    margin: 10px -40px 0 0;
+    font-size: 12px!important;
+    color: #0c5c81;
+}
+
+.approve {
+    margin: 8px -40px 0 0;
+    font-size: 12px!important;
+    color: #3a9e48;
+}
+
+.friends-user-name {
+
+}

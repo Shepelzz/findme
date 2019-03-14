@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "MESSAGE")
-@Getter @Setter @ToString
+@Getter @Setter
 @EqualsAndHashCode(callSuper = true)
 public class Message extends GeneralModel{
 
@@ -37,4 +37,16 @@ public class Message extends GeneralModel{
     @Column(name = "TEXT")
     private String text;
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "userFrom=" + userFrom +
+                ", userTo=" + userTo +
+                ", dateSent=" + dateSent +
+                ", dateEdited=" + dateEdited +
+                ", dateDeleted=" + dateDeleted +
+                ", dateRead=" + dateRead +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

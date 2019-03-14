@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../static/css/profile.css" type="text/css" th:href="@{/css/profile.css}"/>
 <link rel="stylesheet" href="../static/css/main.css" type="text/css" th:href="@{/css/main.css}"/>
 <link rel="stylesheet" href="../static/css/pace.css" type="text/css" th:href="@{/css/pace.css}"/>
+<link rel="stylesheet" href="../static/css/message.css" type="text/css" th:href="@{/css/message.css}"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
 <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
@@ -28,10 +29,14 @@
             <!--Menu-->
             <div class="w3-ul w3-white" style="max-height: 600px; overflow-y:scroll">
                 <div th:each="user : ${friendsList}">
-                    <button th:id="'user'+${user.id}" class="w3-bar w3-button" th:onclick="|changeRecipient(${user.id})|">
-                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 w3-left w3-circle">
-                        <div class="w3-bar-item dropdown-menu-label">
-                            <span class="w3-large" th:text="${user.firstName}+' '+${user.lastName}">Mike Dod</span><br>
+                    <button th:id="'user'+${user.id}" class="w3-bar w3-button" style="padding: 0 0 0 0;" th:onclick="|changeRecipient(${user.id})|">
+                        <img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">
+                        <div class="friends-user-info">
+                            <span class="m-block w3-left" th:text="${user.firstName}+' '+${user.lastName}">Mike Dod</span>
+                            <span class="time-block w3-right w3-hide">02.01.2019</span>
+                            <br>
+                            <span class="s-block w3-left w3-text-theme w3-hide" th:text="${user.firstName}+' '+${user.lastName}">Here is test message, fuck y...</span>
+                            <i class="fa fa-check approve w3-right w3-hide"></i>
                         </div>
                     </button>
                 </div>
@@ -49,18 +54,10 @@
                             <div id="getMessagesDiv">
                                 <div class="messages-list-group">
 
-                                    <!--<div class="w3-text-theme w3-margin">from Kot: hello <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>-->
-                                    <!--<div class="w3-text-theme w3-margin">from Me: fu <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>-->
+                                    <div class="w3-text-theme w3-margin">from Kot: hello <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>
+                                    <div class="w3-text-theme w3-margin">from Me: fu <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>
                                 </div>
                             </div>
-
-                            <!--<p>text</p>-->
-                            <!--<p>text dsfsdfsdsdfsdfsdfsd</p>-->
-                            <!--<p>text deee  eeeee eeewdddddddddsddddddddddddddddddddddddddddddd dddddddddddddddddddddddddddd dddddddddddddddddddddd</p>-->
-                            <!--<p>textdd  dddrrrrrrrrrrrrrrrr</p>-->
-                            <!--<p>textrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr</p>-->
-                            <!--<p>text r</p>-->
-                            <!--<p>text3333333333333333333333 eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p>-->
                         </div>
                         <form id="messageSendFrom">
                             <label for="userFromId"></label><input th:value="${loggedUserId}" class="w3-hide" id="userFromId" type="text" name="userFromId">
@@ -84,10 +81,6 @@
     <!-- Footer -->
     <footer th:replace="common/footer.html :: footer"></footer>
 </div>
-
-<input value="iiiii" id="user1">
-<button onclick="fff()">ttttt</button>
-
 </body>
 
 <script>
@@ -95,7 +88,7 @@
     let recipientId;
 
     $(document).ready ( function(){
-        alert(localStorage['recipientId']);
+        // alert(localStorage['recipientId']);
         changeRecipient(localStorage['recipientId']);
     });
 

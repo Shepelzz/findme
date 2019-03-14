@@ -39,6 +39,9 @@ a {
     height:23px;
     width:23px
 }
+.avatar-border {
+    border-color: #0c6394;
+}
 .avatar:hover {
     border-color: #0c6394;
 }
