@@ -1,12 +1,14 @@
 package com.findme.service.impl;
 
 import com.findme.dao.MessageDAO;
+import com.findme.dao.RelationshipDAO;
 import com.findme.dao.UserDAO;
 import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.Message;
 import com.findme.model.MessageInfo;
+import com.findme.model.Relationship;
 import com.findme.model.User;
 import com.findme.service.MessageService;
 import com.findme.utils.params.MessageValidatorParams;
@@ -26,6 +28,7 @@ import java.util.Optional;
 public class MessageServiceImpl implements MessageService {
     private MessageDAO messageDAO;
     private UserDAO userDAO;
+    private RelationshipDAO relationshipDAO;
 
     @Autowired
     public MessageServiceImpl(MessageDAO messageDAO, UserDAO userDAO) {
@@ -39,6 +42,7 @@ public class MessageServiceImpl implements MessageService {
 
         User useFrom = userDAO.findById(Long.valueOf(messageInfo.getUserFromId()));
         User userTo = userDAO.findById(Long.valueOf(messageInfo.getUserToId()));
+        Relationship usersRelationship = relationshipDAO.getRelationship(messageInfo.getUserFromId(), messageInfo.getUserToId());
 
         Message message = new Message();
         message.setUserFrom(useFrom);
@@ -46,18 +50,50 @@ public class MessageServiceImpl implements MessageService {
         message.setText(messageInfo.getText());
         message.setDateSent(new Date());
 
+        validateMessageInfo(
+            MessageValidatorParams.builder()
+                .message(message)
+                .relationship(usersRelationship)
+                .build()
+        );
+
         return messageDAO.save(message);
     }
 
     @Override
-    public Message update(MessageInfo messageInfo) throws InternalServerError, BadRequestException {
-        Message message = new Message();
+    public Message update(Message message) throws InternalServerError, BadRequestException {
+        Message currentMessage = messageDAO.findById(message.getId());
+        if(currentMessage.getDateRead() != null) {
+            log.warn("Message "+message.getId()+" is read by recipient "+message.getUserTo().getId());
+            throw new BadRequestException("Message " + message.getId() + " is read by recipient " + message.getUserTo().getId() + ". And can not be edited.");
+        }
+
+        Relationship usersRelationship = relationshipDAO.getRelationship(String.valueOf(message.getUserFrom().getId()), String.valueOf(message.getUserTo().getId()));
+
+        currentMessage.setUserFrom(message.getUserFrom());
+        currentMessage.setUserTo(message.getUserTo());
+        currentMessage.setText(message.getText());
+        currentMessage.setDateSent(message.getDateSent());
+        currentMessage.setDateEdited(new Date());
+
+        validateMessageInfo(
+            MessageValidatorParams.builder()
+                .message(message)
+                .relationship(usersRelationship)
+                .build()
+        );
         return messageDAO.update(message);
     }
 
     @Override
     public void delete(Long id) throws InternalServerError, BadRequestException {
-        messageDAO.delete(id);
+        Message currentMessage = messageDAO.findById(id);
+        if(currentMessage.getDateRead() != null) {
+            log.warn("Message "+id+" is read by recipient "+currentMessage.getUserTo().getId());
+            throw new BadRequestException("Message "+id+" is read by recipient "+currentMessage.getUserTo().getId()+". And can not be deleted.");
+        }
+        currentMessage.setDateDeleted(new Date());
+        messageDAO.update(currentMessage);
     }
 
     @Override
@@ -80,7 +116,7 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    private void validatePostInfo(MessageValidatorParams messageValidatorParams) throws BadRequestException{
+    private void validateMessageInfo(MessageValidatorParams messageValidatorParams) throws BadRequestException{
         log.info("Start post validation");
 
         AbstractMessageValidator recipientValidator = new RecipientValidator();

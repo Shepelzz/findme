@@ -14,6 +14,7 @@ public class MessageDAOImpl extends GeneralDAOImpl<Message> implements MessageDA
     private static final String SQL_MESSAGE_LIST = "SELECT msg" +
             " FROM Message msg" +
             " WHERE (msg.userFrom.id = :userFromId AND msg.userTo.id = :userToId) OR (msg.userFrom.id = :userToId AND msg.userTo.id = :userFromId)" +
+            " AND msg.dateDeleted IS NULL" +
             " ORDER BY msg.dateSent";
 
     public MessageDAOImpl() {

@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
         currentUser.setPhone(user.getPhone());
         currentUser.setEmail(user.getEmail());
         currentUser.setPassword(user.getPassword());
+
         validateUserMainData(currentUser);
 
         //check other fields

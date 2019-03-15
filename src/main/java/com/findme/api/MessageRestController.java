@@ -34,23 +34,23 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/edit-message", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody MessageInfo messageInfo){
+    public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody Message message){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        messageService.update(messageInfo);
+        messageService.update(message);
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @RequestMapping(path = "/delete-message", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deletePost(@RequestParam String messageId, HttpSession session){
+    public ResponseEntity<String> deletePost(@RequestParam Long messageId, HttpSession session){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        messageService.delete(Long.valueOf(messageId));
+        messageService.delete(messageId);
         return new ResponseEntity<>( HttpStatus.OK);
     }
 

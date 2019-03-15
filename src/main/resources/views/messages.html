@@ -54,20 +54,26 @@
                             <div id="getMessagesDiv">
                                 <div class="messages-list-group">
 
-                                    <div class="w3-text-theme w3-margin">from Kot: hello <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>
-                                    <div class="w3-text-theme w3-margin">from Me: fu <a class="w3-right w3-margin-right w3-theme-l0">delete</a><a class="w3-right w3-margin-right w3-theme-l0">edit</a></div>
+                                    <!--<div class="w3-text-theme w3-margin">from Kot: hello -->
+                                        <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageDelete()">delete</button>-->
+                                        <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageUpdate()">edit</button>-->
+                                    <!--</div>-->
+
                                 </div>
                             </div>
                         </div>
                         <form id="messageSendFrom">
-                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="w3-hide" id="userFromId" type="text" name="userFromId">
-                            <label for="userToId"></label><input class="w3-hide" id="userToId" type="text" name="userToId">
+                            <label for="id">id</label><input class="" id="id" type="text" name="id">
+                            <label for="dateSent">dtSnt</label><input class="" id="dateSent" type="text" name="dateSent">
+                            <label for="userFromId">usrFrom</label><input th:value="${loggedUserId}" class="" id="userFromId" type="text" name="userFromId">
+                            <label for="userToId">usrTo</label><input class="" id="userToId" type="text" name="userToId">
                             <!--<label for="text"></label><input class="" id="text" type="text" name="userToId">-->
                             <label for="text">
                                 <textarea rows="4" cols="50" id="text" name="text" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
                             </label>
                             <div style="height: 50px">
-                                <button class="w3-button w3-right w3-theme-d1" style="left: 0; margin-top: 5px; width: 80px">Send</button>
+                                <button type="reset" class="w3-button w3-right w3-theme-d1 w3-margin-left w3-hide" style="left: 0; margin-top: 5px; width: 80px">Cancel</button>
+                                <button id="submitBtn" type="submit" class="w3-button w3-right w3-theme-d1" style="left: 0; margin-top: 5px; width: 80px">Send</button>
                             </div>
                         </form>
                     </div>
@@ -115,19 +121,34 @@
     }
 
     $("#messageSendFrom").submit(function messageSend(){
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/send-message",
-            data: $('#messageSendFrom').serialize(),
-            success:function success() {
-                $('#text').val('');
-                ajaxGetMessages();
-            },
-            error: function(xhr) {
-                alert(xhr.responseText);
-            }
-        });
+        if($('id') === '') {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/send-message",
+                data: $('#messageSendFrom').serialize(),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetMessages();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "PUT",
+                url: "/edit-message",
+                data: $('#messageSendFrom').serialize(),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetMessages();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
     });
 
     function ajaxGetMessages(){
@@ -142,7 +163,11 @@
                 $('#getMessagesDiv div').empty();
                 $.each(result, function(i, message){
                     let messageInfo =
-                        "<div class=\"w3-text-theme w3-margin\">from "+message.userFrom.lastName+": "+message.text+" <a class=\"w3-right w3-margin-right w3-theme-l0\">delete</a><a class=\"w3-right w3-margin-right w3-theme-l0\">edit</a></div>";
+                        "<div class=\"w3-text-theme w3-margin\">from "+message.userFrom.lastName+": "+message.text+" " +
+                        "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageDelete("+message.id+")\">delete</button>" +
+// TODO
+                        "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageUpdate("+message.id+",'"+message.text+"')\">edit</button>" +
+                        "</div>";
                     $('#getMessagesDiv .messages-list-group').append(messageInfo)
                 });
             },
@@ -151,6 +176,32 @@
                 console.log("ERROR: "+ e);
             }
         });
+    }
+
+    function messageDelete(id){
+        if (confirm("Do you want delete this message?")) {
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-message?messageId="+id,
+                success: function success() {
+                    ajaxGetMessages();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    function messageUpdate(id,text){
+        // alert(id);
+        // $('#submitBtn').val('Edit');
+// TODO
+        $('#id').val(id);
+        // $('#userFromId').val(message.userFrom.id);
+        // $('#userToId').val(message.userTo.id);
+        // $('#dateSent').val(message.dateSent);
+        $('#text').val(text);
     }
 
 
