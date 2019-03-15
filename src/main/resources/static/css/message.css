@@ -29,6 +29,37 @@
     color: #3a9e48;
 }
 
-.friends-user-name {
+.message {
+    color: #484848;
+    width: 70%;
+    padding: 5px 60px 5px 15px;
+    word-wrap: break-word;
+}
 
+.message-from {
+    background-color: rgba(12,99,148,0.06);
+    margin: 15px 5px 0 5px;
+    border-radius: 5px 30px 30px 30px;
+}
+
+.message-to {
+    background-color: rgba(16,143,57,0.13);
+    margin: 15px 15px 5px auto;
+    border-radius: 30px 30px 5px 30px;
+}
+
+.message-right-block {
+    float: right;
+    margin-right: -45px;
+    font-size: small
+}
+
+.time {
+
+    margin-top: 5px;
+    color: #7f7f7f;
+}
+.buttons {
+    margin-top: -20px;
+    color: rgba(110,110,110,0.73);
 }

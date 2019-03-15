@@ -16,6 +16,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
 <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
+<script type="text/javascript" src="../static/js/message.js" th:src="@{/js/message.js}"></script>
 <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
 <header th:replace="common/header.html :: header"></header>
@@ -50,23 +51,47 @@
             <div class="w3-row-padding w3-margin-bottom">
                 <div class="w3-col m12">
                     <div class="w3-container w3-padding w3-white">
-                        <div style="height: 600px; overflow-y:scroll">
+                        <div id="history" style="height: 600px; overflow-y:scroll; margin-bottom: 10px">
                             <div id="getMessagesDiv">
                                 <div class="messages-list-group">
 
-                                    <!--<div class="w3-text-theme w3-margin">from Kot: hello -->
+                                    <!--<div class="w3-text-theme w3-margin">-->
+                                        <!--<span>from Kot: hello</span>-->
                                         <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageDelete()">delete</button>-->
                                         <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageUpdate()">edit</button>-->
                                     <!--</div>-->
+
+                                    <!--<div style="width: 100%">-->
+                                        <!--<div class="message message-from">-->
+                                            <!--<span>test<br>-->
+                                                <!--tttttt-->
+                                                <!--sdddddddddddddddddddddddddddddddddddddddddddddd dddd <br>-->
+                                                <!--dsdfsdfsdf-->
+                                            <!--</span>-->
+                                            <!--<span class="message-right-block time">14:33</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div style="width: 100%">-->
+                                        <!--<div class="message message-to">-->
+                                            <!--<span>textdfklgjkld  jkl kkcc<br>-->
+                                            <!--sdgddfg <br>-->
+                                                <!--dfgd</span>-->
+                                            <!--<span class="message-right-block time">14:33</span>-->
+                                            <!--<span class="message-right-block buttons">-->
+                                                <!--<a href="/"><i class="far fa-edit w3-hover-opacity" style="margin-right: 2px"></i></a>-->
+                                                <!--<a href="/"><i class="far fa-trash-alt w3-hover-opacity" style="margin-right: 2px"></i></a>-->
+                                            <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
 
                                 </div>
                             </div>
                         </div>
                         <form id="messageSendFrom">
-                            <label for="id">id</label><input class="" id="id" type="text" name="id">
-                            <label for="dateSent">dtSnt</label><input class="" id="dateSent" type="text" name="dateSent">
-                            <label for="userFromId">usrFrom</label><input th:value="${loggedUserId}" class="" id="userFromId" type="text" name="userFromId">
-                            <label for="userToId">usrTo</label><input class="" id="userToId" type="text" name="userToId">
+                            <label for="id"></label><input class="w3-hide" id="id" type="text" name="id">
+                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="w3-hide" id="userFromId" type="text" name="userFromId">
+                            <label for="userToId"></label><input class="w3-hide" id="userToId" type="text" name="userToId">
                             <!--<label for="text"></label><input class="" id="text" type="text" name="userToId">-->
                             <label for="text">
                                 <textarea rows="4" cols="50" id="text" name="text" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
@@ -121,7 +146,7 @@
     }
 
     $("#messageSendFrom").submit(function messageSend(){
-        if($('id') === '') {
+        if($('#id').val()==='') {
             event.preventDefault();
             $.ajax({
                 type: "POST",
@@ -136,10 +161,16 @@
                 }
             });
         } else {
+            let jsonMessage = {
+                id: $('#id').val(),
+                text: $('#text').val()
+            };
+
             $.ajax({
                 type: "PUT",
                 url: "/edit-message",
-                data: $('#messageSendFrom').serialize(),
+                contentType: "application/json",
+                data: JSON.stringify(jsonMessage),
                 success: function success() {
                     $('#text').val('');
                     ajaxGetMessages();
@@ -162,13 +193,36 @@
             success : function(result) {
                 $('#getMessagesDiv div').empty();
                 $.each(result, function(i, message){
-                    let messageInfo =
-                        "<div class=\"w3-text-theme w3-margin\">from "+message.userFrom.lastName+": "+message.text+" " +
-                        "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageDelete("+message.id+")\">delete</button>" +
-// TODO
-                        "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageUpdate("+message.id+",'"+message.text+"')\">edit</button>" +
-                        "</div>";
+                    let messageInfo;
+                    if(message.userFrom.id !== recipientId){
+                        messageInfo = "<div style=\"width: 100%\">" +
+                            "              <div class=\"message message-to\">" +
+                            "                  <span>"+message.text+"</span>" +
+                            "                  <span class=\"message-right-block time\">"+parseMessageDate(new Date(message.dateSent))+"</span>" +
+                            // "                  <span class=\"message-right-block buttons\">" +
+                            // "                      <a href=\"/\"><i class=\"far fa-edit w3-hover-opacity\" style=\"margin-right: 2px\"></i></a>" +
+                            // "                      <a href=\"/\"><i class=\"far fa-trash-alt w3-hover-opacity\" style=\"margin-right: 2px\"></i></a>" +
+                            // "                  </span>" +
+                                //TODO перенести в низ
+                            "              </div>" +
+                            "           </div>";
+
+                    } else {
+                        messageInfo = "<div style=\"width: 100%\">" +
+                            "              <div class=\"message message-from\">" +
+                            "                   <span>"+message.text+"</span>" +
+                            "                   <span class=\"message-right-block time\">"+parseMessageDate(new Date(message.dateSent))+"</span>" +
+                            "              </div>" +
+                            "          </div>";
+
+                    }
+                    // messageInfo =
+                    //     "<div class=\"w3-text-theme w3-margin\">from "+message.userFrom.lastName+": "+message.text+" " +
+                    //     "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageDelete("+message.id+")\">delete</button>" +
+                    //     "   <button class=\"w3-right w3-theme-l0 w3-button\" onclick=\"messageUpdate("+message.id+",'"+message.text+"')\">edit</button>" +
+                    //     "</div>";
                     $('#getMessagesDiv .messages-list-group').append(messageInfo)
+                    $('#history').scrollTop($('#history')[0].scrollHeight);
                 });
             },
             error : function(e) {
@@ -195,12 +249,9 @@
 
     function messageUpdate(id,text){
         // alert(id);
-        // $('#submitBtn').val('Edit');
-// TODO
+        $('#submitBtn').val('Edit');
+
         $('#id').val(id);
-        // $('#userFromId').val(message.userFrom.id);
-        // $('#userToId').val(message.userTo.id);
-        // $('#dateSent').val(message.dateSent);
         $('#text').val(text);
     }
 

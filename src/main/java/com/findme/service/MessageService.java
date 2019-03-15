@@ -11,7 +11,7 @@ import java.util.List;
 public interface MessageService {
 
     Message save(MessageInfo messageInfo) throws InternalServerError, BadRequestException;
-    Message update(Message message) throws InternalServerError, BadRequestException;
+    Message update(MessageInfo messageInfo) throws InternalServerError, BadRequestException;
     void delete(Long id) throws InternalServerError, BadRequestException;
     Message findById(Long id) throws InternalServerError, NotFoundException;
 

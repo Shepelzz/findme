@@ -19,6 +19,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class MessageServiceImpl implements MessageService {
     private RelationshipDAO relationshipDAO;
 
     @Autowired
-    public MessageServiceImpl(MessageDAO messageDAO, UserDAO userDAO) {
+    public MessageServiceImpl(MessageDAO messageDAO, UserDAO userDAO, RelationshipDAO relationshipDAO) {
+        this.relationshipDAO = relationshipDAO;
         this.messageDAO = messageDAO;
         this.userDAO = userDAO;
     }
@@ -61,28 +63,23 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message update(Message message) throws InternalServerError, BadRequestException {
-        Message currentMessage = messageDAO.findById(message.getId());
+    public Message update(MessageInfo messageInfo) throws InternalServerError, BadRequestException {
+        Message currentMessage = messageDAO.findById(messageInfo.getId());
         if(currentMessage.getDateRead() != null) {
-            log.warn("Message "+message.getId()+" is read by recipient "+message.getUserTo().getId());
-            throw new BadRequestException("Message " + message.getId() + " is read by recipient " + message.getUserTo().getId() + ". And can not be edited.");
+            log.warn("Message "+currentMessage.getId()+" is read by recipient "+currentMessage.getUserTo().getId());
+            throw new BadRequestException("Message " + currentMessage.getId() + " is read by recipient " + currentMessage.getUserTo().getId() + ". And can not be edited.");
         }
 
-        Relationship usersRelationship = relationshipDAO.getRelationship(String.valueOf(message.getUserFrom().getId()), String.valueOf(message.getUserTo().getId()));
-
-        currentMessage.setUserFrom(message.getUserFrom());
-        currentMessage.setUserTo(message.getUserTo());
-        currentMessage.setText(message.getText());
-        currentMessage.setDateSent(message.getDateSent());
+        currentMessage.setText(messageInfo.getText());
         currentMessage.setDateEdited(new Date());
 
-        validateMessageInfo(
+        AbstractMessageValidator messageValidator = new MessageValidator();
+        messageValidator.check(
             MessageValidatorParams.builder()
-                .message(message)
-                .relationship(usersRelationship)
-                .build()
-        );
-        return messageDAO.update(message);
+                .message(currentMessage)
+                .build());
+
+        return messageDAO.update(currentMessage);
     }
 
     @Override
@@ -102,7 +99,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional
     public List<Message> getMessageList(String userFromId, String userToId) throws InternalServerError {
+        messageDAO.updateDateRead(userFromId, userToId);
+
         return messageDAO.getMessageList(userFromId, userToId);
     }
 
