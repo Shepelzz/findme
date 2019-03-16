@@ -54,12 +54,21 @@
     font-size: small
 }
 
-.time {
+.msg-time {
 
     margin-top: 5px;
     color: #7f7f7f;
 }
+.msg-appr {
+    font-size: 12px!important;
+    color: #3a9e48;
+    padding-right: 40px;
+    padding-top: 9px;
+}
+
+
 .buttons {
-    margin-top: -20px;
+    margin-top: 30px;
     color: rgba(110,110,110,0.73);
 }
+

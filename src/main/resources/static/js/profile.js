@@ -50,7 +50,7 @@ function ajaxFilterPost(){
                     "                        <a href=\"/user/"+post.userPosted.id+"\">\n" +
                     "                            <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s1 w3-left w3-circle w3-margin-right\">\n" +
                     "                        </a>" +
-                    "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+parsePostDate(new Date(post.datePosted))+"</span>\n" +
+                    "                        <span class=\"w3-right w3-opacity\" style=\"margin-right: 50px\">"+parseDateSent(new Date(post.datePosted))+"</span>\n" +
                     "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
                     "                            <p class=\"inline w3-opacity w3-margin-left\">"+parsePostTaggedUsersAndLocation(post.usersTagged, post.location)+"</p><br>\n" +
                     "                        <hr class=\"w3-clear\">\n" +

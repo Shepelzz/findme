@@ -15,6 +15,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="../static/js/home.js" th:src="@{/js/home.js}"></script>
 <script type="text/javascript" src="../static/js/post.js" th:src="@{/js/post.js}"></script>
+<script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 <!--<script type="text/javascript" src="../static/js/pace.js" th:src="@{/js/pace.js}"></script>-->
 <body>
 <header th:replace="common/header.html :: header"></header>
@@ -113,7 +114,7 @@
                         "                        <a href=\"/user/"+post.userPosted.id+"\">\n" +
                         "                            <img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s1 w3-left w3-circle w3-margin-right\">\n" +
                         "                        </a>" +
-                        "                        <span class=\"w3-right w3-opacity\">"+parsePostDate(new Date(post.datePosted))+"</span>\n" +
+                        "                        <span class=\"w3-right w3-opacity\">"+parseDateSent(new Date(post.datePosted))+"</span>\n" +
                         "                        <h4 class=\"inline\">" + post.userPosted.firstName + " " + post.userPosted.lastName.substring(0, 1) + ".</h4>\n" +
                         "                            <p class=\"inline w3-opacity w3-margin-left\">"+parsePostTaggedUsersAndLocation(post.usersTagged, post.location)+"</p><br>\n" +
                         "                        <hr class=\"w3-clear\">\n" +

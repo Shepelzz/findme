@@ -73,6 +73,21 @@
             }
         });
     </script>
+    <script>
+        $(document).ready ( function(){
+            if(!localStorage['recipientId'] > 0)
+                localStorage['recipientId'] = 0;
+        });
+
+        let i = 4;
+        function iii() {
+            alert(localStorage['recipientId']);
+            alert(localStorage['recipientId'] === i);
+
+            alert(parseInt(localStorage['recipientId'], 10));
+            alert(parseInt(localStorage['recipientId'], 10) === i);
+        }
+    </script>
     <script src="../static/js/croppie.min.js"></script>
     <link rel="stylesheet" href="../static/css/croppie.min.css">
 
@@ -100,6 +115,13 @@
     trtrtrtrtr
 </div>
 
+
+<button onclick="iii()">show</button>
+
+<button onclick="{localStorage['recipientId'] = 4;}">4</button>
+<button onclick="{localStorage['recipientId'] = 5;}">5</button>
+<button onclick="{localStorage['recipientId'] = 6;}">6</button>
+<button onclick="{localStorage['recipientId'] = 7;}">7</button>
 </body>
 
 

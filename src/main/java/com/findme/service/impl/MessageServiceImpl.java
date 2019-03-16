@@ -102,7 +102,6 @@ public class MessageServiceImpl implements MessageService {
     @Transactional
     public List<Message> getMessageList(String userFromId, String userToId) throws InternalServerError {
         messageDAO.updateDateRead(userFromId, userToId);
-
         return messageDAO.getMessageList(userFromId, userToId);
     }
 
