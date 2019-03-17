@@ -44,4 +44,36 @@ public class DAO {
         }
     }
 
+
+//    SELECT  DATA.userId,
+//    DATA.user_firstName,
+//    DATA.user_lastName,
+//    m.ID msg_id,
+//    m.TEXT msg_text,
+//    m.USER_FROM_ID msg_userFromId,
+//    m.USER_TO_ID msg_userToId,
+//    m.DATE_SENT msg_dateSent,
+//    m.DATE_READ msg_dateRead
+//    FROM (
+//            SELECT
+//                    u.id         userId,
+//            u.LAST_NAME  user_lastName,
+//            u.FIRST_NAME user_firstName,
+//            MAX(msg.Id) max_msgId
+//    FROM RELATIONSHIP r
+//    JOIN USERS u
+//    ON ((r.USER_FROM_ID = :userId AND r.USER_TO_ID = u.id) OR (r.USER_TO_ID = :userId AND r.USER_FROM_ID = u.id))
+//    LEFT JOIN MESSAGE msg ON ((msg.USER_FROM_ID = u.id AND msg.USER_TO_ID = :userId) OR
+//                              (msg.USER_FROM_ID = :userId AND msg.USER_TO_ID = u.id))
+//    AND msg.DATE_DELETED IS NULL
+//    WHERE r.STATUS = 'FRIENDS'
+//    GROUP BY u.id,
+//    u.LAST_NAME,
+//    u.FIRST_NAME
+//) DATA
+//    LEFT JOIN MESSAGE m ON DATA.max_msgId = m.ID
+//    ORDER BY m.DATE_SENT DESC, DATA.user_lastName ASC
+
+
+
 }
