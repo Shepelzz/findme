@@ -1,12 +1,22 @@
 package com.findme;
 
+import com.findme.test.ConversationInfo;
 import org.apache.log4j.Logger;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Demo {
     private static Logger log = Logger.getLogger(Demo.class.getName());
 
 
     public static void main(String[] args) throws Exception {
+
+
+        ConversationInfo v;
+
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2019-01-01 15:51:11")  );
+
 
 //        int[] array = {1,34,2,5,87,32,5,9,0};
 ////        System.out.println(Arrays.toString(array));

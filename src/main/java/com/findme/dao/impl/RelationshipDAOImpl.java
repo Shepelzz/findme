@@ -16,7 +16,6 @@ import java.util.List;
 @Log4j
 @Repository
 public class  RelationshipDAOImpl implements RelationshipDAO{
-//TODO check
     private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS, DATE_MODIFIED) VALUES (:userFromId, :userToId, :status, :dateModified)";
     private static final String SQL_UPDATE_RELATIONSHIP = "UPDATE RELATIONSHIP SET USER_FROM_ID = :userFromId_new, USER_TO_ID = :userToId_new, STATUS = :status, DATE_MODIFIED = :dateModified WHERE USER_FROM_ID = :userFromId_old AND USER_TO_ID = :userToId_old";
 
