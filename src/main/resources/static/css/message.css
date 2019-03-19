@@ -17,9 +17,14 @@
     font-size: 12px!important;
 }
 
+
+.conversations-list-group{
+
+}
 .msg-button{
     /*background-color: rgba(210, 221, 224, 0.1);*/
     cursor: pointer;
+    margin: 0 0 0 0; padding: 0 0 0 0;
 
     /*border: none;*/
     /*display: inline-block;*/
