@@ -17,16 +17,41 @@
     font-size: 12px!important;
 }
 
-.time-block {
-    margin: 10px -40px 0 0;
+.msg-button{
+    /*background-color: rgba(210, 221, 224, 0.1);*/
+    cursor: pointer;
+
+    /*border: none;*/
+    /*display: inline-block;*/
+    /*padding: 8px 16px;*/
+    /*vertical-align: middle;*/
+    /*overflow: hidden;*/
+    /*text-decoration: none;*/
+    /*color: inherit;*/
+    /*background-color: inherit;*/
+    /*text-align: center;*/
+    /*cursor: pointer;*/
+    /*white-space: nowrap;*/
+
+}
+.msg-button:hover{
+    background-color: rgba(139, 149, 152, 0.29);
+}
+.msg-user-name {
+    font-size: 18px!important;
+}
+.msg-date-block {
+    padding-right: 6px;
+    float: right;
     font-size: 12px!important;
     color: #0c5c81;
 }
-
-.approve {
-    margin: 8px -40px 0 0;
+.msg-approve-icon {
     font-size: 12px!important;
     color: #3a9e48;
+}
+.msg-preview {
+    font-size: 12px!important;
 }
 
 .message {
