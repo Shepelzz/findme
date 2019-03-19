@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class Controller {
@@ -20,9 +20,11 @@ public class Controller {
     }
 
 
-    @RequestMapping(path = "/test", method = RequestMethod.GET)
-    public ResponseEntity<?> getTest() throws Exception {
-        List<ConversationInfo> list = dao.getConversations(1L);
+    @RequestMapping(path = "/messages/get-conversations", method = RequestMethod.GET)
+    public ResponseEntity<?> getTest(HttpSession session) {
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+
+        List<ConversationInfo> list = dao.getConversations(Long.valueOf(loggedUserId));
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
