@@ -55,15 +55,15 @@ public class MessageRestController {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/get-messages", method = RequestMethod.GET)
-    public ResponseEntity<?> getMessages(HttpSession session, @RequestParam String userToId){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
-            log.warn("User is not authorized");
-            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
-        }
-        List<Message> list = messageService.getMessageList(loggedUserId, userToId);
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+//    @RequestMapping(path = "/get-messages", method = RequestMethod.GET)
+//    public ResponseEntity<?> getMessages(HttpSession session, @RequestParam String userToId){
+//        String loggedUserId = (String) session.getAttribute("loggedUserId");
+//        if(loggedUserId==null) {
+//            log.warn("User is not authorized");
+//            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+//        }
+//        List<Message> list = messageService.getMessageList(loggedUserId, userToId);
+//        return new ResponseEntity<>(list, HttpStatus.OK);
+//    }
 
 }
