@@ -29,7 +29,7 @@
         <!-- Left Column -->
         <div class="w3-col m3">
             <!--Menu-->
-            <div class="w3-ul w3-white" style="max-height: 600px; overflow-y:scroll">
+            <div class="w3-white" style="max-height: 600px; overflow-y:scroll">
                 <div id="getConversationsDiv">
                     <ul class="conversations-list-group">
                         <!--<li class="msg-button">-->
@@ -41,15 +41,16 @@
                                     <!--2018.01.01-->
                                 <!--</div>-->
                                 <!--<div class="msg-user-name" style="margin-right: 70px">-->
-                                    <!--Mike Dod-->
+                                    <!--Mike Dodicicicivavava-->
                                 <!--</div>-->
                             <!--</div>-->
                             <!--<div style="margin-left: 60px;">-->
-                                <!--<div style="float: right;width: 20px;">-->
-                                    <!--<i class="fa fa-check msg-approve-icon"></i>-->
+                                <!--<div style="float: right;width: 20px;padding-right: 3px">-->
+                                    <!--&lt;!&ndash;<i class="fa fa-check msg-approve-icon"></i>&ndash;&gt;-->
+                                    <!--<span class="w3-badge w3-right w3-small w3-green">3</span>-->
                                 <!--</div>-->
-                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 20px;">-->
-                                    <!--text text...-->
+                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 25px;">-->
+                                    <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
                                 <!--</div>-->
                             <!--</div>-->
                         <!--</li>-->
@@ -202,12 +203,12 @@
     }
 
     function changeRecipient(id) {
-        if($(recipientDiv).hasClass('active-element'))
-            $(recipientDiv).removeClass('active-element');
+        if($(recipientDiv).hasClass('msg-active-element'))
+            $(recipientDiv).removeClass('msg-active-element');
 
         setRecipient(id);
 
-        $(recipientDiv).addClass('active-element');
+        $(recipientDiv).addClass('msg-active-element');
         $('#userToId').val(recipientId);
 
         ajaxGetMessages();
@@ -242,8 +243,8 @@
                 data: JSON.stringify(jsonMessage),
                 success: function success() {
                     $('#text').val('');
-                    ajaxGetMessages();
                     ajaxGetConversations();
+                    ajaxGetMessages();
                 },
                 error: function(xhr) {
                     alert(xhr.responseText);
@@ -307,26 +308,17 @@
                 $.each(result, function(i, conv){
                     let conversationInfo;
 
-                    // conversationInfo = "<button id=\""+conv.userId+"\" class=\"w3-bar w3-button\" style=\"padding: 0 0 0 0;\" onclick=\"changeRecipient("+conv.userId+")\">";
-                    // conversationInfo += "<img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s2 avatar-border w3-left w3-circle\" style=\"margin: 7px 5px 7px 5px;\">";
-                    // conversationInfo += "<div class=\"friends-user-info\">";
-                    // conversationInfo += "<span class=\"m-block w3-left\">"+conv.userLastName+" "+conv.userFirstName+"</span>";
-                    // conversationInfo += (conv.messageDateSent != null) ? "<span class=\"time-block w3-right\">"+parseDateToString(new Date(conv.messageDateSent))+"</span>":"";
-                    // conversationInfo += "<br>";
-                    // conversationInfo += (conv.messageText != null) ? "<span class=\"s-block w3-left w3-text-theme\">"+conv.messageText.substring(0, 28)+"...</span>":"";
-                    // conversationInfo += (conv.userId===conv.messageUserToId && conv.messageDateRead != null) ?"<i class=\"fa fa-check approve w3-right\"></i>":"";
-                    // conversationInfo += "</div></button>";
-
-                    conversationInfo ="<li class=\"msg-button\"><div style=\"float: left;width: 60px;\">";
+                    conversationInfo ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\"><div style=\"float: left;width: 60px;\">";
                     conversationInfo += "<img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s2 avatar-border w3-left w3-circle\" style=\"margin: 7px 5px 7px 5px;\">";
                     conversationInfo += "</div><div style=\"margin-left: 60px;padding: 5px 0;\"><div class=\"msg-date-block\" style=\"width: 70px\">";
                     conversationInfo += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
                     conversationInfo += "</div><div class=\"msg-user-name\" style=\"margin-right: 70px\">";
                     conversationInfo += conv.userLastName+" "+conv.userFirstName;
-                    conversationInfo += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 20px;\">";
+                    conversationInfo += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 20px;padding-right: 3px\">";
                     conversationInfo += (conv.userId===conv.messageUserToId && conv.messageDateRead != null) ?"<i class=\"fa fa-check msg-approve-icon\"></i>":"";
+                    conversationInfo += (conv.userId!==conv.messageUserToId && conv.newMessagesCount != null) ?"<span class=\"w3-badge w3-right w3-small w3-green\">"+conv.newMessagesCount+"</span>":"";
                     conversationInfo += "</div><div class=\"w3-text-theme msg-preview\" style=\"margin-right: 20px;\">";
-                    conversationInfo += (conv.messageText != null) ? conv.messageText.substring(0, 28) : "";
+                    conversationInfo += (conv.messageText != null) ? conv.messageText : "";
                     conversationInfo += "</div></div></li>";
 
 
@@ -334,7 +326,7 @@
                 });
             },
             error : function(e) {
-                $('#getConversationsDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
+                // $('#getConversationsDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
                 console.log("ERROR: "+ e);
             }
         });

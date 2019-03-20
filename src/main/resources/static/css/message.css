@@ -19,13 +19,14 @@
 
 
 .conversations-list-group{
-
+    list-style-type: none; padding: 0 0 0 0; margin: 0 0 0 0;
 }
 .msg-button{
     /*background-color: rgba(210, 221, 224, 0.1);*/
     cursor: pointer;
-    margin: 0 0 0 0; padding: 0 0 0 0;
-
+    padding: 2px 0 !important;
+    margin: unset !important;
+    height: 60px;
     /*border: none;*/
     /*display: inline-block;*/
     /*padding: 8px 16px;*/
@@ -44,6 +45,9 @@
 }
 .msg-user-name {
     font-size: 18px!important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .msg-date-block {
     padding-right: 6px;
@@ -54,9 +58,17 @@
 .msg-approve-icon {
     font-size: 12px!important;
     color: #3a9e48;
+    float: left;
+    margin-top: 3px;
 }
 .msg-preview {
     font-size: 12px!important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.msg-active-element {
+    background-color: rgba(81, 131, 183, 0.3)
 }
 
 .message {
@@ -84,8 +96,9 @@
     font-size: small
 }
 
-.msg-time {
 
+
+.msg-time {
     margin-top: 5px;
     color: #7f7f7f;
 }

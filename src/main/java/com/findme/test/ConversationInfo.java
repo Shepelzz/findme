@@ -19,4 +19,5 @@ public class ConversationInfo {
     private Long messageUserToId;
     private Date messageDateSent;
     private Date messageDateRead;
+    private Integer newMessagesCount;
 }
