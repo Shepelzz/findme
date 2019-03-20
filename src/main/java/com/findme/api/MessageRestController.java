@@ -24,7 +24,7 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/send-message", method = RequestMethod.POST)
-    public ResponseEntity<String> savePost(@ModelAttribute MessageInfo messageInfo, HttpSession session){
+    public ResponseEntity<String> saveMessage(@ModelAttribute MessageInfo messageInfo, HttpSession session){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
@@ -35,7 +35,7 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/edit-message", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> editUserSubmit(HttpSession session, @RequestBody MessageInfo messageInfo){
+    public ResponseEntity<String> editMessage(HttpSession session, @RequestBody MessageInfo messageInfo){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
@@ -45,7 +45,7 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/delete-message", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deletePost(@RequestParam Long messageId, HttpSession session){
+    public ResponseEntity<String> deleteMessage(@RequestParam Long messageId, HttpSession session){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
             log.warn("User is not authorized");
@@ -56,7 +56,7 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/get-messages", method = RequestMethod.GET)
-    public ResponseEntity<?> getNewsFeed(HttpSession session, @RequestParam String userToId){
+    public ResponseEntity<?> getMessages(HttpSession session, @RequestParam String userToId){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
             log.warn("User is not authorized");

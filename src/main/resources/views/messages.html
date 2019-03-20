@@ -45,11 +45,11 @@
                                 <!--</div>-->
                             <!--</div>-->
                             <!--<div style="margin-left: 60px;">-->
-                                <!--<div style="float: right;width: 20px;padding-right: 3px">-->
+                                <!--<div style="float: right;width: 25px;padding-right: 5px">-->
                                     <!--&lt;!&ndash;<i class="fa fa-check msg-approve-icon"></i>&ndash;&gt;-->
                                     <!--<span class="w3-badge w3-right w3-small w3-green">3</span>-->
                                 <!--</div>-->
-                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 25px;">-->
+                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 30px;">-->
                                     <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
                                 <!--</div>-->
                             <!--</div>-->
@@ -314,10 +314,10 @@
                     conversationInfo += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
                     conversationInfo += "</div><div class=\"msg-user-name\" style=\"margin-right: 70px\">";
                     conversationInfo += conv.userLastName+" "+conv.userFirstName;
-                    conversationInfo += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 20px;padding-right: 3px\">";
+                    conversationInfo += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 25px;padding-right: 5px\">";
                     conversationInfo += (conv.userId===conv.messageUserToId && conv.messageDateRead != null) ?"<i class=\"fa fa-check msg-approve-icon\"></i>":"";
                     conversationInfo += (conv.userId!==conv.messageUserToId && conv.newMessagesCount != null) ?"<span class=\"w3-badge w3-right w3-small w3-green\">"+conv.newMessagesCount+"</span>":"";
-                    conversationInfo += "</div><div class=\"w3-text-theme msg-preview\" style=\"margin-right: 20px;\">";
+                    conversationInfo += "</div><div class=\"w3-text-theme msg-preview\" style=\"margin-right: 30px;\">";
                     conversationInfo += (conv.messageText != null) ? conv.messageText : "";
                     conversationInfo += "</div></div></li>";
 
