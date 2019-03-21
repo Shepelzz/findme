@@ -2,7 +2,6 @@ package com.findme.api;
 
 import com.findme.model.Message;
 import com.findme.model.MessageInfo;
-import com.findme.model.User;
 import com.findme.service.MessageService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,13 @@ public class MessageRestController {
     }
 
     @RequestMapping(path = "/send-message", method = RequestMethod.POST)
-    public ResponseEntity<String> saveMessage(@ModelAttribute MessageInfo messageInfo, HttpSession session){
+    public ResponseEntity<String> saveMessage(@ModelAttribute Message message, HttpSession session){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
 
-        messageService.save(messageInfo);
+//        messageService.save(new MessageInfo());
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
