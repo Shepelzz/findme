@@ -38,6 +38,7 @@ public class MessageController {
         model.addAttribute("conversationList", relationshipDAO.getFriendsList(loggedUserId));
         model.addAttribute("messagesList", messageService.getMessageList(loggedUserId, userId));
         model.addAttribute("loggedUserId", loggedUserId);
+        model.addAttribute("recipientId", userId);
 
         return "messages";
     }
@@ -53,6 +54,7 @@ public class MessageController {
 
         model.addAttribute("friendsList", relationshipDAO.getFriendsList(loggedUserId));
         model.addAttribute("loggedUserId", loggedUserId);
+        model.addAttribute("recipientId", null);
 
         return "messages";
     }

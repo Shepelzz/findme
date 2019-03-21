@@ -33,26 +33,28 @@
                 <div id="getConversationsDiv">
                     <ul class="conversations-list-group">
                         <!--<li class="msg-button">-->
-                            <!--<div style="float: left;width: 60px;">-->
-                                <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">-->
-                            <!--</div>-->
-                            <!--<div style="margin-left: 60px;padding: 5px 0;">-->
-                                <!--<div class="msg-date-block" style="width: 70px">-->
-                                    <!--2018.01.01-->
+                            <!--<a href="/messages/11">-->
+                                <!--<div style="float: left;width: 60px;">-->
+                                    <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">-->
                                 <!--</div>-->
-                                <!--<div class="msg-user-name" style="margin-right: 70px">-->
-                                    <!--Mike Dodicicicivavava-->
+                                <!--<div style="margin-left: 60px;padding: 5px 0;">-->
+                                    <!--<div class="msg-date-block" style="width: 70px">-->
+                                        <!--2018.01.01-->
+                                    <!--</div>-->
+                                    <!--<div class="msg-user-name" style="margin-right: 70px">-->
+                                        <!--Mike Dodicicicivavava-->
+                                    <!--</div>-->
                                 <!--</div>-->
-                            <!--</div>-->
-                            <!--<div style="margin-left: 60px;">-->
-                                <!--<div style="float: right;width: 25px;padding-right: 5px">-->
-                                    <!--&lt;!&ndash;<i class="fa fa-check msg-approve-icon"></i>&ndash;&gt;-->
-                                    <!--<span class="w3-badge w3-right w3-small w3-green">3</span>-->
+                                <!--<div style="margin-left: 60px;">-->
+                                    <!--<div style="float: right;width: 25px;padding-right: 5px">-->
+                                        <!--&lt;!&ndash;<i class="fa fa-check msg-approve-icon"></i>&ndash;&gt;-->
+                                        <!--<span class="w3-badge w3-right w3-small w3-green">3</span>-->
+                                    <!--</div>-->
+                                    <!--<div class="w3-text-theme msg-preview" style="margin-right: 30px;">-->
+                                        <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
+                                    <!--</div>-->
                                 <!--</div>-->
-                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 30px;">-->
-                                    <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
-                                <!--</div>-->
-                            <!--</div>-->
+                            <!--</a>-->
                         <!--</li>-->
                     <!--&lt;!&ndash;<br>&ndash;&gt;-->
 
@@ -182,7 +184,7 @@
 
 <script>
     let recipientDiv;
-    let recipientId = 0;
+    let recipientId = [[${recipientId}]]==null ? 0 : [[${recipientId}]];
 
     $(document).ready ( function(){
         if(!parseInt(localStorage['recipientId'], 10) > 0) {
@@ -308,7 +310,9 @@
                 $.each(result, function(i, conv){
                     let conversationInfo;
 
-                    conversationInfo ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\"><div style=\"float: left;width: 60px;\">";
+                    conversationInfo ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\">";
+                    conversationInfo += "<a href=\"/messages/"+conv.userId+"\">";
+                    conversationInfo += "<div style=\"float: left;width: 60px;\">";
                     conversationInfo += "<img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s2 avatar-border w3-left w3-circle\" style=\"margin: 7px 5px 7px 5px;\">";
                     conversationInfo += "</div><div style=\"margin-left: 60px;padding: 5px 0;\"><div class=\"msg-date-block\" style=\"width: 70px\">";
                     conversationInfo += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
@@ -319,8 +323,7 @@
                     conversationInfo += (conv.userId!==conv.messageUserToId && conv.newMessagesCount != null) ?"<span class=\"w3-badge w3-right w3-small w3-green\">"+conv.newMessagesCount+"</span>":"";
                     conversationInfo += "</div><div class=\"w3-text-theme msg-preview\" style=\"margin-right: 30px;\">";
                     conversationInfo += (conv.messageText != null) ? conv.messageText : "";
-                    conversationInfo += "</div></div></li>";
-
+                    conversationInfo += "</div></div></a></li>";
 
                     $('#getConversationsDiv .conversations-list-group').append(conversationInfo)
                 });
