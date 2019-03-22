@@ -26,7 +26,7 @@ public class MessageController {
     }
 
 
-    @RequestMapping(path = "/messages/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = {"/messages/{userId}","/messages"}, method = RequestMethod.GET)
     public String messagesByUser(HttpSession session, Model model, @PathVariable String userId){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
@@ -38,25 +38,26 @@ public class MessageController {
         model.addAttribute("conversationList", relationshipDAO.getFriendsList(loggedUserId));
         model.addAttribute("messagesList", messageService.getMessageList(loggedUserId, userId));
         model.addAttribute("loggedUserId", loggedUserId);
-        model.addAttribute("recipientId", userId);
+        if(userId != null)
+            model.addAttribute("recipientId", userId);
 
         return "messages";
     }
 
-    @RequestMapping(path = "/messages", method = RequestMethod.GET)
-    public String messages(HttpSession session, Model model){
-        String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
-            log.warn("User is not authorized");
-            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
-            return "errors/forbidden";
-        }
-
-        model.addAttribute("friendsList", relationshipDAO.getFriendsList(loggedUserId));
-        model.addAttribute("loggedUserId", loggedUserId);
-        model.addAttribute("recipientId", null);
-
-        return "messages";
-    }
+//    @RequestMapping(path = "/messages", method = RequestMethod.GET)
+//    public String messages(HttpSession session, Model model){
+//        String loggedUserId = (String) session.getAttribute("loggedUserId");
+//        if(loggedUserId==null) {
+//            log.warn("User is not authorized");
+//            model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
+//            return "errors/forbidden";
+//        }
+//
+//        model.addAttribute("friendsList", relationshipDAO.getFriendsList(loggedUserId));
+//        model.addAttribute("loggedUserId", loggedUserId);
+//        model.addAttribute("recipientId", null);
+//
+//        return "messages";
+//    }
 
 }
