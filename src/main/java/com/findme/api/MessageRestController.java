@@ -1,7 +1,7 @@
 package com.findme.api;
 
 import com.findme.model.Message;
-import com.findme.model.MessageInfo;
+import com.findme.model.User;
 import com.findme.service.MessageService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +22,28 @@ public class MessageRestController {
         this.messageService = messageService;
     }
 
-    @RequestMapping(path = "/send-message", method = RequestMethod.POST)
-    public ResponseEntity<String> saveMessage(@ModelAttribute Message message, HttpSession session){
+    @RequestMapping(path = "/send-message", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> saveMessage(@RequestBody Message message, HttpSession session){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
 
-//        messageService.save(new MessageInfo());
+        User userFrom = new User();
+        userFrom.setId(1L);
+        message.setUserFrom(userFrom);
+
+        messageService.save(message);
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @RequestMapping(path = "/edit-message", method = RequestMethod.PUT, produces = "application/json", consumes = "application/json")
-    public ResponseEntity<String> editMessage(HttpSession session, @RequestBody MessageInfo messageInfo){
+    public ResponseEntity<String> editMessage(HttpSession session, @RequestBody Message message){
         if(session.getAttribute("loggedUserId")==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        messageService.update(messageInfo);
+        messageService.update(message);
         return new ResponseEntity<>( HttpStatus.OK);
     }
 

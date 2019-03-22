@@ -186,6 +186,7 @@
     let recipientDiv;
     let recipientId = [[${recipientId}]]==null ? 0 : [[${recipientId}]];
 
+
     $(document).ready ( function(){
         if(!parseInt(localStorage['recipientId'], 10) > 0) {
             localStorage['recipientId'] = 0;
@@ -218,41 +219,67 @@
     }
 
     $("#messageSendFrom").submit(function messageSend(){
-        if($('#id').val()==='') {
-            event.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "/send-message",
-                data: $('#messageSendFrom').serialize(),
-                success: function success() {
-                    $('#text').val('');
-                    ajaxGetMessages();
-                },
-                error: function (xhr) {
-                    alert(xhr.responseText);
-                }
-            });
-        } else {
-            let jsonMessage = {
-                id: $('#id').val(),
-                text: $('#text').val()
-            };
+        let jsonMessage = {
+            userFrom: {
+                id: [[${loggedUserId}]]
+            },
+            userTo: {
+                id: recipientId
+            },
+            text: $('#text').val()
+        };
+        // message.text = $('#text').val();
+        event.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/send-message",
+            contentType: "application/json",
+            data: JSON.stringify(jsonMessage),
+            success: function success() {
+                $('#text').val('');
+                ajaxGetMessages();
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
 
-            $.ajax({
-                type: "PUT",
-                url: "/edit-message",
-                contentType: "application/json",
-                data: JSON.stringify(jsonMessage),
-                success: function success() {
-                    $('#text').val('');
-                    ajaxGetConversations();
-                    ajaxGetMessages();
-                },
-                error: function(xhr) {
-                    alert(xhr.responseText);
-                }
-            });
-        }
+
+        // if($('#id').val()==='') {
+        //     event.preventDefault();
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/send-message",
+        //         data: $('#messageSendFrom').serialize(),
+        //         success: function success() {
+        //             $('#text').val('');
+        //             ajaxGetMessages();
+        //         },
+        //         error: function (xhr) {
+        //             alert(xhr.responseText);
+        //         }
+        //     });
+        // } else {
+        //     let jsonMessage = {
+        //         id: $('#id').val(),
+        //         text: $('#text').val()
+        //     };
+        //
+        //     $.ajax({
+        //         type: "PUT",
+        //         url: "/edit-message",
+        //         contentType: "application/json",
+        //         data: JSON.stringify(jsonMessage),
+        //         success: function success() {
+        //             $('#text').val('');
+        //             ajaxGetConversations();
+        //             ajaxGetMessages();
+        //         },
+        //         error: function(xhr) {
+        //             alert(xhr.responseText);
+        //         }
+        //     });
+        // }
     });
 
     function ajaxGetMessages(){

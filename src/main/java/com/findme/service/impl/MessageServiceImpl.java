@@ -7,14 +7,9 @@ import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.Message;
-import com.findme.model.MessageInfo;
 import com.findme.model.Relationship;
-import com.findme.model.User;
 import com.findme.service.MessageService;
-import com.findme.utils.params.MessageValidatorParams;
-import com.findme.utils.validator.messageValidator.AbstractMessageValidator;
-import com.findme.utils.validator.messageValidator.MessageValidator;
-import com.findme.utils.validator.messageValidator.RecipientValidator;
+import com.findme.types.RelationshipStatus;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,46 +34,22 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Message save(MessageInfo messageInfo) throws InternalServerError, BadRequestException {
-        validateIncomingParams(messageInfo.getUserFromId(), messageInfo.getUserToId());
-
-        User useFrom = userDAO.findById(Long.valueOf(messageInfo.getUserFromId()));
-        User userTo = userDAO.findById(Long.valueOf(messageInfo.getUserToId()));
-        Relationship usersRelationship = relationshipDAO.getRelationship(messageInfo.getUserFromId(), messageInfo.getUserToId());
-
-        Message message = new Message();
-        message.setUserFrom(useFrom);
-        message.setUserTo(userTo);
-        message.setText(messageInfo.getText());
+    public Message save(Message message) throws InternalServerError, BadRequestException {
+        validateMessageInfo(message);
         message.setDateSent(new Date());
-
-        validateMessageInfo(
-            MessageValidatorParams.builder()
-                .message(message)
-                .relationship(usersRelationship)
-                .build()
-        );
-
         return messageDAO.save(message);
     }
 
     @Override
-    public Message update(MessageInfo messageInfo) throws InternalServerError, BadRequestException {
-        Message currentMessage = messageDAO.findById(messageInfo.getId());
+    public Message update(Message message) throws InternalServerError, BadRequestException {
+        Message currentMessage = messageDAO.findById(message.getId());
         if(currentMessage.getDateRead() != null) {
             log.warn("Message "+currentMessage.getId()+" is read by recipient "+currentMessage.getUserTo().getId());
             throw new BadRequestException("Message " + currentMessage.getId() + " is read by recipient " + currentMessage.getUserTo().getId() + ". And can not be edited.");
         }
-
-        currentMessage.setText(messageInfo.getText());
+        currentMessage.setText(message.getText());
+        validateMessageInfo(message);
         currentMessage.setDateEdited(new Date());
-
-        AbstractMessageValidator messageValidator = new MessageValidator();
-        messageValidator.check(
-            MessageValidatorParams.builder()
-                .message(currentMessage)
-                .build());
-
         return messageDAO.update(currentMessage);
     }
 
@@ -115,14 +86,18 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    private void validateMessageInfo(MessageValidatorParams messageValidatorParams) throws BadRequestException{
-        log.info("Start post validation");
+    private void validateMessageInfo(Message message) throws BadRequestException{
+        log.info("Message recipient relationship status from user "+message.getUserFrom().getId()+" to user "+message.getUserTo().getId()+" validation");
+        Relationship usersRelationship = relationshipDAO.getRelationship(String.valueOf(message.getUserFrom().getId()), String.valueOf(message.getUserTo().getId()));
+        if(usersRelationship == null || usersRelationship.getStatus() != RelationshipStatus.FRIENDS) {
+            log.warn("Message recipient validation fail. Recipient is not a friend. userId: " + message.getUserTo().getId());
+            throw new BadRequestException("Message recipient validation fail. Recipient is not a friend. userId: " + message.getUserTo().getId());
+        }
 
-        AbstractMessageValidator recipientValidator = new RecipientValidator();
-        AbstractMessageValidator messageValidator = new MessageValidator();
-
-        recipientValidator.setNextAbstractChainValidator(messageValidator);
-
-        recipientValidator.check(messageValidatorParams);
+        log.info("Message text ["+message.getText()+"] validation");
+        if(message.getText().length() > 140) {
+            log.warn("Message text validation fail. Message ["+message.getText()+"] is more than 140 symbols. userId: "+message.getUserTo().getId());
+            throw new BadRequestException("Message text validation fail. Message ["+message.getText()+"] is more than 140 symbols. userId: "+message.getUserTo().getId());
+        }
     }
 }
