@@ -4,7 +4,7 @@ import com.findme.exception.BadRequestException;
 import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.Message;
-import com.findme.model.MessageInfo;
+
 
 import java.util.List;
 
