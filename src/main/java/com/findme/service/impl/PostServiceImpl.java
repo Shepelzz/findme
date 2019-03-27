@@ -8,6 +8,7 @@ import com.findme.exception.InternalServerError;
 import com.findme.exception.NotFoundException;
 import com.findme.model.*;
 import com.findme.service.PostService;
+import com.findme.utils.Utils;
 import com.findme.utils.params.PostValidatorParams;
 import com.findme.utils.validator.postValidator.*;
 import lombok.extern.log4j.Log4j;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Log4j
 @Service
@@ -35,12 +35,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post save(PostInfo postInfo) throws InternalServerError, BadRequestException {
-
-        validateIncomingParams(postInfo.getUserPostedId(), postInfo.getUserPagePostedId());
-
-        User userPosted = userDAO.findById(Long.valueOf(postInfo.getUserPostedId()));
-        User userPagePosted = userDAO.findById(Long.valueOf(postInfo.getUserPagePostedId()));
-        Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(String.valueOf(postInfo.getUserPostedId()), String.valueOf(postInfo.getUserPagePostedId()));
+        User userPosted = userDAO.findById(Utils.castStringToLong(postInfo.getUserPostedId()));
+        User userPagePosted = userDAO.findById(Utils.castStringToLong(postInfo.getUserPagePostedId()));
+        Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(postInfo.getUserPostedId(), postInfo.getUserPagePostedId());
         List<User> usersTagged = null;
         if(postInfo.getUsersTaggedIds() != null && postInfo.getUsersTaggedIds().size() > 0)
             usersTagged = relationshipDAO.getFriendsByIdList(userPosted.getId(), postInfo.getUsersTaggedIds());
@@ -102,16 +99,6 @@ public class PostServiceImpl implements PostService {
     public List<Post> getNewsList(Long userId, int maxResults, int currentListPart) throws InternalServerError {
         int rowsFrom = currentListPart == 1 ? 0 : currentListPart*maxResults-maxResults;
         return postDAO.getNewsListPart(userId, rowsFrom, maxResults);
-    }
-
-    private void validateIncomingParams(String userFromId, String userToId) throws BadRequestException{
-        try{
-            Optional.of(userFromId).map(Long::valueOf);
-            Optional.of(userToId).map(Long::valueOf);
-        } catch (IllegalArgumentException e){
-            log.warn(e.getMessage());
-            throw new BadRequestException(e.getMessage());
-        }
     }
 
     private void validatePostInfo(PostValidatorParams params) throws BadRequestException{
