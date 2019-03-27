@@ -35,6 +35,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post save(PostInfo postInfo) throws InternalServerError, BadRequestException {
+
         validateIncomingParams(postInfo.getUserPostedId(), postInfo.getUserPagePostedId());
 
         User userPosted = userDAO.findById(Long.valueOf(postInfo.getUserPostedId()));
