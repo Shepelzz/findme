@@ -1,5 +1,7 @@
 package com.findme.api;
 
+import com.findme.dao.MessageDAO;
+import com.findme.model.ConversationInfo;
 import com.findme.model.Message;
 import com.findme.service.MessageService;
 import lombok.extern.log4j.Log4j;
@@ -15,10 +17,12 @@ import java.util.List;
 @RestController
 public class MessageRestController {
     private MessageService messageService;
+    private MessageDAO messageDAO;
 
     @Autowired
-    public MessageRestController(MessageService messageService) {
+    public MessageRestController(MessageService messageService, MessageDAO messageDAO) {
         this.messageService = messageService;
+        this.messageDAO = messageDAO;
     }
 
     @RequestMapping(path = "/send-message", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -60,6 +64,14 @@ public class MessageRestController {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
         List<Message> list = messageService.getMessageList(loggedUserId, userToId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/messages/get-conversations", method = RequestMethod.GET)
+    public ResponseEntity<?> getTest(HttpSession session) {
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+
+        List<ConversationInfo> list = messageDAO.getConversations(Long.valueOf(loggedUserId));
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 

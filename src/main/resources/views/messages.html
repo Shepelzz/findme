@@ -29,83 +29,32 @@
         <!-- Left Column -->
         <div class="w3-col m3">
             <!--Menu-->
-            <div class="w3-white" style="max-height: 600px; overflow-y:scroll">
+            <ul class="w3-white conversations-list-group" style="max-height: 600px; overflow-y:scroll">
                 <div id="getConversationsDiv">
                     <ul class="conversations-list-group">
-                        <!--<li class="msg-button">-->
-                            <!--<a href="/messages/11">-->
-                                <!--<div style="float: left;width: 60px;">-->
-                                    <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">-->
-                                <!--</div>-->
-                                <!--<div style="margin-left: 60px;padding: 5px 0;">-->
-                                    <!--<div class="msg-date-block" style="width: 70px">-->
-                                        <!--2018.01.01-->
-                                    <!--</div>-->
-                                    <!--<div class="msg-user-name" style="margin-right: 70px">-->
-                                        <!--Mike Dodicicicivavava-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div style="margin-left: 60px;">-->
-                                    <!--<div style="float: right;width: 25px;padding-right: 5px">-->
-                                        <!--&lt;!&ndash;<i class="fa fa-check msg-approve-icon"></i>&ndash;&gt;-->
-                                        <!--<span class="w3-badge w3-right w3-small w3-green">3</span>-->
-                                    <!--</div>-->
-                                    <!--<div class="w3-text-theme msg-preview" style="margin-right: 30px;">-->
-                                        <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                    <!--&lt;!&ndash;<br>&ndash;&gt;-->
-
-                        <!--<li class="msg-button">-->
+                    <!--<li th:each="conv : ${conversationList}" >-->
+                        <!--<div th:id="$(conv.userId}" class="msg-button">-->
                             <!--<div style="float: left;width: 60px;">-->
                                 <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">-->
                             <!--</div>-->
                             <!--<div style="margin-left: 60px;padding: 5px 0;">-->
-                                <!--<div class="msg-date-block" style="width: 70px">-->
-                                    <!--2018.01.01-->
-                                <!--</div>-->
-                                <!--<div class="msg-user-name" style="margin-right: 70px">-->
-                                    <!--Mike Dod-->
-                                <!--</div>-->
+                                <!--<div class="msg-date-block" style="width: 70px" th:text="${conv.messageDateSent}">2018.01.01</div>-->
+                                <!--<div class="msg-user-name" style="margin-right: 70px" th:text="${conv.userFirstName}+' '+${conv.userLastName}">Mike Dodicicicivavava</div>-->
                             <!--</div>-->
                             <!--<div style="margin-left: 60px;">-->
-                                <!--<div style="float: right;width: 20px;">-->
-                                    <!--<i class="fa fa-check msg-approve-icon"></i>-->
+                                <!--<div style="float: right;width: 25px;padding-right: 5px">-->
+                                    <!--<i th:if="${conv.userId == conv.messageUserToId && conv.messageDateRead != null}" class="fa fa-check msg-approve-icon"></i>-->
+                                    <!--<span th:if="${conv.userId!==conv.messageUserToId && conv.newMessagesCount != null}" class="w3-badge w3-right w3-small w3-green" th:text="${conv.newMessagesCount}">3</span>-->
                                 <!--</div>-->
-                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 20px;">-->
-                                    <!--text text...-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</li>-->
-                    <!--&lt;!&ndash;<br>&ndash;&gt;-->
-
-                        <!--<li class="msg-button">-->
-                            <!--<div style="float: left;width: 60px;">-->
-                                <!--<img src="http://agarioskins.com/submitted/useruploads/Thug%20Cat.png" alt="Avatar" class="avatar avatar-s2 avatar-border w3-left w3-circle" style="margin: 7px 5px 7px 5px;">-->
-                            <!--</div>-->
-                            <!--<div style="margin-left: 60px;padding: 5px 0;">-->
-                                <!--<div class="msg-date-block" style="width: 70px">-->
-                                    <!--2018.01.01-->
-                                <!--</div>-->
-                                <!--<div class="msg-user-name" style="margin-right: 70px">-->
-                                    <!--Mike Dod-->
+                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 30px;" th:text="${conv.messageText}">-->
+                                    <!--text textdfgjfj jkjrfkj  f jfkljk jdlfj lkdfj kldjf dfjklj dfkj-->
                                 <!--</div>-->
                             <!--</div>-->
-                            <!--<div style="margin-left: 60px;">-->
-                                <!--<div style="float: right;width: 20px;">-->
-                                    <!--<i class="fa fa-check msg-approve-icon"></i>-->
-                                <!--</div>-->
-                                <!--<div class="w3-text-theme msg-preview" style="margin-right: 20px;">-->
-                                    <!--text text...-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</li>-->
-
+                        <!--</div>-->
+                    <!--</li>-->
                     </ul>
                 </div>
-            </div>
+            </ul>
             <br>
         </div>
 
@@ -119,37 +68,37 @@
                                 <div class="messages-list-group">
 
                                     <!--<div class="w3-text-theme w3-margin">-->
-                                        <!--<span>from Kot: hello</span>-->
-                                        <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageDelete()">delete</button>-->
-                                        <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageUpdate()">edit</button>-->
+                                    <!--<span>from Kot: hello</span>-->
+                                    <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageDelete()">delete</button>-->
+                                    <!--<button class="w3-right w3-theme-l0 w3-button" onclick="messageUpdate()">edit</button>-->
                                     <!--</div>-->
 
                                     <!--<div style="width: 100%">-->
-                                        <!--<div class="message message-from">-->
-                                            <!--<span>test<br>-->
-                                                <!--tttttt-->
-                                                <!--sdddddddddddddddddddddddddddddddddddddddddddddd dddd <br>-->
-                                                <!--dsdfsdfsdf-->
-                                            <!--</span>-->
-                                            <!--<span class="message-right-block time">14:33</span>-->
-                                        <!--</div>-->
+                                    <!--<div class="message message-from">-->
+                                    <!--<span>test<br>-->
+                                    <!--tttttt-->
+                                    <!--sdddddddddddddddddddddddddddddddddddddddddddddd dddd <br>-->
+                                    <!--dsdfsdfsdf-->
+                                    <!--</span>-->
+                                    <!--<span class="message-right-block time">14:33</span>-->
+                                    <!--</div>-->
                                     <!--</div>-->
                                     <!--<div style="width: 100%">-->
-                                        <!--<div class="message message-to">-->
-                                            <!--<span>textdfklgjkld  jkl kkcc<br>-->
-                                            <!--sdgddfg <br>-->
-                                                <!--dfgd-->
-                                            <!--</span>-->
+                                    <!--<div class="message message-to">-->
+                                    <!--<span>textdfklgjkld  jkl kkcc<br>-->
+                                    <!--sdgddfg <br>-->
+                                    <!--dfgd-->
+                                    <!--</span>-->
 
-                                            <!--<span class="message-right-block msg-time">-->
-                                                <!--14:33</span>-->
-                                            <!--<span class="message-right-block buttons">-->
-                                                <!--<i onclick="" class="far fa-edit w3-hover-opacity" style="margin-right: 2px"></i>-->
-                                                <!--<i class="far fa-trash-alt w3-hover-opacity" style="margin-right: 2px"></i>-->
-                                            <!--</span>-->
-                                            <!--<i class="fa fa-check msg-appr message-right-block"></i>-->
+                                    <!--<span class="message-right-block msg-time">-->
+                                    <!--14:33</span>-->
+                                    <!--<span class="message-right-block buttons">-->
+                                    <!--<i onclick="" class="far fa-edit w3-hover-opacity" style="margin-right: 2px"></i>-->
+                                    <!--<i class="far fa-trash-alt w3-hover-opacity" style="margin-right: 2px"></i>-->
+                                    <!--</span>-->
+                                    <!--<i class="fa fa-check msg-appr message-right-block"></i>-->
 
-                                        <!--</div>-->
+                                    <!--</div>-->
                                     <!--</div>-->
 
 
@@ -184,8 +133,7 @@
 
 <script>
     let recipientDiv;
-    let recipientId = [[${recipientId}]]==null ? 0 : [[${recipientId}]];
-
+    let recipientId = 0;
 
     $(document).ready ( function(){
         if(!parseInt(localStorage['recipientId'], 10) > 0) {
@@ -219,67 +167,41 @@
     }
 
     $("#messageSendFrom").submit(function messageSend(){
-        let jsonMessage = {
-            userFrom: {
-                id: [[${loggedUserId}]]
-            },
-            userTo: {
-                id: recipientId
-            },
-            text: $('#text').val()
-        };
-        // message.text = $('#text').val();
-        event.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/send-message",
-            contentType: "application/json",
-            data: JSON.stringify(jsonMessage),
-            success: function success() {
-                $('#text').val('');
-                ajaxGetMessages();
-            },
-            error: function (xhr) {
-                alert(xhr.responseText);
-            }
-        });
+        if($('#id').val()==='') {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/send-message",
+                data: $('#messageSendFrom').serialize(),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetMessages();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        } else {
+            let jsonMessage = {
+                id: $('#id').val(),
+                text: $('#text').val()
+            };
 
-
-        // if($('#id').val()==='') {
-        //     event.preventDefault();
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "/send-message",
-        //         data: $('#messageSendFrom').serialize(),
-        //         success: function success() {
-        //             $('#text').val('');
-        //             ajaxGetMessages();
-        //         },
-        //         error: function (xhr) {
-        //             alert(xhr.responseText);
-        //         }
-        //     });
-        // } else {
-        //     let jsonMessage = {
-        //         id: $('#id').val(),
-        //         text: $('#text').val()
-        //     };
-        //
-        //     $.ajax({
-        //         type: "PUT",
-        //         url: "/edit-message",
-        //         contentType: "application/json",
-        //         data: JSON.stringify(jsonMessage),
-        //         success: function success() {
-        //             $('#text').val('');
-        //             ajaxGetConversations();
-        //             ajaxGetMessages();
-        //         },
-        //         error: function(xhr) {
-        //             alert(xhr.responseText);
-        //         }
-        //     });
-        // }
+            $.ajax({
+                type: "PUT",
+                url: "/edit-message",
+                contentType: "application/json",
+                data: JSON.stringify(jsonMessage),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetConversations();
+                    ajaxGetMessages();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
     });
 
     function ajaxGetMessages(){
@@ -337,9 +259,7 @@
                 $.each(result, function(i, conv){
                     let conversationInfo;
 
-                    conversationInfo ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\">";
-                    conversationInfo += "<a href=\"/messages/"+conv.userId+"\">";
-                    conversationInfo += "<div style=\"float: left;width: 60px;\">";
+                    conversationInfo ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\"><div style=\"float: left;width: 60px;\">";
                     conversationInfo += "<img src=\"http://agarioskins.com/submitted/useruploads/Thug%20Cat.png\" alt=\"Avatar\" class=\"avatar avatar-s2 avatar-border w3-left w3-circle\" style=\"margin: 7px 5px 7px 5px;\">";
                     conversationInfo += "</div><div style=\"margin-left: 60px;padding: 5px 0;\"><div class=\"msg-date-block\" style=\"width: 70px\">";
                     conversationInfo += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
@@ -350,7 +270,8 @@
                     conversationInfo += (conv.userId!==conv.messageUserToId && conv.newMessagesCount != null) ?"<span class=\"w3-badge w3-right w3-small w3-green\">"+conv.newMessagesCount+"</span>":"";
                     conversationInfo += "</div><div class=\"w3-text-theme msg-preview\" style=\"margin-right: 30px;\">";
                     conversationInfo += (conv.messageText != null) ? conv.messageText : "";
-                    conversationInfo += "</div></div></a></li>";
+                    conversationInfo += "</div></div></li>";
+
 
                     $('#getConversationsDiv .conversations-list-group').append(conversationInfo)
                 });

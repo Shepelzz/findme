@@ -42,7 +42,7 @@ public class MessageServiceImpl implements MessageService {
             log.warn("Message "+currentMessage.getId()+" is read by recipient "+currentMessage.getUserTo().getId());
             throw new BadRequestException("Message " + currentMessage.getId() + " is read by recipient " + currentMessage.getUserTo().getId() + ". And can not be edited.");
         }
-        validateMessageInfo(message);
+//        validateMessageInfo(message);
 
         currentMessage.setText(message.getText());
         currentMessage.setDateEdited(message.getDateEdited());

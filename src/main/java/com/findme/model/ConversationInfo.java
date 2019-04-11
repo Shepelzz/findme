@@ -1,4 +1,4 @@
-package com.findme.test;
+package com.findme.model;
 
 import lombok.Builder;
 import lombok.Getter;
