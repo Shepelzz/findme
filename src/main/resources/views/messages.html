@@ -167,12 +167,24 @@
     }
 
     $("#messageSendFrom").submit(function messageSend(){
+        let jsonMessage = {
+            id: null,
+            userFrom: {
+                id: [[${loggedUserId}]]
+            },
+            userTo: {
+                id: recipientId
+            },
+            text: $('#text').val()
+        };
+
         if($('#id').val()==='') {
             event.preventDefault();
             $.ajax({
                 type: "POST",
                 url: "/send-message",
-                data: $('#messageSendFrom').serialize(),
+                contentType: "application/json",
+                data: JSON.stringify(jsonMessage),
                 success: function success() {
                     $('#text').val('');
                     ajaxGetMessages();
@@ -182,10 +194,12 @@
                 }
             });
         } else {
-            let jsonMessage = {
-                id: $('#id').val(),
-                text: $('#text').val()
-            };
+            jsonMessage.id = $('#id').val();
+
+            // let jsonMessage = {
+            //     id: $('#id').val(),
+            //     text: $('#text').val()
+            // };
 
             $.ajax({
                 type: "PUT",

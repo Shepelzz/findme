@@ -9,11 +9,13 @@ public class UserTaggedValidator extends AbstractPostValidator {
 
     @Override
     protected void checkParam(PostValidatorParams params) throws BadRequestException {
-        log.info("Post tagged users ["+params.getUsersTagged().toString()+"] validation");
+        if(params.getUsersTagged() != null) {
+            log.info("Post tagged users [" + params.getUsersTagged().toString() + "] validation");
 
-        if(params.getUsersTagged() != null && params.getUsersTagged().size()!=params.getPostInfo().getUsersTaggedIds().size()) {
-            log.warn("Post tagged users validation fail. Tagged users ["+params.getUsersTagged().toString()+"] data is not valid");
-            throw new BadRequestException("Post tagged users validation fail. Tagged users ["+params.getUsersTagged().toString()+"] data is not valid");
+            if (params.getUsersTagged().size() != params.getPostInfo().getUsersTaggedIds().size()) {
+                log.warn("Post tagged users validation fail. Tagged users [" + params.getUsersTagged().toString() + "] data is not valid");
+                throw new BadRequestException("Post tagged users validation fail. Tagged users [" + params.getUsersTagged().toString() + "] data is not valid");
+            }
         }
     }
 }

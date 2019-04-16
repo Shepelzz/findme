@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -67,8 +68,9 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional
     public List<Message> getMessageList(String userFromId, String userToId) throws InternalServerError {
-//        messageDAO.updateDateRead(userFromId, userToId);
+        messageDAO.updateDateRead(userFromId, userToId);
         return messageDAO.getMessageList(userFromId, userToId);
     }
 
