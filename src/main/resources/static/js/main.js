@@ -21,3 +21,7 @@ function parseDateSent(currentDate) {
 function parseDateToString(date) {
     return date.getDate()+'.'+date.getMonth()+'.'+date.getFullYear();
 }
+
+function getIncomingMessagesCount(userId) {
+    return RestService.getById('/get-incoming-messages-count', userId, null, null);
+}

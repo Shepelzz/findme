@@ -1,5 +1,6 @@
 package com.findme.controller;
 
+import com.findme.dao.MessageDAO;
 import com.findme.dao.PostDAO;
 import com.findme.dao.RelationshipDAO;
 import com.findme.exception.BadRequestException;
@@ -23,12 +24,14 @@ public class UserController {
     private UserService userService;
     private RelationshipDAO relationshipDAO;
     private PostDAO postDAO;
+    private MessageDAO messageDAO;
 
     @Autowired
-    public UserController(UserService userService, RelationshipDAO relationshipDAO, PostDAO postDAO) {
+    public UserController(UserService userService, RelationshipDAO relationshipDAO, PostDAO postDAO, MessageDAO messageDAO) {
         this.userService = userService;
         this.relationshipDAO = relationshipDAO;
         this.postDAO = postDAO;
+        this.messageDAO = messageDAO;
     }
 
     @RequestMapping(path = "/user/{userId}", method = RequestMethod.GET)

@@ -11,5 +11,6 @@ public interface MessageDAO extends GeneralDAO<Message> {
     void updateDateRead(String userFromId, String userToId) throws InternalServerError;
     List<Message> getMessageList(String userFromId, String userToId) throws InternalServerError;
     List<ConversationInfo> getConversations(Long userId) throws InternalServerError;
+    int getIncomingMessagesCount(String userId) throws InternalServerError;
 
 }
