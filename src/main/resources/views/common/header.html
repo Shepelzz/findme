@@ -1,9 +1,26 @@
 
+
+
 <!--<script>-->
     <!--$('#id').val(id)-->
 <!--</script>-->
 
 <header>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+    <script>
+        $(document).ready ( function(){
+            let msgCount = getIncomingMessagesCount();
+            // alert(msgCount);
+
+            if(msgCount > 0){
+                $('#msgCnt').text(5);
+            } else {
+                $('#msgCnt').hidden;
+            }
+        });
+
+    </script>
     <!-- Navbar -->
     <div class="w3-top">
         <div class="w3-theme-d2 w3-left-align w3-large" style="height: 51px;">
@@ -38,3 +55,4 @@
     <!--</a>-->
     <!--</div>-->
 </header>
+

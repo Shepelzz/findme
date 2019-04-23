@@ -47,7 +47,18 @@ var RestService = (function () {
             }).fail(function (error) {
                 errorCallback(error);
             });
+        },
+        get: function (_restUrl, successCallback, errorCallback) {
+            $.ajax({
+                type: "GET",
+                url: _restUrl
+            }).done(function (result) {
+                successCallback(result);
+            }).fail(function (error) {
+                errorCallback(error);
+            });
         }
+
     }
 }());
 

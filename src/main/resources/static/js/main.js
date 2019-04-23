@@ -22,6 +22,15 @@ function parseDateToString(date) {
     return date.getDate()+'.'+date.getMonth()+'.'+date.getFullYear();
 }
 
-function getIncomingMessagesCount(userId) {
-    return RestService.getById('/get-incoming-messages-count', userId, null, null);
+function getIncomingMessagesCount() {
+    let res = 0;
+    $.ajax({
+        type : "GET",
+        url : "/messages/get-incoming-messages-count",
+        success : function(result) {
+            if(result > 0)
+                res = result;
+        }
+    });
+    return res;
 }

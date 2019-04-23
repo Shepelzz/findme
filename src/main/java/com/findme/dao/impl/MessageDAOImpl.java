@@ -56,7 +56,7 @@ public class MessageDAOImpl extends GeneralDAOImpl<Message> implements MessageDA
             "    LEFT JOIN MESSAGE m ON DATA.max_msgId = m.ID" +
             "    ORDER BY m.DATE_SENT DESC, DATA.user_lastName ASC";
     private static final String SQL_GET_INCOMING_MESSAGES_COUNT = "" +
-            "SELECT COUNT(*) " +
+            "SELECT COUNT(msg) " +
             " FROM Message msg" +
             " WHERE msg.userTo.id = :userToId" +
             " AND msg.dateRead IS NULL";
@@ -126,12 +126,9 @@ public class MessageDAOImpl extends GeneralDAOImpl<Message> implements MessageDA
     @Override
     public int getIncomingMessagesCount(String userId) throws InternalServerError {
         try {
-            Integer result = (Integer) entityManager.createNativeQuery(SQL_GET_INCOMING_MESSAGES_COUNT)
+            return entityManager.createQuery(SQL_GET_INCOMING_MESSAGES_COUNT, Long.class)
                     .setParameter("userToId", Long.valueOf(userId))
-                    .getSingleResult();
-            if(result == null)
-                return 0;
-            return result;
+                    .getSingleResult().intValue();
         }catch (Exception e){
             log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());

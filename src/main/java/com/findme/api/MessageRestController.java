@@ -75,14 +75,14 @@ public class MessageRestController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/get-incoming-messages-count/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getIncomingMessagesCount(HttpSession session, @PathVariable String userId){
+    @RequestMapping(path = "/messages/get-incoming-messages-count", method = RequestMethod.GET)
+    public ResponseEntity<?> getIncomingMessagesCount(HttpSession session){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId==null) {
             log.warn("User is not authorized");
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(messageDAO.getIncomingMessagesCount(userId), HttpStatus.OK);
+        return new ResponseEntity<>(messageDAO.getIncomingMessagesCount(loggedUserId), HttpStatus.OK);
     }
 
 }
