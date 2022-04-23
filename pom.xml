@@ -11,7 +11,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <springframework.version>5.2.3.RELEASE</springframework.version>
+        <springframework.version>5.3.19</springframework.version>
         <springframework.boot.version>2.0.3.RELEASE</springframework.boot.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <hibernate.version>5.3.7.Final</hibernate.version>
