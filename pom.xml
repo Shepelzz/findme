@@ -18,7 +18,7 @@
         <hibernate.validator.version>6.0.13.Final</hibernate.validator.version>
         <oracle.ojdbc.version>12.1.0.1</oracle.ojdbc.version>
         <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
-        <fasterxml.jackson-databind.version>2.9.10.1</fasterxml.jackson-databind.version>
+        <fasterxml.jackson-databind.version>2.13.4.1</fasterxml.jackson-databind.version>
         <project.lombok.version>1.18.4</project.lombok.version>
         <log4j.version>1.2.17</log4j.version>
     </properties>
